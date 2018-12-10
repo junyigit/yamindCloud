@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/header_css::header('患者管理')"></head>
+<body>
+<div id="dyLTE" class="container-fluid" v-cloak>
+    <div class="row">
+        <div class="col-md-4 form-inline pull-left">
+            <div class="form-group">
+                <input v-model="keyword" @keyup.enter="load" class="form-control" th:placeholder="#{inputUserName}" style="width: 220px;" />
+            </div>
+            <div class="form-group">
+                <a class="btn btn-primary" @click="load"><i class="fa fa-search"></i>&nbsp;[[#{find}]]</a>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="btn-toolbar pull-right">
+                <div class="btn-group">
+                    <a v-if="hasPermission('sys:patient:list')" class="btn btn-default" onclick="reload();"><i class="fa fa-refresh"></i>&nbsp;[[#{refresh}]]</a>
+                    <a v-if="hasPermission('sys:patient:save')" class="btn btn-default" @click="save"><i class="fa fa-plus"></i>&nbsp;[[#{add}]]</a>
+                    <a v-if="hasPermission('sys:patient:edit')" class="btn btn-default" @click="edit"><i class="fa fa-pencil-square-o"></i>&nbsp;[[#{edit}]]</a>
+                    <a v-if="hasPermission('sys:patient:remove')" class="btn btn-default" @click="remove"><i class="fa fa-trash-o"></i>&nbsp;[[#{delete}]]</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <table id="dataGrid"></table>
+    </div>
+</div>
+<div th:include="include/footer_js::footer"></div>
+<script th:src="@{/js/base/patient/list.js}"></script>
+<script th:inline="javascript">
+    var vm = new Vue({
+        el : '#dyLTE',
+        data : {
+            keyword : null
+        },
+        methods : {
+            load : function() {
+                $('#dataGrid').bootstrapTable('refresh');
+            },
+            save : function() {
+                dialogOpen({
+                    title : [[#{add}]],
+                    url : 'base/patient/add.html?_' + $.now(),
+                    width : '720px',
+                    height : '530px',
+                    scroll : true,
+                    yes : function(iframeId) {
+                        top.frames[iframeId].vm.acceptClick();
+                    },
+                });
+            },
+            edit : function() {
+                var ck = $('#dataGrid').bootstrapTable('getSelections');
+                if (checkedRow(ck)) {
+                    dialogOpen({
+                        title : [[#{edit}]],
+                        url : 'base/patient/edit.html?_' + $.now(),
+                        width : '720px',
+                        height : '530px',
+                        scroll : true,
+                        success : function(iframeId) {
+                            top.frames[iframeId].vm.pat.id = ck[0].id;
+                            top.frames[iframeId].vm.setForm();
+                        },
+                        yes : function(iframeId) {
+                            top.frames[iframeId].vm.acceptClick();
+                        },
+                    });
+                }
+            },
+            remove : function() {
+                var ck = $('#dataGrid').bootstrapTable('getSelections'), ids = [];
+                if (checkedArray(ck)) {
+                    $.each(ck, function(idx, item) {
+                        ids[idx] = item.userId;
+                    });
+                    $.RemoveForm({
+                        url : '../../sys/user/remove?_' + $.now(),
+                        param : ids,
+                        success : function(data) {
+                            vm.load();
+                        }
+                    });
+                }
+            }
+        }
+    })
+
+    $('#dataGrid').bootstrapTableEx({
+        url : '../../sys/patient/list?_' + $.now(),
+        height : $(window).height() - 56,
+        queryParams : function(params) {
+            params.username = vm.keyword;
+            return params;
+        },
+        columns : [ {
+            checkbox : true
+        }, {
+            field : "id",
+            title : [[#{num}]],
+            width : "50px"
+        },{
+            field : "name",
+            title : [[#{patient.name}]],
+            width : "50px"
+        }, {
+            field : "age",
+            title : [[#{patient.age}]],
+            width : "50px"
+        },{
+            field : "email",
+            title : [[#{patient.ethnicity}]],
+            width : "50px"
+        }, {
+            field : "height",
+            title : [[#{patient.height}]],
+            width : "40px"
+        }, {
+            field : "weight",
+            title : [[#{patient.weight}]],
+            width : "40px",
+        }, {
+            field : "bmi",
+            title : "BMI",
+            width : "35px"
+        }, {
+            field : "pbw",
+            title : "PBW",
+            width : "35px"
+        },
+            {
+                field : "serialNum",
+                title : [[#{patient.deviceNo}]],
+                width : "40px"
+            },
+            {
+                field : "medicalRecord",
+                title : [[#{patient.recoNo}]],
+                width : "40px"
+            },
+            {
+                field : "diagnose",
+                title : [[#{patient.diagnosis}]],
+                width : "60px"
+            },
+            {
+                field : "doctor",
+                title : [[#{patient.doctor}]],
+                width : "60px"
+            },
+            {
+                field : "yblx",
+                title : [[#{patient.ybtype}]],
+                width : "30px"
+            },
+            {
+                field : "homeAddres",
+                title : [[#{patient.addr}]],
+                width : "100px"
+
+            },
+            {
+                field : "operation",
+                title : [[#{operating}]],
+                width : "150px",
+                events: "operateEvents",
+                formatter: function(value, row, index) {
+                    return ' <button id="selectBtn" type="button" class="btn btn-success  btn-xs">[[#{RealData}]]</button>'+
+                        '<button id="historyBtn"  type="button" style="margin-left: 5px" class="btn btn-primary  btn-xs">[[#{HistoryData}]]</button>';
+
+                }
+            }]
+    })
+</script>
+</body>
+</html>

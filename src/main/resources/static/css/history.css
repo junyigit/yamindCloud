@@ -1,0 +1,43 @@
+.statInfo{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    padding-top: 20%;
+    padding-left: 35%;
+}
+#dateRange{
+    float: left;
+    margin-right: 5px;
+}
+#dateHistory{
+    float: left;
+}
+
+
+
+#tjxx{
+    width: 90%;
+}
+.table{
+    width: 90%;
+}
+.table td{
+    width: 100px;
+    text-align: left;
+}
+
+/*#operGroup{*/
+    /*position: absolute;*/
+    /*height: 100%;*/
+    /*width: 100%;*/
+    /*padding-top: 20%;*/
+    /*padding-left: 35%;*/
+/*}*/
+
+/*#dateMap{*/
+    /*float: left;*/
+    /*margin-right: 5px;*/
+/*}*/
+/*#findMap{*/
+    /*float: left;*/
+/*}*/

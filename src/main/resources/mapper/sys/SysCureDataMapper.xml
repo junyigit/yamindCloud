@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yamind.cloud.modules.sys.dao.SysCureDataMapper">
+
+
+
+	<!--历史数据-设备信息列表-->
+	<select id="listForPage" resultType="com.yamind.cloud.modules.sys.entity.SysCureDataEntity">
+
+		SELECT
+		c.id,
+		DATE_FORMAT(c.cure_time,"%Y-%m-%d")as cureTime,
+		c.mode,
+		c.bootSerial,
+		c.cure_stress,
+		c.min_stress,
+		c.max_stress,
+		c.max_inhaleStress,
+		c.inhale_stress,
+		c.exhale_stress,
+		c.respiratory_rate,
+		c.inhale_time,
+		c.inhale_sensitivity,
+		c.exhale_sensitivity,
+		c.stress_up,
+		c.stress_down,
+		c.avaps,
+		c.soft_version
+		FROM
+		sys_curedata c
+		<where>
+		c.bootSerial=#{serialId}
+		</where>
+		group by DATE_FORMAT(c.cure_time, "%Y-%m-%d" )
+		ORDER BY
+		c.id ASC
+
+	</select>
+
+
+	<!--历史数据-设备信息列表-->
+	<select id="getGroupCureData" parameterType="java.lang.String" resultType="com.yamind.cloud.modules.sys.entity.SysCureDataEntity">
+		SELECT
+		c.id,
+		DATE_FORMAT(c.cure_time,"%Y-%m-%d")as cureTime,
+		c.mode,
+		c.bootSerial,
+		c.cure_stress,
+		c.min_stress,
+		c.max_stress,
+		c.max_inhaleStress,
+		c.inhale_stress,
+		c.exhale_stress,
+		c.respiratory_rate,
+		c.inhale_time,
+		c.inhale_sensitivity,
+		c.exhale_sensitivity,
+		c.stress_up,
+		c.stress_down,
+		c.avaps,
+		c.soft_version
+		FROM
+		sys_curedata c
+		<where>
+				AND c.bootSerial LIKE concat('%',#{serialId},'%')
+		</where>
+		group by DATE_FORMAT(c.cure_time, "%Y-%m-%d" )
+		ORDER BY
+		c.id DESC
+	</select>
+
+	<!--获取历史数据中 统计信息的列表-->
+	<select id="listForHistoryStatData" resultType="com.yamind.cloud.modules.sys.entity.SysCureDataEntity">
+		SELECT
+		c.id,
+		c.cure_time,
+		c.mode,
+		c.bootSerial,
+		c.cure_stress,
+		c.min_stress,
+		c.max_stress,
+		c.max_inhaleStress,
+		c.inhale_stress,
+		c.exhale_stress,
+		c.respiratory_rate,
+		c.inhale_time,
+		c.inhale_sensitivity,
+		c.exhale_sensitivity,
+		c.stress_up,
+		c.stress_down,
+		c.avaps,
+		c.soft_version
+		FROM
+		sys_curedata c
+		<where>
+				c.cure_time BETWEEN #{startDate} and #{endDate}
+
+	 	AND c.bootSerial =#{serialId} ORDER BY cure_time ASC
+		</where>
+	</select>
+
+
+	<!--获取历史数据中 统计信息的列表-->
+	<select id="getStatCount" resultType="int">
+		SELECT
+		COUNT(*)
+		FROM
+		sys_curedata
+		<where>
+			cure_time BETWEEN #{startDate} and #{endDate}
+			AND bootSerial =#{serialId} ORDER BY cure_time ASC
+		</where>
+	</select>
+
+
+	<!--获取历史数据中 统计信息的列表-->
+	<select id="getStatDataMaxAndAvg" resultType="hashmap">
+		SELECT
+		AVG(c.cure_stress) as ylpjz,
+		MAX(c.cure_stress) as ylzdz,
+		AVG(c.inhale_stress) as xqylpjz,
+		MAX(c.inhale_stress) as xqylzdz,
+		AVG(c.exhale_stress) as hqylpjz,
+		MAX(c.exhale_stress) as hqylzdz,
+		AVG(c.ai) as aipjz,
+		AVG(c.hi) as hipjz,
+		MAX(c.ai+c.hi) as zdahi,
+		AVG(c.ai+c.hi) as pjahi,
+		AVG(c.minu_throughput) as fztqlpjz,
+		MAX(c.minu_throughput) as fztqzdz,
+		AVG(c.tidal_volume) as cqlpjz,
+		MAX(c.tidal_volume) as cqlzdz,
+		AVG(c.respiratory_rate) as hxplpjz,
+		MAX(c.respiratory_rate) as hxplzdz
+		FROM
+		sys_curedata c
+	WHERE
+			c.cure_time BETWEEN #{startDate} and #{endDate}
+	 	AND c.bootSerial =#{serialId} ORDER BY cure_time DESC
+	</select>
+
+
+
+
+	<!--保存治疗数据sql-->
+	<insert id="save" parameterType="com.yamind.cloud.modules.sys.entity.SysCureDataEntity" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO sys_curedata (
+			cure_time,
+			mode,
+			bootSerial,
+			real_flow,
+			cure_stress,
+			min_stress,
+			max_stress,
+			minu_throughput,
+			max_inhaleStress,
+			inhale_stress,
+			exhale_stress,
+			respiratory_rate,
+			tidal_volume,
+			inhale_time,
+			exhale_release,
+			inhale_sensitivity,
+			exhale_sensitivity,
+			ai,
+			hi,
+			stress_up,
+			stress_down,
+			avaps,
+			soft_version
+		)
+		VALUES (
+  			#{cureTime},
+			#{mode},
+			#{bootSerial},
+			#{realFlow},
+			#{cureStress},
+			#{minStress},
+			#{maxStress},
+			#{minusTroughput},
+			#{maxInhaleStress},
+			#{inhaleStress},
+			#{exhaleStress},
+			#{respiratoryRate},
+			#{tidalVolume},
+			#{inhaleTime},
+			#{exhaleRelease},
+            #{inhaleSensitivity},
+			#{exhaleSensitivity},
+			#{aiCount},
+			#{hiCount},
+			#{stressUp},
+            #{stressDown},
+			#{avaps},
+			#{softVersion}
+		)
+	</insert>
+
+
+	<!--查询所选时间的使用天数-->
+
+	<select id="getUseDayCount" resultType="int">
+			SELECT
+		COUNT(*)
+	FROM
+		(
+			SELECT
+				cure_time
+			FROM
+				sys_curedata
+				WHERE bootSerial=#{serialId} AND cure_time BETWEEN #{startDate} and #{endDate}
+			GROUP BY
+				DATE_FORMAT(cure_time, "%Y%M%D")
+		) AS count
+	</select>
+
+
+
+	<!--按字段排序查询统计信息数据-->
+	<select id="listForColData" resultType="String">
+		SELECT
+			${colName}
+		FROM
+		sys_curedata
+		WHERE
+			cure_time BETWEEN #{startDate} and #{endDate}
+			AND bootSerial =#{serialId} ORDER BY #{colName} ASC
+	</select>
+
+
+
+	<!--按日期查询95值 统计信息信息数据-->
+	<select id="listForDateStatInfo" parameterType="java.lang.String" resultType="String">
+		SELECT
+			${niceCol}
+		FROM
+		sys_curedata
+		<where>
+				cure_time BETWEEN #{niceStart} and #{niceEnd}
+		AND bootSerial =#{serialId} ORDER BY #{niceCol} ASC
+		</where>
+	</select>
+
+
+
+
+	<!--按序列号查询 分组数据  曲线图处用-->
+	<select id="findMapWithSerial"  resultType="com.yamind.cloud.modules.sys.entity.SysCureDataEntity">
+		SELECT
+		c.id,
+		DATE_FORMAT(c.cure_time, "%H:%i:%s" ) as cureTime,
+		c.bootSerial,
+		c.mode,
+		c.real_flow,
+		c.cure_stress,
+		c.min_stress,
+		c.max_stress,
+		c.max_inhaleStress,
+		c.inhale_stress,
+		c.exhale_stress,
+		c.respiratory_rate,
+		c.inhale_time,
+		c.inhale_sensitivity,
+		c.exhale_sensitivity,
+		c.stress_up,
+		c.stress_down,
+		c.avaps,
+		c.soft_version
+		FROM
+		sys_curedata c
+		<where>
+				c.cure_time BETWEEN #{startTime} and #{endTime}
+			AND c.bootSerial =#{serialId} ORDER BY c.cure_time ASC
+		</where>
+	</select>
+
+
+
+	<!--按日期查询数据 曲线图里用-->
+	<select id="findMapListWithDate" parameterType="java.lang.String" resultType="com.yamind.cloud.modules.sys.entity.SysCureDataEntity">
+		SELECT
+		c.id,
+		c.cure_time,
+		c.mode,
+		c.bootSerial,
+		c.cure_stress,
+		c.min_stress,
+		c.max_stress,
+		c.max_inhaleStress,
+		c.inhale_stress,
+		c.exhale_stress,
+		c.respiratory_rate,
+		c.inhale_time,
+		c.inhale_sensitivity,
+		c.exhale_sensitivity,
+		c.stress_up,
+		c.stress_down,
+		c.avaps,
+		c.soft_version
+		FROM
+		sys_curedata c
+		<where>
+				c.cure_time BETWEEN #{niceStart} and #{niceEnd}
+
+		AND c.bootSerial =#{serialId} ORDER BY c.cure_time ASC
+		</where>
+	</select>
+
+	<delete id="delectOldTimeData">
+
+		DELETE FROM sys_curedata WHERE DATEDIFF(now(),cure_time)>7
+	</delete>
+</mapper>

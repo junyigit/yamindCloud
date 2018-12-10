@@ -1,0 +1,28 @@
+{
+    "zh": {
+        "realData": "实时数据",
+        "realyl": "实时压力",
+        "realll": "实时流量",
+        "serial": "机器序列号",
+        "type": "机器型号",
+        "softVersion": "软件版本号",
+        "time": "使用时间",
+        "mode": "模式",
+        "inRelese": "呼吸释放",
+        "maxKpa": "最大压力",
+        "minKpa": "最小压力"
+    },
+    "en": {
+        "realData": "realData",
+        "realyl": "Real-time Pressure",
+        "realll": "Real-time Flow",
+        "serial": "Serial Number",
+        "type": "Type",
+        "softVersion": "Software Version",
+        "time": "Usage Hours",
+        "mode": "Mode",
+        "inRelese": "A-Xlief",
+        "maxKpa": "Max Pressure",
+        "minKpa": "Min Pressure"
+    }
+}

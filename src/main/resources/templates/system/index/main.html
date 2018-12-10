@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link th:href="@{../../css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{../../css/demo.css}" rel="stylesheet"/>
+    <link th:href="@{../../css/material-dashboard.css}" rel="stylesheet"/>
+</head>
+
+
+<body>
+
+    <div class="backgroudImg">
+
+    </div>
+
+<!--<script src="http://code.jquery.com/jquery-1.9.1.js"></script>-->
+<script src="https://cdn.bootcss.com/jquery/1.8.0/jquery-1.8.0.min.js"></script>
+<script src="/static/libs/jquery.min.js"></script>
+
+<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script type="text/javascript">
+
+    console.log("进入main.html ，读取cookie= "+$.cookie('lang'));
+    if ($.cookie('lang') == "en-us" || $.cookie('lang') == "en_us"){
+
+        console.log("main.html  Js文件读取显示英文");
+        $(".backgroudImg").empty();
+        $(".backgroudImg").append("<img id=\"bgrd\" src=\"/images/background-en.png\"/>");
+    }else if($.cookie('lang') == "zh-cn" ||$.cookie('lang') == "zh_cn") {
+        console.log("main.html  Js文件读取显示中文");
+        $(".backgroudImg").empty();
+        $(".backgroudImg").append("<img id=\"bgrd\" src=\"/images/backgroud.png\"/>");
+    }
+</script>
+
+</body>
+
+
+
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/header_css::header('远程调参')"></head>
+<body>
+
+<div class="map" style="float: left;width: 50%">
+    <div id="main" style="width:100%;height:380px;">  </div>
+    <div id="main1" style="width:100%;height:380px;"></div>
+</div>
+
+
+<div class="realdata" style="position:relative;width: 30%;margin-left: 55%">
+
+</div>
+
+
+<div class="operation" style="position: absolute;margin-left: 55%">
+    <div class="btn-group" role="group">
+        <button id="tenSecond" type="button" class="btn btn-default">10秒</button>
+        <button id="towsecond" type="button" class="btn btn-default">20秒</button>
+        <button id="threeSecond" type="button" class="btn btn-default">30秒</button>
+    </div>
+    <a class="btn btn-default" onclick="javascript:history.go(-1)">&nbsp;[[#{return}]]</a>
+</div>
+<div th:include="include/footer_js::footer"></div>
+<script th:src="@{/js/base/patient/realData.js}"></script>
+<script th:src="@{/js/echarts.min.js}"></script>
+<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+</body>
+</html>

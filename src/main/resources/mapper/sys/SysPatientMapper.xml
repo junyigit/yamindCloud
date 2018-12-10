@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yamind.cloud.modules.sys.dao.SysPadientMapper">
+
+
+
+
+    <select id="listForPage" resultType="com.yamind.cloud.modules.sys.entity.SysPatientEntity">
+        SELECT
+        u.id,
+        u.name,
+        u.age,
+        u.height,
+        u.weight,
+        u.bmi,
+        u.pbw,
+        u.serialNum,
+        u.medicalRecord,
+        u.diagnose,
+        u.doctor,
+        u.card,
+        u.homeAddres
+        FROM
+        sys_padient u
+        <where>
+            <if test="username != null and username.trim() != ''">
+                AND u.name LIKE concat('%',#{username},'%')
+            </if>
+        </where>
+        ORDER BY
+        u.id DESC
+    </select>
+
+    <insert id="save" parameterType="com.yamind.cloud.modules.sys.entity.SysPatientEntity" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO sys_padient (
+  			name,
+			age,
+			height,
+			weight,
+			bmi,
+			pbw,
+			serialNum,
+			medicalRecord,
+			diagnose,
+			doctor,
+			card,
+			homeAddres
+		)
+		VALUES (
+			#{name},
+			#{age},
+			#{height},
+			#{weight},
+			#{bmi},
+			#{pbw},
+			#{serialNum},
+			#{medicalRecord},
+			#{diagnose},
+			#{doctor},
+            #{card},
+			#{homeAddres}
+		)
+	</insert>
+
+
+
+    <select id="getObjectById" resultType="com.yamind.cloud.modules.sys.entity.SysPatientEntity">
+		SELECT
+          u.id,
+        u.name,
+        u.age,
+        u.height,
+        u.weight,
+        u.bmi,
+        u.pbw,
+        u.serialNum,
+        u.medicalRecord,
+        u.diagnose,
+        u.doctor,
+        u.card,
+        u.homeAddres
+		FROM
+			sys_padient u
+		WHERE
+			u.id = #{id}
+	</select>
+
+
+
+    <update id="update">
+        UPDATE sys_padient
+        <set>
+            <if test="name != null">name = #{name}, </if>
+            <if test="age != null">age = #{age}, </if>
+            <if test="height != null">height = #{height}, </if>
+            <if test="weight != null">weight = #{weight}, </if>
+            <if test="bmi != null">bmi = #{bmi}, </if>
+            <if test="pbw != null">pbw = #{pbw}, </if>
+            <if test="serialNum != null">serialNum = #{serialNum}, </if>
+            <if test="medicalRecord != null">medicalRecord = #{medicalRecord}, </if>
+            <if test="diagnose != null">diagnose = #{diagnose}, </if>
+            <if test="doctor != null">doctor = #{doctor}, </if>
+            <if test="card != null">card = #{card}, </if>
+            <if test="homeAddres != null">homeAddres = #{homeAddres}, </if>
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+</mapper>

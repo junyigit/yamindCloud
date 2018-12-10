@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/header_css::header('组织机构')"></head>
+<body>
+<div id="dyLTE" class="container-fluid" v-cloak>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="btn-toolbar">
+				<div class="btn-group">
+		            <a v-if="hasPermission('sys:org:list')" class="btn btn-default" onclick="reload();"><i class="fa fa-refresh"></i>&nbsp;[[#{refresh}]]</a>
+		            <a v-if="hasPermission('sys:org:save')" class="btn btn-default" @click="save"><i class="fa fa-plus"></i>&nbsp;[[#{add}]]</a>
+		            <a v-if="hasPermission('sys:org:edit')" class="btn btn-default" @click="edit"><i class="fa fa-pencil-square-o"></i>&nbsp;[[#{edit}]]</a>
+		            <a v-if="hasPermission('sys:org:remove')" class="btn btn-default" @click="remove"><i class="fa fa-trash-o"></i>&nbsp;[[#{delete}]]</a>
+		        </div>
+	        </div>
+		</div>
+	</div>
+	<div class="row">
+		<table id="dataGrid"></table>
+	</div>
+</div>
+<div th:include="include/footer_js::footer"></div>
+<script th:src="@{/js/base/org/list.js}"></script>
+
+<script th:inline="javascript">
+    $('#dataGrid').bootstrapTreeTableEx({
+        url: '../../sys/org/list?_' + $.now(),
+        height: $(window).height() - 56,
+        idField: 'orgId',
+        treeShowField: 'name',
+        parentIdField: 'parentId',
+        columns: [
+            {checkbox: true},
+            {title: [[#{num}]], field: 'orgId', visible: false, width: '80px'},
+            {title: [[#{org.name}]], field: 'name'},
+            {title: [[#{org.jg}]], field: 'code', width: '200px'},
+            {title: [[#{org.parentJg}]], field: 'parentName', width: '300px'},
+            {title: [[#{org.status}]], field: 'status', width: '60px', formatter: function(value, row, index){
+                    if(row.status === 0){
+                        return '<i class="fa fa-toggle-off"></i>';
+                    }
+                    if(row.status === 1){
+                        return '<i class="fa fa-toggle-on"></i>';
+                    }
+                }},
+            {title: [[#{org.sort}]], field: 'orderNum', width: '80px'}
+        ]
+    });
+</script>
+</body>
+</html>

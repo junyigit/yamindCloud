@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/header_css::header('新增-用户管理')"></head>
+<body>
+	<div id="dyLTE" class="container-fluid" v-cloak>
+		<table class="form" id="form">
+			<tr>
+	            <td th:text="#{userAdd.user}" class="formTitle"></td>
+	            <td class="formValue">
+					<input type="text" class="form-control" placeholder="" v-model="user.username" isvalid="yes" checkexpession="NotNull">
+	            </td>
+	            <td class="formTitle" th:text="#{userAdd.jg}"></td>
+	            <td class="formValue">
+					<input type="text" class="form-control pointer" placeholder="" v-model="user.orgName" @click="orgTree" isvalid="yes" checkexpession="NotNull" readonly="readonly">
+	            </td>
+        	</tr>
+        	<tr>
+	            <td class="formTitle" th:text="#{userAdd.password}"></td>
+	            <td class="formValue">
+					<input type="text" class="form-control" placeholder="" v-model="user.password" isvalid="yes" checkexpession="NotNull">
+	            </td>
+        		<td class="formTitle" th:text="#{userAdd.email}"></td>
+	            <td class="formValue">
+					<input type="text" class="form-control" placeholder="" v-model="user.email">
+	            </td>
+        	</tr>
+        	<tr>
+	            <td class="formTitle" th:text="#{userAdd.phone}"></td>
+	            <td class="formValue">
+					<input type="text" class="form-control" placeholder="" v-model="user.mobile">
+	            </td>
+	            <td class="formTitle" th:text="#{userAdd.Remarks}"></td>
+	            <td class="formValue">
+					<input type="text" class="form-control" placeholder="" v-model="user.remark">
+	            </td>
+        		
+        	</tr>
+			<tr>
+				<td class="formTitle" th:text="#{userAdd.role}"></td>
+				<td class="formValue" colspan="3">
+					<select multiple="multiple" size="10" name="doublebox" class="rolebox"></select>
+				</td>
+			</tr>
+			<tr>
+				<td class="formTitle" th:text="#{userAdd.status}"></td>
+				<td class="formValue" colspan="3">
+					<label class="radio-inline">
+						<input type="radio" th:text="#{userAdd.statusOff}" name="status" value="0" v-model="user.status"/>
+					</label>
+					<label class="radio-inline">
+						<input type="radio" th:text="#{userAdd.statusOn}" name="status" value="1" v-model="user.status"/> 					</label>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div th:include="include/footer_js::footer"></div>
+	<script th:src="@{/js/base/user/add.js}"></script>
+</body>
+</html>

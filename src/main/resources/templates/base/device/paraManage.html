@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/header_css::header('远程调参')"></head>
+<body>
+<div id="dyLTE" class="container-fluid" v-cloak>
+    <div class="row">
+        <div class="col-md-4 form-inline pull-left">
+            <div class="form-group">
+                <input v-model="keyword" @keyup.enter="load" class="form-control" th:placeholder="#{inputUserName}" style="width: 220px;" />
+            </div>
+            <div class="form-group">
+                <a class="btn btn-primary" @click="load"><i class="fa fa-search"></i>&nbsp;[[#{find}]]</a>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="btn-toolbar pull-right">
+                <div class="btn-group">
+                    <!--<a v-if="hasPermission('sys:patient:list')" class="btn btn-default" onclick="reload();"><i class="fa fa-refresh"></i>&nbsp;刷新</a>-->
+                    <!--<a v-if="hasPermission('sys:patient:save')" class="btn btn-default" @click="save"><i class="fa fa-plus"></i>&nbsp;新增</a>-->
+                    <!--<a v-if="hasPermission('sys:patient:edit')" class="btn btn-default" @click="edit"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>-->
+                    <!--<a v-if="hasPermission('sys:patient:remove')" class="btn btn-default" @click="remove"><i class="fa fa-trash-o"></i>&nbsp;删除</a>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <table id="dataGrid"></table>
+    </div>
+</div>
+<div th:include="include/footer_js::footer"></div>
+<script th:src="@{/js/base/device/paraManage.js}"></script>
+<script th:inline="javascript">
+    $('#dataGrid').bootstrapTableEx({
+        url : '../../sys/device/list?_' + $.now(),
+        height : $(window).height() - 56,
+        queryParams : function(params) {
+            params.username = vm.keyword;
+            return params;
+        },
+        columns : [ {
+            checkbox : true
+        }, {
+            field : "patientName",
+            title : [[#{para.name}]],
+            width : "50px"
+        },{
+            field : "diagnose",
+            title : [[#{para.diagnosis}]],
+            width : "50px"
+        }, {
+            field : "devSerial",
+            title : [[#{para.deviceNo}]],
+            width : "50px"
+        },{
+            field : "devType",
+            title : [[#{para.type}]],
+            width : "50px"
+        }, {
+            field : "softVersion",
+            title : [[#{para.softVersion}]],
+            width : "40px"
+        }, {
+            field : "operationTime",
+            title : [[#{para.lastoperating}]],
+            width : "40px",
+        },
+            {
+                field : "operation",
+                title : [[#{operating}]],
+                width : "150px",
+                events: "operateEvents",
+                formatter: function(value, row, index) {
+                    return ' <button id="setPara" type="button" class="btn btn-success  btn-xs">设置参数</button>';
+                }
+            }]
+    })
+</script>
+</body>
+</html>

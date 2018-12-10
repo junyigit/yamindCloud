@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yamind.cloud.modules.sys.dao.SysDeviceMapper">
+
+
+	<select id="listForPage" resultType="com.yamind.cloud.modules.sys.entity.SysDeviceEntity">
+		SELECT
+		u.id,
+		u.user_id,
+			(
+				SELECT
+					o.name
+				FROM
+					sys_padient o
+				WHERE
+					o.id = u.user_id
+			) AS patientName,
+						(
+				SELECT
+					o.diagnose
+				FROM
+					sys_padient o
+				WHERE
+					o.serialNum = u.devSerial
+			) AS diagnose,
+		u.devSerial,
+		u.devType,
+		u.softVersion,
+		u.operationTime
+		FROM
+		sys_device u
+		ORDER BY
+		u.id DESC
+	</select>
+</mapper>

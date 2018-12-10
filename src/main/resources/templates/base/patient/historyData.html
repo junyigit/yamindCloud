@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/header_css::header('远程调参')"></head>
+<link rel="stylesheet" type="text/css" th:href="@{/css/history.css}">
+
+<body>
+
+<ul id="myTab" class="nav nav-tabs">
+    <li class="active">
+        <a href="#szxx" data-toggle="tab">
+            [[#{setInfo}]]
+        </a>
+    </li>
+    <li><a href="#tjxx" data-toggle="tab">[[#{statisInfo}]]</a></li>
+    <li>
+        <a href="#qxt" @click="mapImg" data-toggle="tab">[[#{graph}]]</a>
+    </li>
+    <li style="right: 0">
+        <a style="margin-right: 0" class="btn btn-default" onclick="javascript:history.go(-1)">&nbsp;[[#{return}]]</a>
+    </li>
+</ul>
+<div id="myTabContent" class="tab-content">
+
+    <!--历史数据- 设置信息-->
+    <div class="tab-pane fade in active" id="szxx">
+        <table id="setInfo"></table>
+    </div>
+
+
+    <!--历史数据- 统计信息-->
+    <div class="tab-pane fade" id="tjxx">
+        <div class="statInfo">
+            <input id="dateRange" :value="dateRange" class="form-control" placeholder="请选择时间范围" style="width: 190px;"/>
+            <a class="btn btn-primary" id="dateHistory"><i class="fa fa-search"></i>&nbsp;查询</a>
+        </div>
+    </div>
+
+
+    <!--历史数据－　曲线图-->
+    <div class="tab-pane fade" id="qxt" style="width: 100%">
+
+        <div id="operGroup">
+            <input type="text" id="dateMap"  placeholder="请选择查询时间" style="height: 35px">
+            <a class="btn btn-primary" id="findMap"><i class="fa fa-search"></i>&nbsp;查询</a>
+        </div>
+        <div class="map">
+            <div id="charts1" style="width: 1500px;height:300px;"></div>
+            <div id="charts2" style="width: 1500px;height:400px;"></div>
+            <div id="charts3" style="width: 1500px;height:400px;"></div>
+        </div>
+    </div>
+</div>
+<div th:include="include/footer_js::footer"></div>
+<script th:src="@{/js/base/patient/history.js}"></script>
+<script th:src="@{/js/laydate.js}"></script>
+<script th:src="@{/js/echarts.min.js}"></script>
+<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/header_css::header('参数设置')"></head>
+<body>
+<!--<a class="btn btn-default" onclick="javascript:history.go(-1)">&nbsp;返回</a>-->
+
+
+
+<!--设置参数模板-->
+
+<div class="panel panel-default" id="paraList">
+
+</div>
+<button id="setPara" class="btn btn-primary" style="text-align: right">设置参数</button>
+
+<a class="btn btn-primary" onclick="javascript:history.go(-1)">&nbsp;返回上一页</a>
+
+<div th:include="include/footer_js::footer"></div>
+<script th:src="@{/js/base/device/paraSet.js}"></script>
+</body>
+</html>

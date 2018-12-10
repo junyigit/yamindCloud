@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/header_css::header('角色管理')"></head>
+<body>
+<div id="dyLTE" class="container-fluid" v-cloak>
+	<div class="row">
+		<div class="col-md-4 form-inline pull-left">
+			<div class="form-group">
+		    	<input v-model="keyword" @keyup.enter="load" type="text" class="form-control" th:placeholder="#{inputUserName}"  style="width: 220px;" />
+			</div>
+			<div class="form-group">
+			    <a class="btn btn-primary" @click="load"><i class="fa fa-search"></i>&nbsp;[[#{find}]]</a>
+			</div>
+		</div>
+		<div class="col-md-8">
+			<div class="btn-toolbar pull-right">
+				<div class="btn-group">
+		            <a v-if="hasPermission('sys:role:list')" class="btn btn-default" onclick="reload();"><i class="fa fa-refresh"></i>&nbsp;[[#{refresh}]]</a>
+		            <a v-if="hasPermission('sys:role:save')" class="btn btn-default" @click="save"><i class="fa fa-plus"></i>&nbsp;[[#{add}]]</a>
+		            <a v-if="hasPermission('sys:role:edit')" class="btn btn-default" @click="edit"><i class="fa fa-pencil-square-o"></i>&nbsp;[[#{edit}]]</a>
+		            <a v-if="hasPermission('sys:role:remove')" class="btn btn-default" @click="remove"><i class="fa fa-trash-o"></i>&nbsp;[[#{delete}]]</a>
+		        </div>
+		        <div class="btn-group">
+		            <a v-if="hasPermission('sys:role:authorizeOpt')" class="btn btn-default" @click="authorizeOpt"><i class="fa fa-gavel"></i>&nbsp;操作权限</a>
+		            <a v-if="hasPermission('sys:role:authorizeData')" class="btn btn-default" @click="authorizeData"><i class="fa fa-eye"></i>&nbsp;数据权限</a>
+		        </div>
+	        </div>
+		</div>
+	</div>
+	<div class="row">
+		<table id="dataGrid"></table>
+	</div>
+</div>
+<div th:include="include/footer_js::footer"></div>
+<script th:src="@{/js/base/role/list.js}"></script>
+<script th:inline="javascript">
+    $('#dataGrid').bootstrapTableEx({
+        url: '../../sys/role/list?_' + $.now(),
+        height: $(window).height()-56,
+        queryParams: function(params){
+            params.roleName = vm.keyword;
+            return params;
+        },
+        columns: [{
+            checkbox: true
+        }, {
+            field : "roleId",
+            title : [[#{role.num}]],
+            width : "50px"
+        }, {
+            field : "roleName",
+            title : [[#{role.name}]],
+            width : "200px"
+        }, {
+            field : "roleSign",
+            title : [[#{role.roleId}]],
+            width : "200px"
+        }, {
+            field : "orgName",
+            title : [[#{role.jg}]],
+            width : "200px"
+        }, {
+            field : "remark",
+            title : [[#{role.remarks}]],
+            width : "250px"
+        }, {
+            field : "gmtCreate",
+            title : [[#{role.createTime}]]
+        }]
+    })
+</script>
+</body>
+</html>

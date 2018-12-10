@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/header_css::header('新增-患者信息')"></head>
+
+<body>
+<div id="dyLTE" class="container-fluid" v-cloak>
+
+    <table class="table table-bordered" id="form">
+        <tr>
+            <td class="formTitle"><b>[[#{patient.name}]]</b></td>
+            <td class="formValue">
+                <input type="text" class="form-control" placeholder="" v-model="pat.name" isvalid="yes" checkexpession="NotNull">
+            </td>
+
+            <td class="formTitle"><b>[[#{patient.age}]]</b></td>
+            <td class="formValue">
+                <input type="text" class="form-control" placeholder="" v-model="pat.age" isvalid="yes" checkexpession="NotNull">
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle"><b>[[#{patient.height}]]</b></td>
+            <td class="formValue">
+                <input type="text" class="form-control" placeholder="" v-model="pat.height">
+            </td>
+
+            <td class="formTitle"><b>[[#{patient.weight}]]</b></td>
+            <td class="formValue">
+                <input type="text" class="form-control" placeholder="" v-model="pat.weight" isvalid="yes" checkexpession="NotNull">
+            </td>
+        </tr>
+
+
+        <tr>
+            <td class="formTitle formTitle-top"><b>bmi</b></td>
+            <td class="formValue">
+                <input type="text" class="form-control" placeholder="" v-model="pat.bmi">
+            </td>
+
+            <td class="formTitle formTitle-top"><b>pbw</b></td>
+            <td class="formValue">
+                <input type="text" class="form-control" placeholder="" v-model="pat.pbw">
+            </td>
+        </tr>
+
+        <tr>
+            <td class="formTitle formTitle-top"><b>[[#{patient.deviceNo}]]</b></td>
+            <td class="formValue">
+                <input type="text" class="form-control" placeholder="" v-model="pat.serialNum">
+            </td>
+
+            <td class="formTitle formTitle-top"><b>[[#{patient.recoNo}]]</b></td>
+            <td class="formValue">
+                <input type="text" class="form-control" placeholder="" v-model="pat.medicalRecord">
+            </td>
+        </tr>
+
+
+        <tr>
+            <td class="formTitle formTitle-top"><b>[[#{patient.diagnosis}]]</b></td>
+            <td class="formValue">
+                <textarea class="form-control" rows="4" placeholder="" v-model="pat.diagnose"></textarea>
+            </td>
+
+            <td class="formTitle formTitle-top"><b>[[#{patient.doctor}]]</b></td>
+            <td class="formValue">
+                <input type="text" class="form-control" placeholder="" v-model="pat.doctor">
+            </td>
+        </tr>
+
+
+        <tr>
+            <br/>
+            <td class="formTitle formTitle-top"><b>[[#{patient.idcard}]]</b></td>
+            <td class="formValue">
+                <input type="text" class="form-control" placeholder="" v-model="pat.card">
+            </td>
+
+            <td class="formTitle formTitle-top"><b>[[#{patient.addr}]]</b></td>
+            <td class="formValue">
+                <textarea class="form-control" rows="4" placeholder="" v-model="pat.homeAddres"></textarea>
+            </td>
+        </tr>
+
+    </table>
+</div>
+<div th:include="include/footer_js::footer"></div>
+<script th:src="@{/js/base/patient/add.js}"></script>
+</body>
+</html>
