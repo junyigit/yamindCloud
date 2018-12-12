@@ -36,6 +36,7 @@ public class SysDeviceServiceImpl implements SysDeviceService {
         Query form = new Query(params);
         Page<SysDeviceEntity> page = new Page<>(form);
         sysDeviceManager.listForDevice(page, form);
+        System.out.println("1111");
         return page;
     }
 
