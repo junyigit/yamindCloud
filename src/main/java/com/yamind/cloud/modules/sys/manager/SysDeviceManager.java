@@ -11,4 +11,7 @@ public interface SysDeviceManager {
 
 
     List<SysDeviceEntity> listForDevice(Page<SysDeviceEntity> page, Query search);
+
+
+    int saveDevice(SysDeviceEntity dev);
 }

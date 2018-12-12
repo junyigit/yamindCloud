@@ -1,5 +1,23 @@
  $(function () {
 
+     $.ajax({
+         url: "/json/language.json",//json文件位置
+         type: "GET",//请求方式为get
+         dataType: "json", //返回数据格式为json
+         async:false,
+         success: function(data) {//请求成功完成后要执行的方法
+             if (getCookie('lang') == "zh-cn" || getCookie('lang') == "zh_cn") {
+                 lauguageData = data.zh;
+                 console.log("选择了中文==="+lauguageData);
+             } else if (getCookie('lang') == "en-us" || getCookie('lang') == "en_us") {
+                 lauguageData = data.en;
+                 console.log("选择了英文==="+lauguageData);
+
+             }
+         }
+     })
+
+
      //定义全局变量
      var ipAddr;
 

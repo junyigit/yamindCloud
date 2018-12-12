@@ -1,4 +1,22 @@
 $(function () {
+
+    $.ajax({
+        url: "/json/language.json",//json文件位置
+        type: "GET",//请求方式为get
+        dataType: "json", //返回数据格式为json
+        async:false,
+        success: function(data) {//请求成功完成后要执行的方法
+            if (getCookie('lang') == "zh-cn" || getCookie('lang') == "zh_cn") {
+                lauguageData = data.zh;
+                console.log("选择了中文==="+lauguageData);
+            } else if (getCookie('lang') == "en-us" || getCookie('lang') == "en_us") {
+                lauguageData = data.en;
+                console.log("选择了英文==="+lauguageData);
+
+            }
+        }
+    })
+
     initialPage();
     getGrid();
 
@@ -10,13 +28,17 @@ $(function () {
         elem: '#dateMap' //指定元素
     });
 
+
+
+
+
+
     //获取日期范围
     var dateRange=0;
     //开始时间
     var startDate=0;
     //结束时间
     var endTime=0;
-
 
     //获取地址传参
     var serialId = getUrlParam(window.location.href,'serialId');
@@ -43,7 +65,7 @@ $(function () {
                 }
             })
         }else{
-            dialogMsg("请选择统计时间!");
+            dialogMsg(lauguageData.xztjsj);
         }
 
     })
@@ -92,7 +114,7 @@ $(function () {
                                 option = {
                                     title: {
                                         left: 'center',
-                                        text: '治疗压力(hPa)',
+                                        text: lauguageData.treatmentPres+'(hPa)',
                                     },tooltip: {
                                         trigger: 'axis',
                                         showDelay:100,
@@ -168,7 +190,7 @@ $(function () {
 
                                 series: [
                                     {
-                                        name: '最大压力',
+                                        name: lauguageData.maxKpa,
                                         type: 'line',
                                         smooth: 0.3,
                                         symbol:'none',
@@ -176,7 +198,7 @@ $(function () {
                                         data: maxArr
                                     },
                                     {
-                                        name: '最小压力',
+                                        name: lauguageData.minKpa,
                                         type: 'line',
                                         smooth: 0.3,
                                         symbol:'none',
@@ -191,7 +213,7 @@ $(function () {
                             option = {
                                 title: {
                                     left: 'center',
-                                    text: '治疗压力(hPa)',
+                                    text: lauguageData.treatmentPres+'(hPa)',
                                 },tooltip: {
                                     trigger: 'axis',
                                     showDelay:100,
@@ -217,7 +239,7 @@ $(function () {
                                 }],
                                 series: [
                                     {
-                                        name: '吸气压力',
+                                        name: lauguageData.xqyl,
                                         type: 'line',
                                         smooth: 0.3,
                                         symbol:'none',
@@ -225,7 +247,7 @@ $(function () {
                                         data: inhale
                                     },
                                     {
-                                        name: '呼气压力',
+                                        name: lauguageData.hqyl,
                                         type: 'line',
                                         smooth: 0.3,
                                         symbol:'none',
@@ -432,7 +454,9 @@ function initialPage() {
 }
 
 
+
 function getGrid() {
+    console.log("getGrid");
     serialId = getUrlParam(window.location.href,'serialId');
     $('#setInfo').bootstrapTableEx({
         url: '../../sys/patient/getHistorySetData?_' + $.now(),
@@ -446,72 +470,72 @@ function getGrid() {
             checkbox: true
         }, {
             field: "cureTime",
-            title: "日期",
+            title: lauguageData.data,
             width: "80px"
         }, {
             field: "mode",
-            title: "模式",
+            title: lauguageData.mode,
             width: "50px"
         }, {
             field: "cureStress",
-            title: "治疗压力",
+            title: lauguageData.treatmentPres,
             width: "20px"
         }, {
             field: "minStress",
-            title: "最小压力",
+            title: lauguageData.minKpa,
             width: "50px"
         }, {
             field: "maxStress",
-            title: "最大压力",
+            title: lauguageData.maxKpa,
             width: "40px"
         }, {
             field: "maxInhaleStress",
-            title: "最大吸气压力",
+            title: lauguageData.zdxqyl,
             width: "35px",
         }, {
             field: "inhaleStress",
-            title: "吸气压力",
+            title: lauguageData.xqyl,
             width: "35px"
         }, {
             field: "exhaleStress",
-            title: "呼气压力",
+            title: lauguageData.hqyl,
             width: "35px"
         },
         {
             field: "respiratoryRate",
-            title: "呼吸频率",
+            title: lauguageData.hxpl,
             width: "40px"
         },
         {
 
             field: "inhaleTime",
-            title: "吸气时间",
+            title: lauguageData.xqsj,
             width: "40px"
         },
         {
             field: "exhaleRelease",
-            title: "呼气释放",
+            title: lauguageData.hqsf,
             width: "60px"
         },
         {
             field: "inhaleSensitivity",
-            title: "吸气灵敏度",
+            title: lauguageData.xqlmd,
             width: "60px"
         },
         {
             field: "exhaleSensitivity",
-            title: "呼气灵敏度",
+            title: lauguageData.hqlmd,
             width: "30px"
         },
         {
             field: "stressUp",
-            title: "压力上升坡度",
+            title: lauguageData.ylsspd,
             width: "80px"
 
         },
         {
             field: "stressDown",
-            title: "压力下降坡度",
+            title: lauguageData.ylxjpd,
             width: "80px"
 
         },
@@ -523,7 +547,7 @@ function getGrid() {
         },
         {
             field: "softVersion",
-            title: "软件版本",
+            title: lauguageData.softVersion,
             width: "80px"
         }]
     })
@@ -537,49 +561,49 @@ function getGrid() {
 function returnMode1(p) {
         return mode1 =
             '<table class="table" id="syxx" >' +
-            '<h3><tr style="background-color: coral"><b>使用信息</b></tr></h3>' +
+            '<h3><tr style="background-color: coral"><b>'+lauguageData.syxx+'</b></tr></h3>' +
             '<tr> ' +
-            '<td>' + "使用天数" + '</td>' +
+            '<td>' + lauguageData.syts+ '</td>' +
             '<td>' + p.useDay + '</td>' +
-            '<td>' + "天＞4小时" + '</td>' +
+            '<td>' + lauguageData.day4hours + '</td>' +
             '<td>' + p.useDay + '</td>' +
             '</tr>' +
             '<tr> ' +
-            '<td style="background-color: coral">' + "使用时间" + '</td>' +
+            '<td>' + lauguageData.time + '</td>' +
             '<td>' + p.useTime + '</td>' +
-            '<td>' + "平均使用时间" + '</td>' +
+            '<td>' + lauguageData.pjsysj + '</td>' +
             '<td>' + p.avgUseTime + '</td>' +
             '</tr>' +
             '</table>' +
 
             '<table class="table" id="zlyl" cellspacing="50">' +
-            '<h3><tr><b>治疗压力</b></tr></h3>' +
+            '<h3><tr><b>'+lauguageData.treatmentPres+'</b></tr></h3>' +
             '<tr> ' +
-            '<td  style="background:red;">' + "平均值" + '</td>' +
+            '<td  style="background:red;">' + lauguageData.pjz + '</td>' +
             '<td>' + p.maxAvg.ylpjz + '</td>' +
-            '<td>' + "P95值" + '</td>' +
+            '<td>' + lauguageData.p95z + '</td>' +
             '<td>' + p.stressNice + '</td>' +
             '</tr>' +
             '<tr> ' +
-            '<td>' + "中位值" + '</td>' +
+            '<td>' + lauguageData.zwz + '</td>' +
             '<td>' + p.cureStress.cureStress + '</td>' +
-            '<td>' + "最大值" + '</td>' +
+            '<td>' + lauguageData.zdz + '</td>' +
             '<td>' + p.maxAvg.ylzdz + '</td>' +
             '</tr>' +
             '</table>' +
 
             '<table class="table" id="hxzt" cellspacing="50">' +
-            '<h3><tr><b>呼吸暂停低通气指数</b></tr></h3>' +
+            '<h3><tr><b>'+lauguageData.hxztdtqzs+'</b></tr></h3>' +
             '<tr> ' +
-            '<td>' + "平均AHI" + '</td>' +
+            '<td>' + lauguageData.pjahi+ '</td>' +
             '<td>' + p.maxAvg.pjahi + '</td>' +
-            '<td>' + "最大AHI" + '</td>' +
+            '<td>' + lauguageData.zdahi + '</td>' +
             '<td>' + p.maxAvg.zdahi+ '</td>' +
             '</tr>' +
             '<tr> ' +
-            '<td>' + "平均AI" + '</td>' +
+            '<td>' + lauguageData.pjai + '</td>' +
             '<td>' + p.maxAvg.aipjz+ '</td>' +
-            '<td>' + "平均HI" + '</td>' +
+            '<td>' + lauguageData.pjhi + '</td>' +
             '<td>' + p.maxAvg.hipjz + '</td>' +
             '</tr>' +
             '</table>';
@@ -593,110 +617,111 @@ function returnMode1(p) {
  */
 function returnMode2(p){
         return mode2=
+
             '<table class="table" id="syxx" >' +
-            '<h3><tr style="background-color: coral"><b>使用信息</b></tr></h3>' +
+            '<h3><tr style="background-color: coral"><b>'+lauguageData.syxx+'</b></tr></h3>' +
             '<tr> ' +
-            '<td>' + "使用天数" + '</td>' +
+            '<td>' + lauguageData.syts+ '</td>' +
             '<td>' + p.useDay + '</td>' +
-            '<td>' + "天＞4小时" + '</td>' +
+            '<td>' + lauguageData.day4hours + '</td>' +
             '<td>' + p.useDay + '</td>' +
             '</tr>' +
             '<tr> ' +
-            '<td>' + "使用时间" + '</td>' +
+            '<td style="background-color: coral">' + lauguageData.time + '</td>' +
             '<td>' + p.useTime + '</td>' +
-            '<td>' + "平均使用时间" + '</td>' +
+            '<td>' + lauguageData.pjsysj + '</td>' +
             '<td>' + p.avgUseTime + '</td>' +
             '</tr>' +
             '</table>' +
 
             '<table class="table" id="lql" cellspacing="50">'+
-            '<h3><tr><b>治疗压力</b></tr></h3>'+
+            '<h3><tr><b>'+lauguageData.treatmentPres+'</b></tr></h3>'+
             '<tr> ' +
-            '<td>' + "吸气平均压力" + '</td>' +
+            '<td>' + lauguageData.xqpjyl + '</td>' +
             '<td>' + p.maxAvg.xqylpjz+ '</td>' +
-            '<td>' + "呼气平均压力" + '</td>' +
+            '<td>' + lauguageData.hqpjyl + '</td>' +
             '<td>' + p.maxAvg.hqylpjz + '</td>' +
             '</tr>' +
             '<tr> ' +
-            '<td>' + "吸气平均P95" + '</td>' +
+            '<td>' + lauguageData.xqpj95 + '</td>' +
             '<td>' + p.inhaleStressNice+ '</td>' +
-            '<td>' + "呼气平均P95" + '</td>' +
+            '<td>' + lauguageData.hqpj95 + '</td>' +
             '<td>' + p.exhaleStressNice + '</td>' +
             '</tr>' +
             '<tr> ' +
-            '<td>' + "吸气压力中位值" + '</td>' +
+            '<td>' + lauguageData.xqylzwz + '</td>' +
             '<td>' + p.inhaleStress+ '</td>' +
-            '<td>' + "呼气压力中位值" + '</td>' +
+            '<td>' + lauguageData.hqylzwz + '</td>' +
             '<td>' + p.exhaleStress + '</td>' +
             '</tr>' +
             '<tr> ' +
-            '<td>' + "吸气压力最大值" + '</td>' +
+            '<td>' + lauguageData.xqylzdz + '</td>' +
             '<td>' + p.maxAvg.xqylzdz+ '</td>' +
-            '<td>' + "呼气压力最大值" + '</td>' +
+            '<td>' + lauguageData.hqylzdz + '</td>' +
             '<td>' + p.maxAvg.hqylzdz + '</td>' +
             '</tr>' +
             '</table>'+
 
 
             '<table class="table" id="hxzt" cellspacing="50">' +
-            '<h3><tr><b>呼吸暂停低通气指数</b></tr></h3>' +
+            '<h3><tr><b>'+lauguageData.hxztdtqzs+'</b></tr></h3>' +
             '<tr> ' +
-            '<td>' + "平均AHI" + '</td>' +
+            '<td>' + lauguageData.pjahi+ '</td>' +
             '<td>' + p.maxAvg.pjahi + '</td>' +
-            '<td>' + "最大AHI" + '</td>' +
+            '<td>' + lauguageData.zdahi + '</td>' +
             '<td>' + p.maxAvg.zdahi+ '</td>' +
             '</tr>' +
             '<tr> ' +
-            '<td>' + "平均AI" + '</td>' +
+            '<td>' + lauguageData.pjai + '</td>' +
             '<td>' + p.maxAvg.aipjz+ '</td>' +
-            '<td>' + "平均HI" + '</td>' +
+            '<td>' + lauguageData.pjhi + '</td>' +
             '<td>' + p.maxAvg.hipjz + '</td>' +
             '</tr>' +
             '</table>'+
 
 
             '<table class="table" id="cql" cellspacing="50">'+
-            '<h3><tr><b>潮气量＆分钟通气量</b></tr></h3>'+
+            '<h3><tr><b>'+lauguageData.cqlfztql+'</b></tr></h3>'+
             '<tr> ' +
-            '<td>' + "潮气量平均值" + '</td>' +
+            '<td>' + lauguageData.cqlpjz + '</td>' +
             '<td>' + p.maxAvg.cqlpjz+ '</td>' +
-            '<td>' + "分钟通气量平均值" + '</td>' +
+            '<td>' + lauguageData.fztqpjz + '</td>' +
             '<td>' + p.maxAvg.fztqlpjz + '</td>' +
             '</tr>' +
             '<tr> ' +
-            '<td>' + "潮气量中位值" + '</td>' +
+            '<td>' + lauguageData.cqlzwz + '</td>' +
             '<td>' + p.tidalVolume+ '</td>' +
-            '<td>' + "分钟通气量中位值" + '</td>' +
+            '<td>' + lauguageData.fztqzwz+ '</td>' +
             '<td>' + p.minuThroughput + '</td>' +
             '</tr>' +
             '<tr> ' +
-            '<td>' + "潮气量95%值" + '</td>' +
+            '<td>' + lauguageData.cql95z + '</td>' +
             '<td>' + p.tidalVolumeNice+ '</td>' +
-            '<td>' + "分钟通气量95%值" + '</td>' +
+            '<td>' + lauguageData.fztq95z + '</td>' +
             '<td>' + p.minuThroughputNice + '</td>' +
             '</tr>' +
             '<tr> ' +
-            '<td>' + "潮气量最大值" + '</td>' +
+            '<td>' + lauguageData.cqlzdz + '</td>' +
             '<td>' + p.maxAvg.cqlzdz+ '</td>' +
-            '<td>' + "分钟通气量最大值" + '</td>' +
+            '<td>' + lauguageData.fztqzdz + '</td>' +
             '<td>' + p.maxAvg.fztqzdz + '</td>' +
             '</tr>' +
             '</table>'+
 
 
             '<table class="table" id="hxpl" cellspacing="50">'+
-            '<h3><tr><b>呼吸频率</b></tr></h3>'+
+            '<h3><tr><b>'+lauguageData.hxpl+'</b></tr></h3>'+
             '<tr> ' +
-            '<td>' + "呼吸频率平均值" + '</td>' +
+            '<td>' + lauguageData.hxplpjz + '</td>' +
             '<td>' + p.maxAvg.hxplpjz+ '</td>' +
-            '<td>' + "呼吸频率中位值" + '</td>' +
+            '<td>' + lauguageData.hxplzwz + '</td>' +
             '<td>' +  p.respiratoryRate+ '</td>' +
             '</tr>' +
 
             '<tr> ' +
-            '<td>' + "呼吸频率95%值" + '</td>' +
+            '<td>'  +lauguageData.hxpl95z+ '</td>' +
             '<td>' + p.respiratoryRateNice+ '</td>' +
-            '<td>' + "呼吸频率最大值" + '</td>' +
+            '<td>' +lauguageData.hxplzdz+ '</td>' +
             '<td>' + p.maxAvg.hxplzdz + '</td>' +
             '</tr>' +
             '</table>';
@@ -727,6 +752,34 @@ function returnMode2(p){
         return items;
     }
 
+
+    /**
+     * 获取cookie值
+     * @param cookie_name
+     * @returns {string}
+     */
+    function getCookie(cookie_name) {
+        var allcookies = document.cookie;
+        //索引长度，开始索引的位置
+        var cookie_pos = allcookies.indexOf(cookie_name);
+
+        // 如果找到了索引，就代表cookie存在,否则不存在
+        if (cookie_pos != -1) {
+            // 把cookie_pos放在值的开始，只要给值加1即可
+            //计算取cookie值得开始索引，加的1为“=”
+            cookie_pos = cookie_pos + cookie_name.length + 1;
+            //计算取cookie值得结束索引
+            var cookie_end = allcookies.indexOf(";", cookie_pos);
+
+            if (cookie_end == -1) {
+                cookie_end = allcookies.length;
+
+            }
+            //得到想要的cookie的值
+            var value = unescape(allcookies.substring(cookie_pos, cookie_end));
+        }
+        return value;
+    }
 
 });
 

@@ -41,8 +41,6 @@ public class SysDeviceServiceImpl implements SysDeviceService {
 
 
 
-    //
-
     public int savaRecvDate(String date) {
 
 
@@ -85,9 +83,7 @@ public class SysDeviceServiceImpl implements SysDeviceService {
 
                 sysCureDataService.sava(sysCureDataEntity);
             } catch (Exception e) {
-                // TODO: handle exception
                 System.out.println("===========接受数据的时候出现错误============"+e.getMessage());
-
             }
         }
         return 1;

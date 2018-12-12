@@ -33,4 +33,22 @@
 		ORDER BY
 		u.id DESC
 	</select>
+
+
+	<insert id="save" parameterType="com.yamind.cloud.modules.sys.entity.SysDeviceEntity" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO sys_device (
+  			user_id,
+			devSerial,
+			devType,
+			softVersion,
+			operationTime
+		)
+		VALUES (
+			#{userId},
+			#{devSerial},
+			#{devType},
+			#{softVersion},
+			#{operationTime}
+		)
+	</insert>
 </mapper>

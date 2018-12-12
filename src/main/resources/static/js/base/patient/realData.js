@@ -4,17 +4,24 @@ $(function () {
     var myChart = echarts.init(document.getElementById('main'));
     var myChart1 = echarts.init(document.getElementById('main1'));
 
-    //加载JSON内容
-    $.getJSON("/json/language.json",function (data) {
 
-        if (getCookie('lang') == "zh-cn" ||getCookie('lang') == "zh_cn"){
-            lauguageData =data.zh;
-        }else if (getCookie('lang') == "en-us" || getCookie('lang') == "en_us") {
-            lauguageData =data.en;
+    $.ajax({
+        url: "/json/language.json",//json文件位置
+        type: "GET",//请求方式为get
+        dataType: "json", //返回数据格式为json
+        async:false,
+        success: function(data) {//请求成功完成后要执行的方法
+            if (getCookie('lang') == "zh-cn" || getCookie('lang') == "zh_cn") {
+                lauguageData = data.zh;
+                console.log("seleted chinese!!" );
+            } else if (getCookie('lang') == "en-us" || getCookie('lang') == "en_us") {
+                lauguageData = data.en;
+                console.log("seleted english!!");
+            }
+            console.log("RealData ----Seleted Json is :" + JSON.stringify(lauguageData));
         }
-
-        console.log(lauguageData);
     })
+
 
     //在此处剪切 动态代码在html文件中
 
@@ -98,11 +105,10 @@ $(function () {
         colArr.push(i);
     }
 
- //   var option1 = lauguageData.realyl;
-    var option1 = '1111';
+
     option = {
         title: {
-            text:option1
+            text:lauguageData.realyl
         },tooltip: {
             trigger: 'axis',
             showDelay:100,
@@ -148,7 +154,7 @@ $(function () {
 
     option1 = {
         title: {
-            text: '实时流量'
+            text: lauguageData.realll
         },tooltip: {
             trigger: 'axis',
             showDelay:100,
@@ -216,7 +222,7 @@ $(function () {
 
                     var date1=new Date();
                     var second = date1.getSeconds();//秒
-                    console.log("秒为"+second);
+                    //console.log("秒为"+second);
 
                     //填充数据
                     //data.shift();
@@ -246,23 +252,23 @@ $(function () {
                         case "CPAP":
                             table.append(
                                 '<table class="table" id="realtable1" cellspacing="50">'+
-                                '<h4><b>实时数据</b></h4>'+
+                                '<h4><b>'+lauguageData.realData+'</b></h4>' +
                                 '<tr> ' +
-                                '<td>' + "实时压力" + '</td>' +
+                                '<td>' + lauguageData.realyl + '</td>' +
                                 '<td>' + d.cureData.yl + '</td>' +
-                                '<td>' + "实时流量" + '</td>' +
+                                '<td>' + lauguageData.realll + '</td>' +
                                 '<td>' + d.cureData.ll + '</td>' +
                                 '</tr>' +
                                 '</table>'+
                                 '<table class="table" id="realtable2" cellspacing="30" >'+
-                                '<h4><b>设备参数</b></h4>'+
+                                '<h4><b>'+ lauguageData.devicePara+ '</b></h4>'+
 
                                 returnSoft(d)+
 
                                 '<tr> ' +
-                                '<td>' + "呼气释放" + '</td>' +
+                                '<td>' + lauguageData.inRelese + '</td>' +
                                 '<td>' + d.cureData.hqsf + '</td>' +
-                                '<td>' + "治疗压力" + '</td>' +
+                                '<td>' + lauguageData.treatmentPres + '</td>' +
                                 '<td>' + d.cureData.zlyl+ '</td>' +
                                 '</tr>'+
                                 '</table>'
@@ -272,28 +278,28 @@ $(function () {
 
                             table.append(
                                 '<table class="table" id="realtable1" cellspacing="50">'+
-                                '<h4><b>实时数据</b></h4>'+
+                                '<h4><b>'+lauguageData.realData+'</b></h4>' +
                                 '<tr> ' +
-                                '<td>' + "实时压力" + '</td>' +
+                                '<td>' + lauguageData.realyl + '</td>' +
                                 '<td>' + d.cureData.yl + '</td>' +
-                                '<td>' + "实时流量" + '</td>' +
+                                '<td>' + lauguageData.realll + '</td>' +
                                 '<td>' + d.cureData.ll + '</td>' +
                                 '</tr>' +
                                 '</table>'+
                                 '<table class="table" id="realtable2" cellspacing="30" >'+
-                                '<h4><b>设备参数</b></h4>'+
+                                '<h4><b>'+ lauguageData.devicePara+ '</b></h4>'+
 
                                 returnSoft(d)+
 
                                 '<tr> ' +
-                                '<td>' + "呼气释放" + '</td>' +
+                                '<td>' + lauguageData.hqsf + '</td>' +
                                 '<td>' + d.cureData.hqsf + '</td>' +
                                 '</tr>'+
 
                                 '<tr> ' +
-                                '<td>' + "最大压力" + '</td>' +
+                                '<td>' + lauguageData.maxKpa + '</td>' +
                                 '<td>' + d.cureData.zdyl+ '</td>' +
-                                '<td>' + "最小压力" + '</td>' +
+                                '<td>' + lauguageData.minKpa+ '</td>' +
                                 '<td>' + d.cureData.zxyl+ '</td>' +
                                 '</tr>'+
                                 '</table>'
@@ -305,128 +311,130 @@ $(function () {
 
                             table.append(
                                 '<table class="table" id="realtable1" cellspacing="50">'+
-                                '<h4><b>实时数据</b></h4>'+
+                                '<h4><b>'+lauguageData.realData+'</b></h4>' +
 
                                 '<tr> ' +
-                                '<td>' + "实时压力" + '</td>' +
+                                '<td>' + lauguageData.realyl + '</td>' +
                                 '<td>' + d.cureData.yl + '</td>' +
-                                '<td>' + "实时流量" + '</td>' +
+                                '<td>' + lauguageData.realll + '</td>' +
                                 '<td>' + d.cureData.ll + '</td>' +
                                 '</tr>' +
 
                                 '<tr> ' +
-                                '<td>' + "吸呼比" + '</td>' +
+                                '<td>' + lauguageData.xhb + '</td>' +
                                 '<td>' + d.cureData.xhb + '</td>' +
-                                '<td>' + "呼吸频率" + '</td>' +
+                                '<td>' + lauguageData.hxpl + '</td>' +
                                 '<td>' + d.cureData.hxpl + '</td>' +
                                 '</tr>'+
 
                                 '<tr> ' +
-                                '<td>' + "潮气量" + '</td>' +
+                                '<td>' + lauguageData.cql + '</td>' +
                                 '<td>' + d.cureData.cql + '</td>' +
-                                '<td>' + "分钟通气量" + '</td>' +
+                                '<td>' + lauguageData.fztql + '</td>' +
                                 '<td>' + d.cureData.fztql + '</td>' +
                                 '</tr>'+
 
 
                                 '</table>'+
                                 '<table class="table" id="realtable2" cellspacing="30" >'+
-                                '<h4><b>设备参数</b></h4>'+
+                                '<h4><b>'+ lauguageData.devicePara+ '</b></h4>'+
 
                                 returnSoft(d)+
 
                                 '<tr> ' +
-                                '<td>' + "吸气压力" + '</td>' +
-                                '<td>' + d.cureData.xqyl+ '</td>' +
-                                '<td>' + "呼气压力" + '</td>' +
-                                '<td>' + d.cureData.hqyl+ '</td>' +
-                                '</tr>'+
+                                '<td>' + lauguageData.xqyl + '</td>' +
+                                '<td>' + d.cureData.xqyl + '</td>' +
+                                '<td>' + lauguageData.hqyl + '</td>' +
+                                '<td>' + d.cureData.hqyl + '</td>' +
+                                '</tr>' +
 
                                 '<tr> ' +
-                                '<td>' + "吸气灵敏度" + '</td>' +
-                                '<td>' + d.cureData.xqlmd+ '</td>' +
-                                '<td>' + "呼气灵敏度" + '</td>' +
-                                '<td>' + d.cureData.hqlmd+ '</td>' +
-                                '</tr>'+
+                                '<td>' + lauguageData.xqlmd + '</td>' +
+                                '<td>' + d.cureData.xqlmd + '</td>' +
+                                '<td>' + lauguageData.hqlmd + '</td>' +
+                                '<td>' + d.cureData.hqlmd + '</td>' +
+                                '</tr>' +
 
 
                                 '<tr> ' +
-                                '<td>' + "压力上升坡度" + '</td>' +
-                                '<td>' + d.cureData.ylsspd+ '</td>' +
-                                '<td>' + "压力下降坡度" + '</td>' +
-                                '<td>' + d.cureData.ylxjpd+ '</td>' +
-                                '</tr>'+
+                                '<td>' + lauguageData.ylsspd + '</td>' +
+                                '<td>' + d.cureData.ylsspd + '</td>' +
+                                '<td>' + lauguageData.ylxjpd + '</td>' +
+                                '<td>' + d.cureData.ylxjpd + '</td>' +
+                                '</tr>' +
 
                                 '<tr> ' +
                                 '<td>' + "AVAPS" + '</td>' +
                                 '<td>' + d.cureData.avaps+ '</td>' +
-                                '<td>' + "目标潮气量" + '</td>' +
+                                '<td>' + lauguageData.mbcql + '</td>' +
                                 '<td>' + d.cureData.mbcql+ '</td>' +
                                 '</tr>'+
 
                                 '<tr> ' +
-                                '<td>' + "最大吸气压力" + '</td>' +
-                                '<td>' + d.cureData.zdxqyl+ '</td>' +
-                                '<td>' + "最小吸气压力" + '</td>' +
-                                '<td>' + d.cureData.zxxqyl+ '</td>' +
-                                '</tr>'+
+                                '<td>' + lauguageData.zdxqyl+ '</td>' +
+                                '<td>' + d.cureData.zdxqyl + '</td>' +
+                                '<td>' + lauguageData.zxxqyl + '</td>' +
+                                '<td>' + d.cureData.zxxqyl + '</td>' +
+                                '</tr>' +
                                 '</table>'
                             )
                             break;
                         case "S-Auto":
                             table.append(
                                 '<table class="table" id="realtable1" cellspacing="50">'+
-                                '<h4><b>实时数据</b></h4>'+
+                                '<h4><b>'+lauguageData.realData+'</b></h4>' +
 
                                 '<tr> ' +
-                                '<td>' + "实时压力" + '</td>' +
+                                '<td>' + lauguageData.realyl + '</td>' +
                                 '<td>' + d.cureData.yl + '</td>' +
-                                '<td>' + "实时流量" + '</td>' +
+                                '<td>' + lauguageData.realll + '</td>' +
                                 '<td>' + d.cureData.ll + '</td>' +
                                 '</tr>' +
 
                                 '<tr> ' +
-                                '<td>' + "吸呼比" + '</td>' +
+                                '<td>' + lauguageData.xhb + '</td>' +
                                 '<td>' + d.cureData.xhb + '</td>' +
-                                '<td>' + "呼吸频率" + '</td>' +
+                                '<td>' + lauguageData.hxpl + '</td>' +
                                 '<td>' + d.cureData.hxpl + '</td>' +
                                 '</tr>'+
 
                                 '<tr> ' +
-                                '<td>' + "潮气量" + '</td>' +
+                                '<td>' + lauguageData.cql + '</td>' +
                                 '<td>' + d.cureData.cql + '</td>' +
-                                '<td>' + "分钟通气量" + '</td>' +
+                                '<td>' + lauguageData.fztql + '</td>' +
                                 '<td>' + d.cureData.fztql + '</td>' +
                                 '</tr>'+
 
                                 '</table>'+
                                 '<table class="table" id="realtable2" cellspacing="30" >'+
-                                '<h4><b>设备参数</b></h4>'+
+                                '<h4><b>'+ lauguageData.devicePara+ '</b></h4>'+
 
                                 returnSoft(d)+
 
                                 '<tr> ' +
-                                '<td>' + "最大吸气压力" + '</td>' +
+                                '<td>' + lauguageData.zdxqyl + '</td>' +
                                 '<td>' + d.cureData.zdxqyl+ '</td>' +
                                 '</tr>'+
                                 '<tr> ' +
-                                '<td>' + "吸气压力" + '</td>' +
-                                '<td>' + d.cureData.xqyl+ '</td>' +
-                                '<td>' + "呼气压力" + '</td>' +
-                                '<td>' + d.cureData.hqyl+ '</td>' +
-                                '</tr>'+
+                                '<td>' + lauguageData.xqyl + '</td>' +
+                                '<td>' + d.cureData.xqyl + '</td>' +
+                                '<td>' + lauguageData.hqyl + '</td>' +
+                                '<td>' + d.cureData.hqyl + '</td>' +
+                                '</tr>' +
+
                                 '<tr> ' +
-                                '<td>' + "吸气灵敏度" + '</td>' +
-                                '<td>' + d.cureData.xqlmd+ '</td>' +
-                                '<td>' + "呼气灵敏度" + '</td>' +
-                                '<td>' + d.cureData.hqlmd+ '</td>' +
-                                '</tr>'+
+                                '<td>' + lauguageData.xqlmd + '</td>' +
+                                '<td>' + d.cureData.xqlmd + '</td>' +
+                                '<td>' + lauguageData.hqlmd + '</td>' +
+                                '<td>' + d.cureData.hqlmd + '</td>' +
+                                '</tr>' +
+
                                 '<tr> ' +
-                                '<td>' + "压力上升坡度" + '</td>' +
-                                '<td>' + d.cureData.ylsspd+ '</td>' +
-                                '<td>' + "压力下降坡度" + '</td>' +
-                                '<td>' + d.cureData.ylxjpd+ '</td>' +
-                                '</tr>'+
+                                '<td>' + lauguageData.ylsspd + '</td>' +
+                                '<td>' + d.cureData.ylsspd + '</td>' +
+                                '<td>' + lauguageData.ylxjpd + '</td>' +
+                                '<td>' + d.cureData.ylxjpd + '</td>' +
+                                '</tr>' +
                                 '</table>'
                             )
                             break;
@@ -454,7 +462,7 @@ $(function () {
         myChart1.resize();
     };
 
-})
+
 
 /**
  * 获取参数值
@@ -509,93 +517,92 @@ function returnSoft(d) {
 
 function returnStData(d) {
 
-
     return stmodel =
         '<table class="table" id="realtable1" cellspacing="50">' +
-        '<h4><b>实时数据</b></h4>' +
+        '<h4><b>'+lauguageData.realData+'</b></h4>' +
 
         '<tr> ' +
-        '<td>' + "实时压力" + '</td>' +
+        '<td>' + lauguageData.realyl + '</td>' +
         '<td>' + d.cureData.yl + '</td>' +
-        '<td>' + "实时流量" + '</td>' +
+        '<td>' + lauguageData.realll + '</td>' +
         '<td>' + d.cureData.ll + '</td>' +
         '</tr>' +
 
         '<tr> ' +
-        '<td>' + "吸呼比" + '</td>' +
+        '<td>' + lauguageData.xhb + '</td>' +
         '<td>' + d.cureData.xhb + '</td>' +
-        '<td>' + "呼吸频率" + '</td>' +
+        '<td>' + lauguageData.hxpl + '</td>' +
         '<td>' + d.cureData.hxpl + '</td>' +
         '</tr>' +
 
         '<tr> ' +
-        '<td>' + "潮气量" + '</td>' +
+        '<td>' + lauguageData.cql + '</td>' +
         '<td>' + d.cureData.cql + '</td>' +
-        '<td>' + "分钟通气量" + '</td>' +
+        '<td>' + lauguageData.fztql + '</td>' +
         '<td>' + d.cureData.fztql + '</td>' +
         '</tr>' +
 
         '<tr> ' +
-        '<td>' + "漏气量" + '</td>' +
+        '<td>' + lauguageData.lql + '</td>' +
         '<td>' + d.cureData.lql + '</td>' +
         '</tr>' +
 
 
         '</table>' +
         '<table class="table" id="realtable2" cellspacing="30" >' +
-        '<h4><b>设备参数</b></h4>' +
+        '<h4><b>'+ lauguageData.devicePara+ '</b></h4>'+
 
         returnSoft(d) +
         '<tr> ' +
-        '<td>' + "吸气压力" + '</td>' +
+        '<td>' + lauguageData.xqyl + '</td>' +
         '<td>' + d.cureData.xqyl + '</td>' +
-        '<td>' + "呼气压力" + '</td>' +
+        '<td>' + lauguageData.hqyl + '</td>' +
         '<td>' + d.cureData.hqyl + '</td>' +
         '</tr>' +
 
         '<tr> ' +
-        '<td>' + "呼吸频率" + '</td>' +
+        '<td>' + lauguageData.hxpl + '</td>' +
         '<td>' + d.cureData.hxpl + '</td>' +
-        '<td>' + "吸气时间" + '</td>' +
+        '<td>' + lauguageData.xqsj + '</td>' +
         '<td>' + d.cureData.xqsj + '</td>' +
         '</tr>' +
 
 
         '<tr> ' +
-        '<td>' + "吸气灵敏度" + '</td>' +
+        '<td>' + lauguageData.xqlmd + '</td>' +
         '<td>' + d.cureData.xqlmd + '</td>' +
-        '<td>' + "呼气灵敏度" + '</td>' +
+        '<td>' + lauguageData.hqlmd + '</td>' +
         '<td>' + d.cureData.hqlmd + '</td>' +
         '</tr>' +
 
         '<tr> ' +
-        '<td>' + "最大吸气压力" + '</td>' +
+        '<td>' + lauguageData.zdxqyl+ '</td>' +
         '<td>' + d.cureData.zdxqyl + '</td>' +
-        '<td>' + "最小吸气压力" + '</td>' +
+        '<td>' + lauguageData.zxxqyl + '</td>' +
         '<td>' + d.cureData.zxxqyl + '</td>' +
         '</tr>' +
 
 
         '<tr> ' +
-        '<td>' + "压力上升坡度" + '</td>' +
+        '<td>' + lauguageData.ylsspd + '</td>' +
         '<td>' + d.cureData.ylsspd + '</td>' +
-        '<td>' + "压力下降坡度" + '</td>' +
+        '<td>' + lauguageData.ylxjpd + '</td>' +
         '<td>' + d.cureData.ylxjpd + '</td>' +
         '</tr>' +
 
         '<tr> ' +
         '<td>' + "AVAPS" + '</td>' +
         '<td>' + d.cureData.avaps + '</td>' +
-        '<td>' + "目标潮气量" + '</td>' +
+        '<td>' + lauguageData.mbcql + '</td>' +
         '<td>' + d.cureData.mbcql + '</td>' +
         '</tr>' +
 
-        '<tr> ' +
-        '<td>' + "最大吸气压力" + '</td>' +
-        '<td>' + d.cureData.zdxqyl + '</td>' +
-        '<td>' + "最小吸气压力" + '</td>' +
-        '<td>' + d.cureData.zxxqyl + '</td>' +
-        '</tr>' +
+        // '<tr> ' +
+        // '<td>' + "最大吸气压力" + '</td>' +
+        // '<td>' + d.cureData.zdxqyl + '</td>' +
+        // '<td>' + "最小吸气压力" + '</td>' +
+        // '<td>' + d.cureData.zxxqyl + '</td>' +
+        // '</tr>' +
         '</table>';
 
 }
@@ -626,3 +633,4 @@ function getCookie(cookie_name) {
     }
     return value;
 }
+})

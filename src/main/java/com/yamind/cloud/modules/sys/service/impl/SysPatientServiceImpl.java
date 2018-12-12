@@ -6,8 +6,10 @@ import com.yamind.cloud.common.entity.R;
 import com.yamind.cloud.common.utils.CommonUtils;
 
 import com.yamind.cloud.modules.sys.dao.SysPadientMapper;
+import com.yamind.cloud.modules.sys.entity.SysDeviceEntity;
 import com.yamind.cloud.modules.sys.entity.SysOrgEntity;
 import com.yamind.cloud.modules.sys.entity.SysPatientEntity;
+import com.yamind.cloud.modules.sys.manager.SysDeviceManager;
 import com.yamind.cloud.modules.sys.manager.SysPatientManager;
 import com.yamind.cloud.modules.sys.service.SysPatientService;
 import org.springframework.beans.factory.annotation.Autowired;

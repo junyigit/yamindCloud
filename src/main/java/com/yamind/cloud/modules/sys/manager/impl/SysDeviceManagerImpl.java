@@ -25,4 +25,9 @@ public class SysDeviceManagerImpl implements SysDeviceManager {
     public List<SysDeviceEntity> listForDevice(Page<SysDeviceEntity> page, Query search){
         return sysDeviceMapper.listForPage(page, search);
     }
+
+    @Override
+    public int saveDevice(SysDeviceEntity dev){
+        return sysDeviceMapper.save(dev);
+    }
 }
