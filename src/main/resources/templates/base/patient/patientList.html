@@ -130,48 +130,48 @@
             title : "PBW",
             width : "35px"
         },
-            {
-                field : "serialNum",
-                title : [[#{patient.deviceNo}]],
-                width : "40px"
-            },
-            {
-                field : "medicalRecord",
-                title : [[#{patient.recoNo}]],
-                width : "40px"
-            },
-            {
-                field : "diagnose",
-                title : [[#{patient.diagnosis}]],
-                width : "60px"
-            },
-            {
-                field : "doctor",
-                title : [[#{patient.doctor}]],
-                width : "60px"
-            },
-            {
-                field : "yblx",
-                title : [[#{patient.ybtype}]],
-                width : "30px"
-            },
-            {
-                field : "homeAddres",
-                title : [[#{patient.addr}]],
-                width : "100px"
+        {
+            field : "serialNum",
+            title : [[#{patient.deviceNo}]],
+            width : "40px"
+        },
+        {
+            field : "medicalRecord",
+            title : [[#{patient.recoNo}]],
+            width : "40px"
+        },
+        {
+            field : "diagnose",
+            title : [[#{patient.diagnosis}]],
+            width : "60px"
+        },
+        {
+            field : "doctor",
+            title : [[#{patient.doctor}]],
+            width : "60px"
+        },
+        {
+            field : "yblx",
+            title : [[#{patient.ybtype}]],
+            width : "30px"
+        },
+        {
+            field : "homeAddres",
+            title : [[#{patient.addr}]],
+            width : "100px"
 
-            },
-            {
-                field : "operation",
-                title : [[#{operating}]],
-                width : "150px",
-                events: "operateEvents",
-                formatter: function(value, row, index) {
-                    return ' <button id="selectBtn" type="button" class="btn btn-success  btn-xs">[[#{RealData}]]</button>'+
-                        '<button id="historyBtn"  type="button" style="margin-left: 5px" class="btn btn-primary  btn-xs">[[#{HistoryData}]]</button>';
+        },
+        {
+            field : "operation",
+            title : [[#{operating}]],
+            width : "150px",
+            events: "operateEvents",
+            formatter: function(value, row, index) {
+                return ' <button id="selectBtn" type="button" class="btn btn-success  btn-xs">[[#{RealData}]]</button>'+
+                    '<button id="historyBtn"  type="button" style="margin-left: 5px" class="btn btn-primary  btn-xs">[[#{HistoryData}]]</button>';
 
-                }
-            }]
+            }
+        }]
     })
 </script>
 </body>

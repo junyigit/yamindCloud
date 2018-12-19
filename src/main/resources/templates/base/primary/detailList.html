@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/header_css::header('时间段查看')"></head>
+<body>
+<div id="dyLTE" class="container-fluid" v-cloak>
+    <div class="row">
+        <div class="col-md-4 form-inline pull-left">
+            <div class="form-group">
+                <input v-model="keyword" @keyup.enter="load" class="form-control" th:placeholder="#{inputUserName}" style="width: 220px;" />
+            </div>
+            <div class="form-group">
+                <a class="btn btn-primary" @click="load"><i class="fa fa-search"></i>&nbsp;[[#{find}]]</a>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="btn-toolbar pull-right">
+                <div class="btn-group">
+                    <a v-if="hasPermission('sys:patient:list')" class="btn btn-default" onclick="reload();"><i class="fa fa-refresh"></i>&nbsp;[[#{refresh}]]</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <table id="dataGrid"></table>
+    </div>
+</div>
+<div th:include="include/footer_js::footer"></div>
+<script th:src="@{/js/base/primary/detailList.js}"></script>
+
+</body>
+</html>

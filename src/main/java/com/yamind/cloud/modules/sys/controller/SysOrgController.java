@@ -25,7 +25,9 @@ public class SysOrgController extends AbstractController {
 
 	@Autowired
 	private SysOrgService sysOrgService;
-	
+
+
+
 	/**
 	 * 机构列表
 	 * @return
@@ -86,5 +88,6 @@ public class SysOrgController extends AbstractController {
 	public R batchRemove(@RequestBody Long[] id) {
 		return sysOrgService.bactchRemoveOrg(id);
 	}
-	
+
+
 }

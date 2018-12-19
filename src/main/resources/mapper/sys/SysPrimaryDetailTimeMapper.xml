@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yamind.cloud.modules.sys.dao.SysPrimaryDetailTimeMapper">
+
+
+    <select id="listForPage" resultType="com.yamind.cloud.modules.sys.entity.SysPrimaryDetailTimeEntity">
+		SELECT
+        `id`,
+        `ymd`
+        FROM
+            `daya_mechine_data`
+        WHERE
+            `user_id` = #{userId}
+        GROUP BY
+            `ymd`
+        ORDER BY
+            id DESC
+	</select>
+
+</mapper>
