@@ -11,11 +11,11 @@
          async:false,
          success: function(data) {//请求成功完成后要执行的方法
              if (getCookie('lang') == "zh-cn" || getCookie('lang') == "zh_cn") {
-                 lauguageData = data.zh;
-                 console.log("选择了中文==="+lauguageData);
+                 languageData = data.zh;
+                 console.log("选择了中文==="+languageData);
              } else if (getCookie('lang') == "en-us" || getCookie('lang') == "en_us") {
-                 lauguageData = data.en;
-                 console.log("选择了英文==="+lauguageData);
+                 languageData = data.en;
+                 console.log("选择了英文==="+languageData);
 
              }
          }
@@ -106,10 +106,10 @@
                  case "APAP":
                      table.append(
                          '<table class="table" id="setParaTable" cellspacing="30" >' +
-                         '<h4><b>设备参数</b></h4>' +
+                         '<h4><b>'+languageData.devicePara+'</b></h4>' +
 
                          '<tr> ' +
-                         '<td>' + "模式" + '</td>' +
+                         '<td>' + languageData.mode + '</td>' +
                          '<td><select id="modeSel" onchange="changeMode()">\n' +
                          '<option value="APAP" selected="selected">APAP</option>' +
                          '<option value ="CPAP">CPAP</option>' +
@@ -121,20 +121,20 @@
                          '</tr>' +
 
                          '<tr> ' +
-                         '<td>' + "开始压力" + '</td>' +
+                         '<td>' + languageData.ksyl + '</td>' +
                          '<td><input id="starStress" value=' + d.cureData.ksyl + '></td>' +
-                         '<td>' + "延迟时间" + '</td>' +
+                         '<td>' + languageData.ycsj + '</td>' +
                          '<td><input id="delayTime" value=' + d.cureData.ycsj + '></td>' +
                          '</tr>' +
 
                          '<tr> ' +
-                         '<td>' + "最大压力" + '</td>' +
+                         '<td>' + languageData.maxKpa + '</td>' +
                          '<td><input id="maxStress" value=' + d.cureData.zdyl + '></td>' +
-                         '<td>' + "最小压力" + '</td>' +
+                         '<td>' + languageData.minKpa + '</td>' +
                          '<td><input id="minStress" value=' + d.cureData.zxyl + '></td>' +
                          '</tr>' +
                          '<tr> ' +
-                         '<td>' + "呼气释放" + '</td>' +
+                         '<td>' + languageData.hqsf + '</td>' +
                          '<td><input id="breatheRel" value=' + d.cureData.hqsf + '></td>' +
                          '</tr>' +
 
@@ -146,51 +146,53 @@
 
                      table.append(
                          '<table class="table" id="setParaTable" cellspacing="30" >' +
+
                          '<tr> ' +
-                         '<td>' + "吸气压力" + '</td>' +
+                         '<td>' + languageData.xqyl + '</td>' +
                          '<td><input value=' + d.cureData.xqyl + '></td>' +
-                         '<td>' + "呼气压力" + '</td>' +
+                         '<td>' + languageData.hqyl + '</td>' +
                          '<td><input value=' + d.cureData.hqyl + '></td>' +
                          '</tr>' +
 
+
                          '<tr> ' +
-                         '<td>' + "开始压力" + '</td>' +
+                         '<td>' + languageData.ksyl + '</td>' +
                          '<td><input value=' + d.cureData.ksyl + '></td>' +
-                         '<td>' + "延迟时间" + '</td>' +
+                         '<td>' + languageData.ycsj + '</td>' +
                          '<td><input value=' + d.cureData.ycsj + '></td>' +
                          '</tr>' +
 
                          '<tr> ' +
-                         '<td>' + "吸气灵敏度" + '</td>' +
+                         '<td>' + languageData.xqlmd + '</td>' +
                          '<td><input value=' + d.cureData.xqlmd + '></td>' +
-                         '<td>' + "呼气灵敏度" + '</td>' +
+                         '<td>' + languageData.hqlmd + '</td>' +
                          '<td><input value=' + d.cureData.hqlmd + '></td>' +
                          '</tr>' +
 
 
                          '<tr> ' +
-                         '<td>' + "压力上升坡度" + '</td>' +
+                         '<td>' + languageData.ylsspd + '</td>' +
                          '<td><input value=' + d.cureData.ylsspd + '></td>' +
-                         '<td>' + "压力下降坡度" + '</td>' +
+                         '<td>' + languageData.ylxjpd + '</td>' +
                          '<td><input value=' + d.cureData.ylxjpd + '></td>' +
                          '</tr>' +
 
                          '<tr> ' +
                          '<td>' + "AVAPS" + '</td>' +
                          '<td><input value=' + d.cureData.avaps + '></td>' +
-                         '<td>' + "目标潮气量" + '</td>' +
+                         '<td>' + languageData.mbcql + '</td>' +
                          '<td><input value=' + d.cureData.mbcql + '></td>' +
                          '</tr>' +
 
                          '<tr> ' +
-                         '<td>' + "最大吸气压力" + '</td>' +
+                         '<td>' + languageData.zdxqyl + '</td>' +
                          '<td><input value=' + d.cureData.zdxqyl + '></td>' +
-                         '<td>' + "最小吸气压力" + '</td>' +
+                         '<td>' + languageData.zxxqyl + '</td>' +
                          '<td><input value=' + d.cureData.zxxqyl + '></td>' +
                          '</tr>' +
 
                          '<tr> ' +
-                         '<td>' + "呼气释放" + '</td>' +
+                         '<td>' + languageData.hqsf + '</td>' +
                          '<td><input value=' + d.cureData.hqsf + '></td>' +
                          '</tr>' +
                          '</table>'
@@ -201,38 +203,40 @@
                          '<table class="table" id="setParaTable" cellspacing="30" >' +
 
                          '<tr> ' +
-                         '<td>' + "吸气压力" + '</td>' +
+                         '<td>' + languageData.xqyl + '</td>' +
                          '<td><input value=' + d.cureData.xqyl + '></td>' +
-                         '<td>' + "呼气压力" + '</td>' +
+                         '<td>' + languageData.hqyl + '</td>' +
                          '<td><input value=' + d.cureData.hqyl + '></td>' +
                          '</tr>' +
 
                          '<tr> '+
-                         '<td>' + "最大吸气压力" + '</td>' +
+                         '<td>' + languageData.zdxqyl + '</td>' +
                          '<td><input value=' + d.cureData.zdxqyl + '></td>' +
-                         '<td>' + "呼气释放" + '</td>' +
+                         '<td>' + languageData.hqsf + '</td>' +
                          '<td><input value=' + d.cureData.hqsf + '></td>' +
                          '</tr>'+
 
 
                          '<tr> '+
-                         '<td>' + "开始压力" + '</td>' +
+                         '<td>' + languageData.ksyl + '</td>' +
                          '<td><input value=' + d.cureData.ksyl + '></td>' +
-                         '<td>' + "延迟时间" + '</td>' +
+                         '<td>' + languageData.ycsj + '</td>' +
                          '<td><input value=' + d.cureData.ycsj + '></td>' +
                          '</tr>'+
 
-                         '<tr> '+
-                         '<td>' + "吸气灵敏度" + '</td>' +
+                         '<tr> ' +
+                         '<td>' + languageData.xqlmd + '</td>' +
                          '<td><input value=' + d.cureData.xqlmd + '></td>' +
-                         '<td>' + "呼气灵敏度" + '</td>' +
+                         '<td>' + languageData.hqlmd + '</td>' +
                          '<td><input value=' + d.cureData.hqlmd + '></td>' +
-                         '</tr>'+
-                         '<tr> '+
-                         '<td>' + "压力上升坡度" + '</td>' +
-                         '<td><input value=' + d.cureData.ylsspd + '></td>' +
-                         '<td>' + "压力下降坡度" + '</td>' +
-                         '<td><input value=' + d.cureData.ylxjpd + '></td>' +
+                         '</tr>' +
+
+
+                         '<tr> ' +
+                         '<td>' + languageData.ylsspd + '</td>' +
+                         '<td>' + d.cureData.ylsspd + '</td>' +
+                         '<td>' + languageData.ylxjpd + '</td>' +
+                         '<td>' + d.cureData.ylxjpd + '</td>' +
                          '</tr>' +
                          '</table>'
                      );
@@ -241,65 +245,59 @@
                      table.append(
                          '<table class="table" id="setParaTable" cellspacing="30" >' +
                          '<tr> ' +
-                         '<td>' + "吸气压力" + '</td>' +
+                         '<td>' + languageData.xqyl + '</td>' +
                          '<td><input value=' + d.cureData.xqyl + '></td>' +
-                         '<td>' + "呼气压力" + '</td>' +
+                         '<td>' + languageData.hqyl + '</td>' +
                          '<td><input value=' + d.cureData.hqyl + '></td>' +
                          '</tr>' +
 
                          '<tr> ' +
-                         '<td>' + "开始压力" + '</td>' +
+                         '<td>' + languageData.ksyl + '</td>' +
                          '<td><input value=' + d.cureData.ksyl + '></td>' +
-                         '<td>' + "延迟时间" + '</td>' +
+                         '<td>' + languageData.ycsj + '</td>' +
                          '<td><input value=' + d.cureData.ycsj + '></td>' +
                          '</tr>' +
 
                          '<tr> ' +
-                         '<td>' + "呼吸频率" + '</td>' +
+                         '<td>' + languageData.hxpl + '</td>' +
                          '<td><input value=' + d.cureData.hxpl + '></td>' +
-                         '<td>' + "吸气时间" + '</td>' +
+                         '<td>' + languageData.xqsj + '</td>' +
                          '<td><input value=' + d.cureData.xqsj + '></td>' +
                          '</tr>' +
 
 
                          '<tr> ' +
-                         '<td>' + "吸气灵敏度" + '</td>' +
+                         '<td>' + languageData.xqlmd + '</td>' +
                          '<td><input value=' + d.cureData.xqlmd + '></td>' +
-                         '<td>' + "呼气灵敏度" + '</td>' +
+                         '<td>' + languageData.hqlmd + '</td>' +
                          '<td><input value=' + d.cureData.hqlmd + '></td>' +
                          '</tr>' +
 
                          '<tr> ' +
-                         '<td>' + "最大吸气压力" + '</td>' +
+                         '<td>' + languageData.zdxqyl + '</td>' +
                          '<td><input value=' + d.cureData.zdxqyl + '></td>' +
-                         '<td>' + "最小吸气压力" + '</td>' +
+                         '<td>' + languageData.zxxqyl + '</td>' +
                          '<td><input value=' + d.cureData.zxxqyl + '></td>' +
                          '</tr>' +
 
 
                          '<tr> ' +
-                         '<td>' + "压力上升坡度" + '</td>' +
+                         '<td>' + languageData.ylsspd + '</td>' +
                          '<td>' + d.cureData.ylsspd + '</td>' +
-                         '<td>' + "压力下降坡度" + '</td>' +
+                         '<td>' + languageData.ylxjpd + '</td>' +
                          '<td>' + d.cureData.ylxjpd + '</td>' +
                          '</tr>' +
 
                          '<tr> ' +
                          '<td>' + "AVAPS" + '</td>' +
                          '<td>' + d.cureData.avaps + '</td>' +
-                         '<td>' + "目标潮气量" + '</td>' +
+                         '<td>' + languageData.mbcql + '</td>' +
                          '<td>' + d.cureData.mbcql + '</td>' +
                          '</tr>' +
 
-                         '<tr> ' +
-                         '<td>' + "最大吸气压力" + '</td>' +
-                         '<td>' + d.cureData.zdxqyl + '</td>' +
-                         '<td>' + "最小吸气压力" + '</td>' +
-                         '<td>' + d.cureData.zxxqyl + '</td>' +
-                         '</tr>' +
 
                          '<tr> ' +
-                         '<td>' + "呼气释放" + '</td>' +
+                         '<td>' + languageData.hqsf + '</td>' +
                          '<td>' + d.cureData.hqsf + '</td>' +
                          '</tr>' +
                          '</table>'
@@ -309,66 +307,67 @@
                  case "S/T":
                      table.append(
                          '<table class="table" id="setParaTable" cellspacing="30" >' +
+
                          '<tr> ' +
-                         '<td>' + "吸气压力" + '</td>' +
-                         '<td>' + d.cureData.xqyl + '</td>' +
-                         '<td>' + "呼气压力" + '</td>' +
-                         '<td>' + d.cureData.hqyl + '</td>' +
+                         '<td>' + languageData.xqyl + '</td>' +
+                         '<td><input value=' + d.cureData.xqyl + '></td>' +
+                         '<td>' + languageData.hqyl + '</td>' +
+                         '<td><input value=' + d.cureData.hqyl + '></td>' +
                          '</tr>' +
 
                          '<tr> ' +
-                         '<td>' + "开始压力" + '</td>' +
-                         '<td>' + d.cureData.ksyl + '</td>' +
-                         '<td>' + "延迟时间" + '</td>' +
-                         '<td>' + d.cureData.ycsj + '</td>' +
+                         '<td>' + languageData.ksyl + '</td>' +
+                         '<td><input value=' + d.cureData.ksyl + '></td>' +
+                         '<td>' + languageData.ycsj + '</td>' +
+                         '<td><input value=' + d.cureData.ycsj + '></td>' +
                          '</tr>' +
 
                          '<tr> ' +
-                         '<td>' + "呼吸频率" + '</td>' +
-                         '<td>' + d.cureData.hxpl + '</td>' +
-                         '<td>' + "吸气时间" + '</td>' +
-                         '<td>' + d.cureData.xqsj + '</td>' +
+                         '<td>' + languageData.hxpl + '</td>' +
+                         '<td><input value=' + d.cureData.hxpl + '></td>' +
+                         '<td>' + languageData.xqsj + '</td>' +
+                         '<td><input value=' + d.cureData.xqsj + '></td>' +
                          '</tr>' +
 
 
+
                          '<tr> ' +
-                         '<td>' + "吸气灵敏度" + '</td>' +
-                         '<td>' + d.cureData.xqlmd + '</td>' +
-                         '<td>' + "呼气灵敏度" + '</td>' +
-                         '<td>' + d.cureData.hqlmd + '</td>' +
+                         '<td>' + languageData.xqlmd + '</td>' +
+                         '<td><input value=' + d.cureData.xqlmd + '></td>' +
+                         '<td>' + languageData.hqlmd + '</td>' +
+                         '<td><input value=' + d.cureData.hqlmd + '></td>' +
                          '</tr>' +
 
                          '<tr> ' +
-                         '<td>' + "最大吸气压力" + '</td>' +
-                         '<td>' + d.cureData.zdxqyl + '</td>' +
-                         '<td>' + "最小吸气压力" + '</td>' +
-                         '<td>' + d.cureData.zxxqyl + '</td>' +
+                         '<td>' + languageData.zdxqyl + '</td>' +
+                         '<td><input value=' + d.cureData.zdxqyl + '></td>' +
+                         '<td>' + languageData.zxxqyl + '</td>' +
+                         '<td><input value=' + d.cureData.zxxqyl + '></td>' +
                          '</tr>' +
 
-
                          '<tr> ' +
-                         '<td>' + "压力上升坡度" + '</td>' +
+                         '<td>' + languageData.ylsspd + '</td>' +
                          '<td>' + d.cureData.ylsspd + '</td>' +
-                         '<td>' + "压力下降坡度" + '</td>' +
+                         '<td>' + languageData.ylxjpd + '</td>' +
                          '<td>' + d.cureData.ylxjpd + '</td>' +
                          '</tr>' +
 
                          '<tr> ' +
                          '<td>' + "AVAPS" + '</td>' +
                          '<td>' + d.cureData.avaps + '</td>' +
-                         '<td>' + "目标潮气量" + '</td>' +
+                         '<td>' + languageData.mbcql + '</td>' +
                          '<td>' + d.cureData.mbcql + '</td>' +
                          '</tr>' +
 
                          '<tr> ' +
-                         '<td>' + "最大吸气压力" + '</td>' +
-                         '<td>' + d.cureData.zdxqyl + '</td>' +
-                         '<td>' + "最小吸气压力" + '</td>' +
-                         '<td>' + d.cureData.zxxqyl + '</td>' +
+                         '<td>' + languageData.zdxqyl + '</td>' +
+                         '<td><input value=' + d.cureData.zdxqyl + '></td>' +
+                         '<td>' + languageData.zxxqyl + '</td>' +
+                         '<td><input value=' + d.cureData.zxxqyl + '></td>' +
                          '</tr>' +
 
                          '<tr> ' +
-                         '<td>' + "呼气释放" + '</td>' +
+                         '<td>' + languageData.hqsf + '</td>' +
                          '<td>' + d.cureData.hqsf + '</td>' +
                          '</tr>' +
                          '</table>');

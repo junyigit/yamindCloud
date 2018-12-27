@@ -28,7 +28,6 @@ public interface SysCureDataService {
     int getStatCount(Map<String, Object> params);
 
 //    获取历史数据 统计信息 --最大值最小值
-
     Map<String,String> getStatDataMaxAndAvg(Map<String, Object> params);
 
     //统计所选日期使用天数
@@ -38,7 +37,6 @@ public interface SysCureDataService {
     List<String> listForColData(Map<String,Object> param);
 
     //根据日期获取95值
-
     List<String> listForDateStatInfo(Map<String,Object> param);
 
     //保存治疗数据

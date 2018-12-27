@@ -65,7 +65,9 @@
         "zwz": "中位值",
         "p95z": "P95值",
         "zdz": "最大值",
-        "hxztdtqzs": "呼吸暂停低通气指数"
+        "hxztdtqzs": "呼吸暂停低通气指数",
+        "ksyl":"开始压力",
+        "ycsj":"延迟时间"
 
 
 
@@ -139,7 +141,10 @@
         "zwz": "Median",
         "p95z": "P95 ",
         "zdz": "Max",
-        "hxztdtqzs": "SAHS"
+        "hxztdtqzs": "SAHS",
+
+        "ksyl":"Start Pressure",
+        "ycsj":"Delay Time"
 
     }
 }

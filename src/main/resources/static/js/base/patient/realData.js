@@ -24,7 +24,6 @@ $(function () {
 
 
     //在此处剪切 动态代码在html文件中
-
     var data = [];
     var data1 = [];
     var colArr = [];
@@ -308,11 +307,9 @@ $(function () {
                             break;
 
                         case "S":
-
                             table.append(
                                 '<table class="table" id="realtable1" cellspacing="50">'+
                                 '<h4><b>'+lauguageData.realData+'</b></h4>' +
-
                                 '<tr> ' +
                                 '<td>' + lauguageData.realyl + '</td>' +
                                 '<td>' + d.cureData.yl + '</td>' +

@@ -1,6 +1,7 @@
 package com.yamind.cloud.modules.sys.controller;
 
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.yamind.cloud.common.annotation.SysLog;
 import com.yamind.cloud.common.entity.Page;
 import com.yamind.cloud.common.entity.R;
@@ -15,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,11 +38,13 @@ public class SysPatientController extends AbstractController{
 
 
     @Autowired
-    SysPatientService sysPatientService;
+    private JdbcTemplate jdbcTemplate;
     @Autowired
-    RedisTemplate redisTemplate;
+    private SysPatientService sysPatientService;
     @Autowired
-    SysCureDataService sysCureDataService;
+    private RedisTemplate redisTemplate;
+    @Autowired
+    private SysCureDataService sysCureDataService;
 
 
     /**
@@ -192,12 +197,8 @@ public class SysPatientController extends AbstractController{
 
         long a=System.currentTimeMillis();
         //查询当前日期所有的数据List
-
         System.out.println("执行耗时 : "+(System.currentTimeMillis()-a)/1000f+" 秒 ");
-        //List<SysCureDataEntity>list = sysCureDataService.listForHistoryStatData(map);
-        //size
         int size = sysCureDataService.getStatCount(map);
-
         System.out.println("执行耗时 : "+(System.currentTimeMillis()-a)/1000f+" 秒 ");
 
 
@@ -234,9 +235,15 @@ public class SysPatientController extends AbstractController{
             median =(size/2)+1;
         }
 
-
+        String sql;
         //按字段排序查询[统计信息]数据
         map.put("colName","cure_stress");
+
+       sql= "SELECT "+map.get("colName")+" FROM sys_curedata WHERE cure_time BETWEEN '"+ map.get("startDate")+"' AND '"
+                + map.get("endDate") +"' AND bootSerial='"+map.get("serialId") +"' ORDER BY "+ map.get("colName")+" ASC";
+
+        SqlRowSet rowSet=jdbcTemplate.queryForRowSet(sql);
+
         colData=sysCureDataService.listForColData(map);  //压力的中位值
         r.put("cureStress",Double.parseDouble(colData.get(median)));
 
@@ -328,6 +335,8 @@ public class SysPatientController extends AbstractController{
                     sigleNice6+= Double.parseDouble(sData.get((int)Math.ceil(sData.size() * (0.95))-1));
                 }
                 sDte=addDays(sDte,1);//时间再加一天
+
+
             }
 
         } catch (ParseException e) {

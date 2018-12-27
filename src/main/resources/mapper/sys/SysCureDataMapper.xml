@@ -218,7 +218,7 @@
 
 
 	<!--按字段排序查询统计信息数据-->
-	<select id="listForColData" resultType="String">
+	<select id="listForColData" resultType="String" fetchSize="1000">
 		SELECT
 			${colName}
 		FROM
@@ -231,7 +231,7 @@
 
 
 	<!--按日期查询95值 统计信息信息数据-->
-	<select id="listForDateStatInfo" parameterType="java.lang.String" resultType="String">
+	<select id="listForDateStatInfo" parameterType="java.lang.String" resultType="String" fetchSize="1000">
 		SELECT
 			${niceCol}
 		FROM

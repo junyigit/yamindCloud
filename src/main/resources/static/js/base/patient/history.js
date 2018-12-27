@@ -692,7 +692,7 @@ function returnMode2(p){
             '<td>' + lauguageData.cqlzwz + '</td>' +
             '<td>' + p.tidalVolume+ '</td>' +
             '<td>' + lauguageData.fztqzwz+ '</td>' +
-            '<td>' + p.minuThroughput + '</td>' +
+            '<td>' + p.minuThroughput + '</td>'  +
             '</tr>' +
             '<tr> ' +
             '<td>' + lauguageData.cql95z + '</td>' +

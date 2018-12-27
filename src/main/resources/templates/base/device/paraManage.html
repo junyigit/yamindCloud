@@ -19,6 +19,7 @@
                     <!--<a v-if="hasPermission('sys:patient:save')" class="btn btn-default" @click="save"><i class="fa fa-plus"></i>&nbsp;新增</a>-->
                     <!--<a v-if="hasPermission('sys:patient:edit')" class="btn btn-default" @click="edit"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>-->
                     <!--<a v-if="hasPermission('sys:patient:remove')" class="btn btn-default" @click="remove"><i class="fa fa-trash-o"></i>&nbsp;删除</a>-->
+
                 </div>
             </div>
         </div>
@@ -36,7 +37,6 @@
         url : '../../sys/device/list?_' + $.now(),
         height : $(window).height() - 56,
         queryParams : function(params) {
-            params.username = vm.keyword;
             return params;
         },
         columns : [ {
