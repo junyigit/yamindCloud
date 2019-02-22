@@ -35,14 +35,13 @@
 <div th:include="include/footer_js::footer"></div>
 <script th:src="@{/js/base/user/list.js}"></script>
 <script th:inline="javascript">
-    function   initialPage() {
+    function initialPage() {
         $(window).resize(function() {
             $('#dataGrid').bootstrapTable('resetView', {
                 height : $(window).height() - 56
             });
         });
     }
-
     function getGrid() {
         $('#dataGrid').bootstrapTableEx({
             url : '../../sys/user/list?_' + $.now(),
@@ -79,9 +78,9 @@
                 width : "60px",
                 formatter : function(value, row, index) {
                     if (value == '0') {
-                        return '<span class="label label-danger">[[#{userAdd.statusOff}]]</span>';
+                        return '<span class="label label-danger">'+[[#{userAdd.statusOff}]].replace(/\"/g, "")+'</span>';
                     } else if (value == '1') {
-                        return '<span class="label label-success">[[#{userAdd.statusOn}]]</span>';
+                        return '<span class="label label-success">'+[[#{userAdd.statusOn}]].replace(/\"/g, "")+'</span>';
                     }
                 }
             }, {
@@ -94,7 +93,6 @@
             } ]
         })
     }
-
 
 </script>
 </body>

@@ -83,7 +83,7 @@ $(function () {
      */
     function changeDateFormat(value){
         console.log(value);
-        var date = new Date(value * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var date = new Date(value*1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
         var Y = date.getFullYear() + '-';
         var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
         var D = date.getDate() + ' ';
@@ -91,6 +91,9 @@ $(function () {
         var m = date.getMinutes() + ':';
         var s = date.getSeconds();
         return Y+M+D+h+m+s;
+
+
+     //   return new Date(parseInt(value) * 1000).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
     }
 
 
@@ -100,8 +103,10 @@ $(function () {
      */
     function changeStatus(value) {
 
-        if (value ==1){
-            return "初筛仪";
+        if (value ==0){
+            return "在线";
+        }else{
+            return "下线";
         }
         
     }

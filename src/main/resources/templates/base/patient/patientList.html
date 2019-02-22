@@ -167,9 +167,8 @@
             width : "150px",
             events: "operateEvents",
             formatter: function(value, row, index) {
-                return ' <button id="selectBtn" type="button" class="btn btn-success  btn-xs">[[#{RealData}]]</button>'+
-                    '<button id="historyBtn"  type="button" style="margin-left: 5px" class="btn btn-primary  btn-xs">[[#{HistoryData}]]</button>';
-
+                return ' <button id="selectBtn" type="button" class="btn btn-success  btn-xs">'+[[#{RealData}]].replace(/\"/g, "")+'</button>'+
+                    '<button id="historyBtn"  type="button" style="margin-left: 5px" class="btn btn-primary  btn-xs">'+[[#{HistoryData}]].replace(/\"/g, "")+'</button>';
             }
         }]
     })

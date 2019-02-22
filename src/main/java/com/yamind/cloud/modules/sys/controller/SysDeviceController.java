@@ -65,12 +65,16 @@ public class SysDeviceController {
     }
 
 
+    /**
+     * 远程调参调用方法
+     * @param ctx
+     * @param params
+     * @return
+     */
     @RequestMapping(value ="/testNetty",method = RequestMethod.POST)
     public R testNetty(ChannelHandlerContext ctx,@RequestParam Map<String, String> params) {
-        //Channel channel=ChannelMap.getChannelByName(params.get("ipAddr"));
+        //获取IP地址用于指定IP地址的信息发送
         Channel channel=ChannelMap.getChannelByName(params.get("ipAddr"));
-
-
 
         JSONObject jsonObject = new JSONObject();
         JSONObject pataArr = new JSONObject();
@@ -96,8 +100,8 @@ public class SysDeviceController {
                 jsonObject.put("paraData",pataArr);
                 break;
         }
-
-       channel.writeAndFlush(jsonObject.toString());
+        //写入到缓冲通道
+        channel.writeAndFlush(jsonObject.toString());
         return R.ok("ok");
     }
 

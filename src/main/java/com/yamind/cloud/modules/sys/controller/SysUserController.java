@@ -40,7 +40,6 @@ public class SysUserController extends AbstractController {
 		if(getUserId() != SystemConstant.SUPER_ADMIN) {
 			params.put("userIdCreate", getUserId());
 		}
-
 		return sysUserService.listUser(params);
 	}
 	
@@ -157,13 +156,10 @@ public class SysUserController extends AbstractController {
 	/**
 	 * 切换多语言
 	 */
-
 	@RequestMapping("/setLanguageFlag")
 	@ResponseBody
 	public R setLanguageFlag(@RequestParam(name = "language") Integer flag){
-
 		System.out.print(flag);
 		return R.ok("aaaa");
-
 	}
 }

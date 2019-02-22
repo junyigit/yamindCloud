@@ -151,23 +151,9 @@
 			bootSerial,
 			real_flow,
 			cure_stress,
-			min_stress,
-			max_stress,
 			minu_throughput,
-			max_inhaleStress,
-			inhale_stress,
-			exhale_stress,
-			respiratory_rate,
-			tidal_volume,
-			inhale_time,
-			exhale_release,
-			inhale_sensitivity,
-			exhale_sensitivity,
 			ai,
 			hi,
-			stress_up,
-			stress_down,
-			avaps,
 			soft_version
 		)
 		VALUES (
@@ -176,23 +162,9 @@
 			#{bootSerial},
 			#{realFlow},
 			#{cureStress},
-			#{minStress},
-			#{maxStress},
 			#{minusTroughput},
-			#{maxInhaleStress},
-			#{inhaleStress},
-			#{exhaleStress},
-			#{respiratoryRate},
-			#{tidalVolume},
-			#{inhaleTime},
-			#{exhaleRelease},
-            #{inhaleSensitivity},
-			#{exhaleSensitivity},
 			#{aiCount},
 			#{hiCount},
-			#{stressUp},
-            #{stressDown},
-			#{avaps},
 			#{softVersion}
 		)
 	</insert>
@@ -308,7 +280,6 @@
 	</select>
 
 	<delete id="delectOldTimeData">
-
 		DELETE FROM sys_curedata WHERE DATEDIFF(now(),cure_time)>7
 	</delete>
 </mapper>

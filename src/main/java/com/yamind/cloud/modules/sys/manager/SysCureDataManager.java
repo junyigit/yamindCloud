@@ -17,5 +17,5 @@ public interface SysCureDataManager {
 
 
 
-    int sava(SysCureDataEntity pat);
+    int save(SysCureDataEntity pat);
 }

@@ -26,7 +26,7 @@ public class SysCureDataManagerImpl implements SysCureDataManager {
 
 
     @Override
-    public int sava(SysCureDataEntity pat){
+    public int save(SysCureDataEntity pat){
         int count = sysCureDataMapper.save(pat);
         return count;
     }

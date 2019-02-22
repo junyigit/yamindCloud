@@ -24,6 +24,8 @@ $(function () {
     var myChart1 = echarts.init(document.getElementById('charts1'));
     var myChart2 = echarts.init(document.getElementById('charts2'));
     var myChart3 = echarts.init(document.getElementById('charts3'));
+
+
     laydate.render({
         elem: '#dateMap' //指定元素
     });
@@ -471,7 +473,7 @@ function getGrid() {
         }, {
             field: "cureTime",
             title: lauguageData.data,
-            width: "80px"
+            width: "100px"
         }, {
             field: "mode",
             title: lauguageData.mode,
@@ -491,7 +493,7 @@ function getGrid() {
         }, {
             field: "maxInhaleStress",
             title: lauguageData.zdxqyl,
-            width: "35px",
+            width: "25px",
         }, {
             field: "inhaleStress",
             title: lauguageData.xqyl,
@@ -561,7 +563,7 @@ function getGrid() {
 function returnMode1(p) {
         return mode1 =
             '<table class="table" id="syxx" >' +
-            '<h3><tr style="background-color: coral"><b>'+lauguageData.syxx+'</b></tr></h3>' +
+            '<h3><tr><b>'+lauguageData.syxx+'</b></tr></h3>' +
             '<tr> ' +
             '<td>' + lauguageData.syts+ '</td>' +
             '<td>' + p.useDay + '</td>' +
@@ -579,7 +581,7 @@ function returnMode1(p) {
             '<table class="table" id="zlyl" cellspacing="50">' +
             '<h3><tr><b>'+lauguageData.treatmentPres+'</b></tr></h3>' +
             '<tr> ' +
-            '<td  style="background:red;">' + lauguageData.pjz + '</td>' +
+            '<td>' + lauguageData.pjz + '</td>' +
             '<td>' + p.maxAvg.ylpjz + '</td>' +
             '<td>' + lauguageData.p95z + '</td>' +
             '<td>' + p.stressNice + '</td>' +
@@ -619,7 +621,7 @@ function returnMode2(p){
         return mode2=
 
             '<table class="table" id="syxx" >' +
-            '<h3><tr style="background-color: coral"><b>'+lauguageData.syxx+'</b></tr></h3>' +
+            '<h3><tr><b>'+lauguageData.syxx+'</b></tr></h3>' +
             '<tr> ' +
             '<td>' + lauguageData.syts+ '</td>' +
             '<td>' + p.useDay + '</td>' +
@@ -627,7 +629,7 @@ function returnMode2(p){
             '<td>' + p.useDay + '</td>' +
             '</tr>' +
             '<tr> ' +
-            '<td style="background-color: coral">' + lauguageData.time + '</td>' +
+            '<td>' + lauguageData.time + '</td>' +
             '<td>' + p.useTime + '</td>' +
             '<td>' + lauguageData.pjsysj + '</td>' +
             '<td>' + p.avgUseTime + '</td>' +

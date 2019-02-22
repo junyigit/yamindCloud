@@ -23,7 +23,7 @@ public class RRExceptionHandler {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	/**
-	 * 自定义异常
+	 * 自定义异常`
 	 */
 	@ExceptionHandler(RRException.class)
 	public R handleRRException(RRException e){

@@ -70,7 +70,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 	}
 
 	@Override
-	public R batchRemove(Long[] id) {
+	 public R batchRemove(Long[] id) {
 		boolean children = sysMenuManager.hasChildren(id);
 		if(children) {
 			return R.error(MsgConstant.MSG_HAS_CHILD);
@@ -78,5 +78,4 @@ public class SysMenuServiceImpl implements SysMenuService {
 		int count = sysMenuManager.batchRemove(id);
 		return CommonUtils.msg(id, count);
 	}
-
 }

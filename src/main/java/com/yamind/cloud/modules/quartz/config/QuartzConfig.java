@@ -40,9 +40,14 @@ public class QuartzConfig {
 
         prop.put("org.quartz.jobStore.misfireThreshold", "12000");
         //prop.put("org.quartz.jobStore.tablePrefix", "QRTZ_");
+
+
         factory.setQuartzProperties(prop);
 
         factory.setSchedulerName("quartzScheduler");
+   /*
+        2019-1-3 修改屏蔽
+
         //延时启动
         factory.setStartupDelay(30);
         factory.setApplicationContextSchedulerContextKey("applicationContextKey");
@@ -50,7 +55,7 @@ public class QuartzConfig {
         factory.setOverwriteExistingJobs(true);
         //设置自动启动，默认为true
         factory.setAutoStartup(false);
-
+    `   */
         return factory;
     }
 }

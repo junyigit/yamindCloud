@@ -40,7 +40,7 @@ public interface SysCureDataService {
     List<String> listForDateStatInfo(Map<String,Object> param);
 
     //保存治疗数据
-    R sava(SysCureDataEntity user);
+    R save(SysCureDataEntity user);
 
 
     R delectData();

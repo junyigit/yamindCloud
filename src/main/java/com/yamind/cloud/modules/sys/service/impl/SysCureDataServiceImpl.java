@@ -68,8 +68,8 @@ public class SysCureDataServiceImpl implements SysCureDataService {
         return sysCureDataMapper.listForDateStatInfo(param);
     }
 
-    public R sava(SysCureDataEntity data){
-        int count = sysCureDataManager.sava(data);
+    public R save(SysCureDataEntity data){
+        int count = sysCureDataManager.save(data);
         return CommonUtils.msg(count);
     }
 

@@ -10,7 +10,6 @@ server:
 spring:
     messages:
       basename: messages
-      encoding: UTF-8
 
   # 环境 dev:开发环境|test:测试环境|prod:生成环境
     profiles:
@@ -66,6 +65,7 @@ mybatis:
 n:
   port: 2222
   url: localhost
+  #url: 192.168.123.1
   #url: 172.18.72.186
 logging:
-  file: cloud.log
+  file: log/cloud.log

@@ -13,5 +13,7 @@ public interface SysDeviceService {
 
 
 
-    int savaRecvDate(String date);
+    int saveRecvData(String date);
+
+    int saveRecvHistoryData(String date);
 }

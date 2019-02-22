@@ -8,7 +8,6 @@ public class SysPrimarySieveEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-
     private Long id;
 
     private Long status;
@@ -19,10 +18,10 @@ public class SysPrimarySieveEntity implements Serializable {
 
     private String mobile;
 
-
     private String userNickName;
 
     private String lastTime;
+
     public String getLastTime() {
         return lastTime;
     }
@@ -30,8 +29,6 @@ public class SysPrimarySieveEntity implements Serializable {
     public void setLastTime(String lastTime) {
         this.lastTime = lastTime;
     }
-
-
 
     public Long getId() {
         return id;
@@ -57,8 +54,6 @@ public class SysPrimarySieveEntity implements Serializable {
         this.userId = userId;
     }
 
-
-
     public String getMobile() {
         return mobile;
     }
@@ -66,8 +61,6 @@ public class SysPrimarySieveEntity implements Serializable {
     public void setMobile(String mobile) {
         this.mobile = mobile;
     }
-
-
 
     public Long getModel() {
         return model;
@@ -84,8 +77,4 @@ public class SysPrimarySieveEntity implements Serializable {
     public void setUserNickName(String userNickName) {
         this.userNickName = userNickName;
     }
-
-
 }
-
-

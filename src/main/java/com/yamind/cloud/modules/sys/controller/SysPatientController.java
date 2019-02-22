@@ -54,6 +54,8 @@ public class SysPatientController extends AbstractController{
      */
     @RequestMapping("/list")
     public Page<SysPatientEntity> list(@RequestBody Map<String, Object> params) {
+        logger.info("进去用户ie表");
+
         Page<SysPatientEntity> list = sysPatientService.listForPatient(params);
         return list;
     }
@@ -174,7 +176,6 @@ public class SysPatientController extends AbstractController{
     }
 
 
-
     /**
      * 获取历史数据-统计信息
      * @param serialId
@@ -194,23 +195,17 @@ public class SysPatientController extends AbstractController{
         map.put("endDate",endDate);
 
 
-
-        long a=System.currentTimeMillis();
         //查询当前日期所有的数据List
-        System.out.println("执行耗时 : "+(System.currentTimeMillis()-a)/1000f+" 秒 ");
         int size = sysCureDataService.getStatCount(map);
-        System.out.println("执行耗时 : "+(System.currentTimeMillis()-a)/1000f+" 秒 ");
 
 
-
-
+//        long a=System.currentTimeMillis();
+//        System.out.println("执行耗时 : "+(System.currentTimeMillis()-a)/1000f+" 秒 ");
+//        System.out.println("执行耗时 : "+(System.currentTimeMillis()-a)/1000f+" 秒 ");
 
 
         //查询最大值最小值
-         r.put("maxAvg",sysCureDataService.getStatDataMaxAndAvg(map)); //参数:最大值最小值的
-
-
-
+        r.put("maxAvg",sysCureDataService.getStatDataMaxAndAvg(map)); //参数:最大值最小值的
 
 
         int useDay =sysCureDataService.getUseDayCount(map);
@@ -220,7 +215,6 @@ public class SysPatientController extends AbstractController{
         long hours = (diff - days * ( 60 * 60 * 24)) / (60 * 60);
 
         //使用信息
-
         r.put("dayCount",size); //使用天数
         r.put("useDay",useDay); ////获取所选时间内的 使用天数
         r.put("useTime",hours); //使用时间  单位小时
@@ -239,10 +233,10 @@ public class SysPatientController extends AbstractController{
         //按字段排序查询[统计信息]数据
         map.put("colName","cure_stress");
 
-       sql= "SELECT "+map.get("colName")+" FROM sys_curedata WHERE cure_time BETWEEN '"+ map.get("startDate")+"' AND '"
-                + map.get("endDate") +"' AND bootSerial='"+map.get("serialId") +"' ORDER BY "+ map.get("colName")+" ASC";
-
-        SqlRowSet rowSet=jdbcTemplate.queryForRowSet(sql);
+//       sql= "SELECT "+map.get("colName")+" FROM sys_curedata WHERE cure_time BETWEEN '"+ map.get("startDate")+"' AND '"
+//                + map.get("endDate") +"' AND bootSerial='"+map.get("serialId") +"' ORDER BY "+ map.get("colName")+" ASC";
+//
+//        SqlRowSet rowSet=jdbcTemplate.queryForRowSet(sql);
 
         colData=sysCureDataService.listForColData(map);  //压力的中位值
         r.put("cureStress",Double.parseDouble(colData.get(median)));
@@ -408,4 +402,13 @@ public class SysPatientController extends AbstractController{
         return cal.getTime();
     }
 
+
+    /**
+     * 定时任务-删除大于7天的历史数据
+     */
+    @Scheduled(cron = "0 30 0 * * ?")
+    public void delTimeOutHistory() {
+        System.out.println("删除过期的历史数据");
+        sysCureDataService.delectData();
+    }
 }

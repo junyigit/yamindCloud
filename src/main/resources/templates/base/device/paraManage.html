@@ -72,10 +72,12 @@
                 width : "150px",
                 events: "operateEvents",
                 formatter: function(value, row, index) {
-                    return ' <button id="setPara" type="button" class="btn btn-success  btn-xs">[[#{device.setPara}]]</button>';
+                    return ' <button id="setPara" type="button" class="btn btn-success  btn-xs">'+[[#{device.setPara}]].replace(/\"/g, "")+'</button>';
                 }
             }]
     })
+
+
 </script>
 </body>
 </html>

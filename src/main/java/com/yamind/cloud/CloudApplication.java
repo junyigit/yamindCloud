@@ -77,7 +77,4 @@ public class CloudApplication extends SpringBootServletInitializer implements Co
 
 		future.channel().closeFuture().syncUninterruptibly();
 	}
-
-
-
 }

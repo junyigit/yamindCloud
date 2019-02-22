@@ -40,6 +40,6 @@ public class SysPrimarySieveController extends AbstractController{
     @RequestMapping("/detailList")
     public Page<SysPrimaryDetailTimeEntity> detailList(@RequestBody Map<String, Object> params) {
        Page<SysPrimaryDetailTimeEntity> list = sysPrimarySieveService.listForDetailTime(params);
-        return list;
+       return list;
     }
 }
