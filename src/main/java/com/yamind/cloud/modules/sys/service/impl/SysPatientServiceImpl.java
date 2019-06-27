@@ -6,17 +6,13 @@ import com.yamind.cloud.common.entity.R;
 import com.yamind.cloud.common.utils.CommonUtils;
 
 import com.yamind.cloud.modules.sys.dao.SysPadientMapper;
-import com.yamind.cloud.modules.sys.entity.SysDeviceEntity;
-import com.yamind.cloud.modules.sys.entity.SysOrgEntity;
 import com.yamind.cloud.modules.sys.entity.SysPatientEntity;
-import com.yamind.cloud.modules.sys.manager.SysDeviceManager;
 import com.yamind.cloud.modules.sys.manager.SysPatientManager;
 import com.yamind.cloud.modules.sys.service.SysPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Map;
 
 @Service("sysPadientService")
@@ -46,7 +42,11 @@ public class SysPatientServiceImpl implements SysPatientService {
         return CommonUtils.msg(count);
     }
 
-
+    @Override
+    public R batchRemove(Long[] id){
+        int count = sysPatientManager.batchRemove(id);
+        return CommonUtils.msg(count);
+    }
 
     @Override
     public R getPatientById(Long id){

@@ -3,11 +3,12 @@ package com.yamind.cloud.modules.sys.controller;
 
 import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.yamind.cloud.common.annotation.SysLog;
-import com.yamind.cloud.common.entity.Page;
 import com.yamind.cloud.common.entity.R;
 import com.yamind.cloud.modules.sys.entity.SysCureDataEntity;
+import com.yamind.cloud.modules.sys.entity.SysParamaterSetEntity;
 import com.yamind.cloud.modules.sys.entity.SysPatientEntity;
 import com.yamind.cloud.modules.sys.service.SysCureDataService;
+import com.yamind.cloud.modules.sys.service.SysParamaterSetService;
 import com.yamind.cloud.modules.sys.service.SysPatientService;
 
 import net.sf.json.JSONObject;
@@ -15,15 +16,15 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.yamind.cloud.common.entity.Page;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 
 import javax.xml.crypto.Data;
-import java.net.InetSocketAddress;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -45,6 +46,8 @@ public class SysPatientController extends AbstractController{
     private RedisTemplate redisTemplate;
     @Autowired
     private SysCureDataService sysCureDataService;
+    @Autowired
+    private SysParamaterSetService sysParamaterSetService;
 
 
     /**
@@ -54,10 +57,8 @@ public class SysPatientController extends AbstractController{
      */
     @RequestMapping("/list")
     public Page<SysPatientEntity> list(@RequestBody Map<String, Object> params) {
-        logger.info("进去用户ie表");
-
-        Page<SysPatientEntity> list = sysPatientService.listForPatient(params);
-        return list;
+       Page<SysPatientEntity> list = sysPatientService.listForPatient(params);
+       return list;
     }
 
 
@@ -86,29 +87,24 @@ public class SysPatientController extends AbstractController{
         }
         //获取参数
         map.put("serialId",serialId);
-        map.put("startTime",time);
+        map.put("seleceTime",time);
 
+        //自增加日期
         Calendar   calendar   =   new   GregorianCalendar();
         calendar.setTime(eDte);
-        calendar.add(calendar.DATE,1);//把日期往后增加一天.整数往后推,负数往前移动
-        sDte=calendar.getTime();   //这个时间就是日期往后推一天的结果
+        calendar.add(calendar.DATE,1);
+        sDte=calendar.getTime();
+        //结束日期，用于查询数据时用
+        map.put("endTime",format.format(sDte));
 
-        map.put("endTime",sDte);
-
-        //根据序列号查询当前有几天的数据
-        List<SysCureDataEntity> listForDay = sysCureDataService.getGroupCureData(map);
-
-            for (SysCureDataEntity sysCureDataEntity :listForDay){
-                    if (sysCureDataEntity.getCureTime().equals(time)){
-                        mode = sysCureDataEntity.getMode();
-                    }
-            }
-
-        //根据序列号获取当天的数据
-        //List <SysCureDataEntity> list = sysCureDataService.findMapWithSerial(map);
+        //获取当天模式
+        SysParamaterSetEntity sysParamaterSetEntity= sysParamaterSetService.getParamaterBySerial(map);
+        if (sysParamaterSetEntity ==null){
+            return R.error("该日期没有查询到数据");
+        }
         //传递模式
-        r.put("mode",mode);
-            List<SysCureDataEntity> list =sysCureDataService.findMapWithSerial(map);
+        r.put("mode",sysParamaterSetEntity.getMode());
+        List<SysCureDataEntity> list =sysCureDataService.findMapWithSerial(map);
         return r.put("map",list);
     }
 
@@ -143,7 +139,16 @@ public class SysPatientController extends AbstractController{
         return sysPatientService.updatePatient(pat);
     }
 
-
+    /**
+     * 删除
+     * @param id
+     * @return
+     */
+    @SysLog("删除用户")
+    @RequestMapping("/remove")
+    public R batchRemove(@RequestBody Long[] id) {
+        return sysPatientService.batchRemove(id);
+    }
 
     /**
      * 判断是否有实时数据传输
@@ -157,7 +162,6 @@ public class SysPatientController extends AbstractController{
         }else {
             return R.ok("有实时数据");
         }
-
     }
 
 
@@ -170,9 +174,9 @@ public class SysPatientController extends AbstractController{
      */
 
     @RequestMapping(value = "/getHistorySetData",method = RequestMethod.POST)
-    public Page<SysCureDataEntity> getHistorySetData(@RequestBody Map<String, Object> params) {
-        Page<SysCureDataEntity> list = sysCureDataService.listForCureSetData(params);
-        return list;
+    public Page<SysParamaterSetEntity> getHistorySetData(@RequestBody Map<String, Object> params) {
+        Page<SysParamaterSetEntity> setEntityPage = sysParamaterSetService.listForParamaterInfo(params);
+        return setEntityPage;
     }
 
 
@@ -189,7 +193,7 @@ public class SysPatientController extends AbstractController{
         R r = new R();
         Map<String,Object> map = new HashMap<>();
         List<String> colData = new ArrayList<>();
-        //获取参数
+        //获取前台传递的参数
         map.put("serialId",serialId);
         map.put("startDate",startDate);
         map.put("endDate",endDate);
@@ -198,10 +202,10 @@ public class SysPatientController extends AbstractController{
         //查询当前日期所有的数据List
         int size = sysCureDataService.getStatCount(map);
 
+        if(size<=0){
+            return R.error("当前时间段没有监测到治疗数据!");
+        }
 
-//        long a=System.currentTimeMillis();
-//        System.out.println("执行耗时 : "+(System.currentTimeMillis()-a)/1000f+" 秒 ");
-//        System.out.println("执行耗时 : "+(System.currentTimeMillis()-a)/1000f+" 秒 ");
 
 
         //查询最大值最小值
@@ -209,16 +213,15 @@ public class SysPatientController extends AbstractController{
 
 
         int useDay =sysCureDataService.getUseDayCount(map);
-      //  long diff = listForHistoryData.size();
-        long diff = size;
-        long days = diff / ( 60 * 60 * 24);
-        long hours = (diff - days * ( 60 * 60 * 24)) / (60 * 60);
+
+
+        double useHours = new BigDecimal((float)size/3600).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 
         //使用信息
         r.put("dayCount",size); //使用天数
         r.put("useDay",useDay); ////获取所选时间内的 使用天数
-        r.put("useTime",hours); //使用时间  单位小时
-//        r.put("avgUseTime",hours/useDay); //平均使用时间
+        r.put("useTime",useHours+" h"); //使用时间  单位小时
+        r.put("avgUseTime",useHours/useDay+" h"); //平均使用时间
 
 
         //计算中位值 奇数 N+1/2   偶数 （长度/2的值 + 长度/2+1位)/2
@@ -229,17 +232,24 @@ public class SysPatientController extends AbstractController{
             median =(size/2)+1;
         }
 
-        String sql;
-        //按字段排序查询[统计信息]数据
-        map.put("colName","cure_stress");
 
-//       sql= "SELECT "+map.get("colName")+" FROM sys_curedata WHERE cure_time BETWEEN '"+ map.get("startDate")+"' AND '"
-//                + map.get("endDate") +"' AND bootSerial='"+map.get("serialId") +"' ORDER BY "+ map.get("colName")+" ASC";
-//
-//        SqlRowSet rowSet=jdbcTemplate.queryForRowSet(sql);
+        List<SysCureDataEntity> colsData = new ArrayList<>();
+        map.put("colName","inhale_stress,cure_stress,exhale_stress,tidal_volume,minu_throughput,respiratory_rate");
+        colsData = sysCureDataService.listForColData2(map);
+        System.out.println(colData.toString());
 
         colData=sysCureDataService.listForColData(map);  //压力的中位值
         r.put("cureStress",Double.parseDouble(colData.get(median)));
+
+        System.out.println(colsData.get(median).getCureStress1());
+
+
+        //按字段排序查询[统计信息]数据
+       /* map.put("colName","cure_stress");
+        colData=sysCureDataService.listForColData(map);  //压力的中位值
+        r.put("cureStress",Double.parseDouble(colData.get(median)));
+
+        System.out.println(colsData.get(median).getCureStress1());
 
         map.put("colName","inhale_stress");
         colData=sysCureDataService.listForColData(map);  //吸气压力中位值
@@ -260,12 +270,13 @@ public class SysPatientController extends AbstractController{
 
         map.put("colName","respiratory_rate");
         colData=sysCureDataService.listForColData(map);  //呼吸频率中位值
-        r.put("respiratoryRate",Double.parseDouble(colData.get(median)));
+        r.put("respiratoryRate",Double.parseDouble(colData.get(median)));*/
 
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date sDte = null; //开始日期
         Date eDte = null; //结束日期
+
 
 
         List<String> sData = new ArrayList<String>();
@@ -322,6 +333,7 @@ public class SysPatientController extends AbstractController{
                 if (sData.size()!=0) {
                     sigleNice5 += Double.parseDouble(sData.get((int) Math.ceil(sData.size() * (0.95)) - 1));
                 }
+
                 //获取呼吸频率平均95值
                 map.put("niceCol","respiratory_rate");
                 sData = sysCureDataService.listForDateStatInfo(map);
@@ -329,7 +341,6 @@ public class SysPatientController extends AbstractController{
                     sigleNice6+= Double.parseDouble(sData.get((int)Math.ceil(sData.size() * (0.95))-1));
                 }
                 sDte=addDays(sDte,1);//时间再加一天
-
 
             }
 
@@ -341,13 +352,11 @@ public class SysPatientController extends AbstractController{
         //存储压力95的list cure_stress
         r.put("stressNice",sigleNice1/useDay);
 
-
         //存储吸气压力95的list inhale_stress
         r.put("inhaleStressNice",sigleNice2/useDay);
 
         //存储呼气压力95的list exhale_stress
         r.put("exhaleStressNice",sigleNice3/useDay);
-
 
         //存储潮气量95的list  tidal_volume
         r.put("tidalVolumeNice",sigleNice4/useDay);
@@ -375,16 +384,24 @@ public class SysPatientController extends AbstractController{
         List<String> test = new ArrayList<>();
         R r= new R();
 
+        //获取Redis数据部分
+        String dataMsg=redisTemplate.opsForList().range(serialId,0,0).toString();
+        dataMsg = dataMsg.substring(1,dataMsg.length()-1);
 
-        String tempData=redisTemplate.opsForList().range(serialId,0,0).toString();
-        tempData = tempData.substring(1,tempData.length()-1);
+        //获取Redis设置信息部分
+        String paraMsg=(String) redisTemplate.opsForValue().get("P"+serialId);
+      //  paraMsg = paraMsg.substring(1,paraMsg.length()-1);
 
-
-        if (!StringUtils.isBlank(tempData)){
-            r.put("data",tempData);
-        }else{
-            return R.error(111,"当前设备没有检测到实时数据");
+        //判断数据信息是否为空
+        if (!StringUtils.isBlank(dataMsg)){
+            r.put("dataMsg",dataMsg);
         }
+
+        //判断设置信息是否为空
+        if (!StringUtils.isBlank(dataMsg)){
+            r.put("paraMsg",paraMsg);
+        }
+
         return r;
     }
 
@@ -411,4 +428,9 @@ public class SysPatientController extends AbstractController{
         System.out.println("删除过期的历史数据");
         sysCureDataService.delectData();
     }
+
+
+
+
+
 }

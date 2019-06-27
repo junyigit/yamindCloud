@@ -31,10 +31,6 @@ $(function () {
     });
 
 
-
-
-
-
     //获取日期范围
     var dateRange=0;
     //开始时间
@@ -49,6 +45,7 @@ $(function () {
     $("#dateHistory").click(function(){
 
         if (endTime !=0 && startDate !=0){
+            console.log("123123123213123131313");
             $.ajax({
                 type: "POST",
                 url: "/sys/patient/getHistoryStatInfo",
@@ -91,26 +88,34 @@ $(function () {
                 //控制器返回的选择当天数据
                 var mapData = result.map;
                 //保存时间的数组
-                var time = [];
+                var curetime = [];
                 var cureArr = [];//治疗数组
                 var flowArr = [];//流量数组
                 var ahiArr  = [];//低通气数组
                 var ahiTime = [];//低通气数组
-                var maxArr = [];//最大压力
-                var minArr = []; //最小压力
+                // var maxArr = [];//最大压力
+                // var minArr = []; //最小压力
                 var inhale = [];//吸气压力
                 var outhale =[]; //呼气压力
 
-                for (var i = 0;mapData[i]!=null; i++) {
-                    time.push(mapData[i].cureTime);
+
+
+
+                for (var i = 0, length = mapData.length; i < length; i++) {
+                    curetime.push(mapData[i].cureTime);
                     cureArr.push(mapData[i].cureStress);
-                    minArr.push(mapData[i].minStress);
-                    maxArr.push(mapData[i].maxStress);
+                    // minArr.push(mapData[i].minStress);
+                    // maxArr.push(mapData[i].maxStress);
                     inhale.push(mapData[i].inhaleStress);
                     outhale.push(mapData[i].exhaleStress);
-                    flowArr.push(mapData[i].realFlow);
+                    flowArr.push(mapData[i].realFlow1);
+                    flowArr.push(mapData[i].realFlow2);
+                    flowArr.push(mapData[i].realFlow3);
+                    flowArr.push(mapData[i].realFlow4);
+                    flowArr.push(mapData[i].realFlow5);
                 }
-                console.timeEnd();
+
+
                     switch (result.mode) {
                         case "CPAP":
                                 option = {
@@ -128,7 +133,7 @@ $(function () {
                                     xAxis: {
                                         type: 'category',
                                         boundaryGap: false,
-                                        data: time
+                                        data: curetime
                                     },
                                     yAxis: {
                                         type: 'value',
@@ -176,7 +181,7 @@ $(function () {
                                 xAxis: {
                                     type: 'category',
                                     boundaryGap: false,
-                                    data: time
+                                    data: curetime
                                 },
                                 yAxis: {
                                     type: 'value',
@@ -197,15 +202,16 @@ $(function () {
                                         smooth: 0.3,
                                         symbol:'none',
                                         color:["#CE0000"],
-                                        data: maxArr
-                                    },
+                                        data: cureArr
+                                    }
+                                    ,
                                     {
                                         name: lauguageData.minKpa,
                                         type: 'line',
                                         smooth: 0.3,
                                         symbol:'none',
                                         color:["#00BB00"],
-                                        data: minArr
+                                        data: cureArr
                                     }
                                 ]
                             };
@@ -227,7 +233,7 @@ $(function () {
                                 xAxis: {
                                     type: 'category',
                                     boundaryGap: false,
-                                    data: time
+                                    data: curetime
                                 },
                                 yAxis: {
                                     type: 'value',
@@ -278,7 +284,7 @@ $(function () {
                         xAxis: {
                             type: 'category',
                             boundaryGap: false,
-                            data: time
+                            data: curetime
                         },
                         yAxis: {
                             type: 'value',
@@ -306,127 +312,11 @@ $(function () {
                     myChart2.setOption(option2);
 
 
-                var data = [];
-                var dataCount = 10;
-                var startTime = +new Date();
-                var categories = ['低通气', '呼吸暂停',];
-                var types = [
-                    {name: 'JS Heap', color: '#009393'},
-                    {name: 'Documents', color: '#eac100'}
-                ];
+                /**
+                 * 呼吸事件图形
+                 * @type {Array}
+                 */
 
-// Generate mock data
-                echarts.util.each(categories, function (category, index) {
-                    var baseTime = startTime;
-                    for (var i = 0; i < dataCount; i++) {
-                        var typeItem = types[Math.round(Math.random() * (types.length - 1))];
-                        var duration = Math.round(Math.random() * 10000);
-                        data.push({
-                            name: typeItem.name,
-                            value: [
-                                index,
-                                baseTime,
-                                baseTime += duration,
-                                duration
-                            ],
-                            itemStyle: {
-                                normal: {
-                                    color: typeItem.color
-                                }
-                            }
-                        });
-                        baseTime += Math.round(Math.random() * 2000);
-                    }
-                });
-
-                function renderItem(params, api) {
-                    var categoryIndex = api.value(0);
-                    var start = api.coord([api.value(1), categoryIndex]);
-                    var end = api.coord([api.value(2), categoryIndex]);
-                    var height = api.size([0, 1])[1] * 0.6;
-
-                    var rectShape = echarts.graphic.clipRectByRect({
-                        x: start[0],
-                        y: start[1] - height / 2,
-                        width: end[0] - start[0],
-                        height: height
-                    }, {
-                        x: params.coordSys.x,
-                        y: params.coordSys.y,
-                        width: params.coordSys.width,
-                        height: params.coordSys.height
-                    });
-
-                    return rectShape && {
-                        type: 'rect',
-                        shape: rectShape,
-                        style: api.style()
-                    };
-                }
-
-
-                option3 = {
-                    tooltip: {
-                        formatter: function (params) {
-                            return params.marker + params.name + ': ' + params.value[3] + ' ms';
-                        }
-                    },
-                    title: {
-                        text: '事件',
-                        left: 'center'
-                    },
-                    dataZoom: [{
-                        type: 'slider',
-                        filterMode: 'weakFilter',
-                        showDataShadow: false,
-                        top: 400,
-                        height: 10,
-                        borderColor: 'transparent',
-                        backgroundColor: '#e2e2e2',
-                        handleIcon: 'M10.7,11.9H9.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4h1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7v-1.2h6.6z M13.3,22H6.7v-1.2h6.6z M13.3,19.6H6.7v-1.2h6.6z', // jshint ignore:line
-                        handleSize: 20,
-                        handleStyle: {
-                            shadowBlur: 6,
-                            shadowOffsetX: 1,
-                            shadowOffsetY: 2,
-                            shadowColor: '#aaa'
-                        },
-                        labelFormatter: ''
-                    }, {
-                        type: 'inside',
-                        filterMode: 'weakFilter'
-                    }],
-                    grid: {
-                        height:300
-                    },
-                    xAxis: {
-                        min: startTime,
-                        scale: true,
-                        axisLabel: {
-                            formatter: function (val) {
-                                return Math.max(0, val - startTime) + ' ms';
-                            }
-                        }
-                    },
-                    yAxis: {
-                        data: categories
-                    },
-                    series: [{
-                        type: 'custom',
-                        renderItem: renderItem,
-                        itemStyle: {
-                            normal: {
-                                opacity: 0.8
-                            }
-                        },
-                        encode: {
-                            x: [1, 2],
-                            y: 0
-                        },
-                        data: data
-                    }]
-                };
-                    myChart3.setOption(option3);
 
             }, error: function (r) {
                 console.log("曲线图错误");
@@ -458,7 +348,6 @@ function initialPage() {
 
 
 function getGrid() {
-    console.log("getGrid");
     serialId = getUrlParam(window.location.href,'serialId');
     $('#setInfo').bootstrapTableEx({
         url: '../../sys/patient/getHistorySetData?_' + $.now(),
@@ -471,7 +360,7 @@ function getGrid() {
         columns: [{
             checkbox: true
         }, {
-            field: "cureTime",
+            field: "useDate",
             title: lauguageData.data,
             width: "100px"
         }, {
@@ -640,7 +529,7 @@ function returnMode2(p){
             '<h3><tr><b>'+lauguageData.treatmentPres+'</b></tr></h3>'+
             '<tr> ' +
             '<td>' + lauguageData.xqpjyl + '</td>' +
-            '<td>' + p.maxAvg.xqylpjz+ '</td>' +
+            '<td>' + p.maxAvg.xqylpjz.toFixed(2) + '</td>' +
             '<td>' + lauguageData.hqpjyl + '</td>' +
             '<td>' + p.maxAvg.hqylpjz + '</td>' +
             '</tr>' +
@@ -686,9 +575,9 @@ function returnMode2(p){
             '<h3><tr><b>'+lauguageData.cqlfztql+'</b></tr></h3>'+
             '<tr> ' +
             '<td>' + lauguageData.cqlpjz + '</td>' +
-            '<td>' + p.maxAvg.cqlpjz+ '</td>' +
+            '<td>' + p.maxAvg.cqlpjz.toFixed(2)+ '</td>' +
             '<td>' + lauguageData.fztqpjz + '</td>' +
-            '<td>' + p.maxAvg.fztqlpjz + '</td>' +
+            '<td>' + p.maxAvg.fztqlpjz.toFixed(2) + '</td>' +
             '</tr>' +
             '<tr> ' +
             '<td>' + lauguageData.cqlzwz + '</td>' +
@@ -698,9 +587,9 @@ function returnMode2(p){
             '</tr>' +
             '<tr> ' +
             '<td>' + lauguageData.cql95z + '</td>' +
-            '<td>' + p.tidalVolumeNice+ '</td>' +
+            '<td>' + p.tidalVolumeNice.toFixed(2)+ '</td>' +
             '<td>' + lauguageData.fztq95z + '</td>' +
-            '<td>' + p.minuThroughputNice + '</td>' +
+            '<td>' + p.minuThroughputNice.toFixed(2) + '</td>' +
             '</tr>' +
             '<tr> ' +
             '<td>' + lauguageData.cqlzdz + '</td>' +
@@ -715,7 +604,7 @@ function returnMode2(p){
             '<h3><tr><b>'+lauguageData.hxpl+'</b></tr></h3>'+
             '<tr> ' +
             '<td>' + lauguageData.hxplpjz + '</td>' +
-            '<td>' + p.maxAvg.hxplpjz+ '</td>' +
+            '<td>' + p.maxAvg.hxplpjz.toFixed(2)+ '</td>' +
             '<td>' + lauguageData.hxplzwz + '</td>' +
             '<td>' +  p.respiratoryRate+ '</td>' +
             '</tr>' +

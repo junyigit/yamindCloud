@@ -18,11 +18,6 @@ public class SysCureDataManagerImpl implements SysCureDataManager {
     SysCureDataMapper sysCureDataMapper;
 
 
-    @Override
-    public List<SysCureDataEntity> listForCureSetData(Page<SysCureDataEntity> page, Query search){
-        return sysCureDataMapper.listForPage(page,search);
-    }
-
 
 
     @Override
@@ -30,4 +25,5 @@ public class SysCureDataManagerImpl implements SysCureDataManager {
         int count = sysCureDataMapper.save(pat);
         return count;
     }
+
 }

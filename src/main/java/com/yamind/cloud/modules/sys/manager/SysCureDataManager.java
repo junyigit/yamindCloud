@@ -12,10 +12,9 @@ public interface SysCureDataManager {
 
 
 
-    List<SysCureDataEntity> listForCureSetData(Page<SysCureDataEntity> page, Query search);
 
-
-
-
+    //保存治疗数据
     int save(SysCureDataEntity pat);
+
+
 }

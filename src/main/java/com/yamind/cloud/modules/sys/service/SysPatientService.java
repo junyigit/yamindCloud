@@ -21,4 +21,5 @@ public interface SysPatientService {
 
     R saveUser(SysPatientEntity user);
 
+    R batchRemove(Long[] id);
 }

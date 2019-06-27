@@ -112,6 +112,7 @@ var vm = new Vue({
 			if (checkedArray(ck)) {
 				$.each(ck, function(idx, item) {
 					ids[idx] = item.userId;
+					console.log(item.userId);
 				});
 				$.RemoveForm({
 					url : '../../sys/user/remove?_' + $.now(),

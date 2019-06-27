@@ -59,46 +59,53 @@
      var cureMode ;
      $.ajax({
          type: "POST",
-         url: "/sys/device/getParaDetails",
+         url: "/sys/paraSet/getParaDetails",
          dataType: "json",
          data: {
              "serialId": serialId
          },//数据，这里使用的是Json格式进行传输
          success: function (result) {//返回数据根据结果进行相应的处理
-             console.log(result);
-             var table = $("#paraList");
-             var d = eval('(' + result.para + ')');
-             ipAddr = d.ipAddr;
-             $("#paraList").empty(); //清空table（除了第一行以外）
+             if (result.code <0){
+                 dialogMsg(result.msg);
+                 window.history.back(-1);
+             }else{
 
-             switch (d.mode) {
+
+
+             var table = $("#paraList");
+             var paraString = result.para;
+             var paraArr = paraString.split(",");
+
+             switch (paraArr[4]) {
                  case "CPAP":
                      table.append(
                          '<table class="table" id="setParaTable" cellspacing="30" >' +
-                         '<h4><b>设备参数</b></h4>' +
+                         '<h4><b>'+languageData.devicePara+'</b></h4>' +
 
                          '<tr> ' +
-                         '<td>' + "模式" + '</td>' +
-                         '<td><select id="modeSel" selected = "selected" onchange="changeMode()">\n' +
-                         '<option value="CPAP" selected="selected">CPAP</option>' +
-                         '  <option value ="APAP">APAP</option>\n' +
-                         // '  <option>S</option>\n' +
-                         // '  <option>S-Auto</option>\n' +
-                         // '  <option>T</option>\n' +
-                         // '  <option>S/T</option>\n' +
+                         '<td>' + languageData.mode + '</td>' +
+                         '<td><select id="modeSel" onchange="changeMode()">\n' +
+                         '<option value="APAP">APAP</option>' +
+                         '<option value ="CPAP" selected="selected">CPAP</option>' +
+                         '  <option value="S">S</option>\n' +
+                         '  <option value="S-Auto">S-Auto</option>\n' +
+                         '  <option value="T">T</option>\n' +
+                         '  <option value="S/T">S/T</option>\n' +
                          '</select></td>' +
                          '</tr>' +
+
+
                          '<tr> ' +
-                         '<td>' + "呼气释放" + '</td>' +
-                         '<td><input id="breatheRel" value=' + d.cureData.hqsf + '></td>' +
-                         '<td>' + "治疗压力" + '</td>' +
-                         '<td><input id="cureStress" value=' + d.cureData.zlyl + '></td>' +
+                         '<td>' +  languageData.hqsf + '</td>' +
+                         '<td><input id="breatheRel" value=' + paraArr[17]+ '></td>' +
+                         '<td>' +  languageData.zlyl + '</td>' +
+                         '<td><input id="cureStress" value=' + paraArr[5] + '></td>' +
                          '</tr>' +
                          '<tr> ' +
-                         '<td>' + "开始压力" + '</td>' +
-                         '<td><input id="starStress" value=' + d.cureData.ksyl + '></td>' +
-                         '<td>' + "延迟时间" + '</td>' +
-                         '<td><input id="delayTime" value=' + d.cureData.ycsj + '></td>' +
+                         '<td>' + languageData.ksyl + '</td>' +
+                         '<td><input id="starStress" value=' + paraArr[6] + '></td>' +
+                         '<td>' + languageData.ycsj + '</td>' +
+                         '<td><input id="delayTime" value=' + paraArr[7] + '></td>' +
                          '</tr>' +
                          '</table>'
                      );
@@ -108,34 +115,39 @@
                          '<table class="table" id="setParaTable" cellspacing="30" >' +
                          '<h4><b>'+languageData.devicePara+'</b></h4>' +
 
+
+
                          '<tr> ' +
                          '<td>' + languageData.mode + '</td>' +
                          '<td><select id="modeSel" onchange="changeMode()">\n' +
                          '<option value="APAP" selected="selected">APAP</option>' +
                          '<option value ="CPAP">CPAP</option>' +
-                         // '  <option>S</option>\n' +
-                         // '  <option>S-Auto</option>\n' +
-                         // '  <option>T</option>\n' +
-                         // '  <option>S/T</option>\n' +
+                         '  <option value="S">S</option>\n' +
+                         '  <option value="S-Auto">S-Auto</option>\n' +
+                         '  <option value="T">T</option>\n' +
+                         '  <option value="S/T">S/T</option>\n' +
                          '</select></td>' +
                          '</tr>' +
 
+
+
+
                          '<tr> ' +
                          '<td>' + languageData.ksyl + '</td>' +
-                         '<td><input id="starStress" value=' + d.cureData.ksyl + '></td>' +
+                         '<td><input id="starStress" value=' + paraArr[6] + '></td>' +
                          '<td>' + languageData.ycsj + '</td>' +
-                         '<td><input id="delayTime" value=' + d.cureData.ycsj + '></td>' +
+                         '<td><input id="delayTime" value=' + paraArr[7] + '></td>' +
                          '</tr>' +
 
                          '<tr> ' +
                          '<td>' + languageData.maxKpa + '</td>' +
-                         '<td><input id="maxStress" value=' + d.cureData.zdyl + '></td>' +
+                         '<td><input id="maxStress" value=' + paraArr[10] + '></td>' +
                          '<td>' + languageData.minKpa + '</td>' +
-                         '<td><input id="minStress" value=' + d.cureData.zxyl + '></td>' +
+                         '<td><input id="minStress" value=' + paraArr[1] + '></td>' +
                          '</tr>' +
                          '<tr> ' +
                          '<td>' + languageData.hqsf + '</td>' +
-                         '<td><input id="breatheRel" value=' + d.cureData.hqsf + '></td>' +
+                         '<td><input id="breatheRel" value=' + paraArr[17] + '></td>' +
                          '</tr>' +
 
                          '</table>'
@@ -148,52 +160,65 @@
                          '<table class="table" id="setParaTable" cellspacing="30" >' +
 
                          '<tr> ' +
+                         '<td>' + languageData.mode + '</td>' +
+                         '<td><select id="modeSel" onchange="changeMode()">\n' +
+                         '<option value="APAP" >APAP</option>' +
+                         '<option value ="CPAP">CPAP</option>' +
+                         '  <option value="S" selected="selected">S</option>\n' +
+                         '  <option value="S-Auto">S-Auto</option>\n' +
+                         '  <option value="T">T</option>\n' +
+                         '  <option value="S/T">S/T</option>\n' +
+                         '</select></td>' +
+                         '</tr>' +
+
+
+                         '<tr> ' +
                          '<td>' + languageData.xqyl + '</td>' +
-                         '<td><input value=' + d.cureData.xqyl + '></td>' +
+                         '<td><input id="" value=' + paraArr[14] + '></td>' +
                          '<td>' + languageData.hqyl + '</td>' +
-                         '<td><input value=' + d.cureData.hqyl + '></td>' +
+                         '<td><input value=' + paraArr[15] + '></td>' +
                          '</tr>' +
 
 
                          '<tr> ' +
                          '<td>' + languageData.ksyl + '</td>' +
-                         '<td><input value=' + d.cureData.ksyl + '></td>' +
+                         '<td><input value=' + paraArr[6] + '></td>' +
                          '<td>' + languageData.ycsj + '</td>' +
-                         '<td><input value=' + d.cureData.ycsj + '></td>' +
+                         '<td><input value=' + paraArr[7] + '></td>' +
                          '</tr>' +
 
                          '<tr> ' +
                          '<td>' + languageData.xqlmd + '</td>' +
-                         '<td><input value=' + d.cureData.xqlmd + '></td>' +
+                         '<td><input value=' + paraArr[18] + '></td>' +
                          '<td>' + languageData.hqlmd + '</td>' +
-                         '<td><input value=' + d.cureData.hqlmd + '></td>' +
+                         '<td><input value=' + paraArr[19] + '></td>' +
                          '</tr>' +
 
 
                          '<tr> ' +
                          '<td>' + languageData.ylsspd + '</td>' +
-                         '<td><input value=' + d.cureData.ylsspd + '></td>' +
+                         '<td><input value=' + paraArr[20] + '></td>' +
                          '<td>' + languageData.ylxjpd + '</td>' +
-                         '<td><input value=' + d.cureData.ylxjpd + '></td>' +
+                         '<td><input value=' + paraArr[21]  + '></td>' +
                          '</tr>' +
 
                          '<tr> ' +
                          '<td>' + "AVAPS" + '</td>' +
-                         '<td><input value=' + d.cureData.avaps + '></td>' +
+                         '<td><input value=' + paraArr[22] + '></td>' +
                          '<td>' + languageData.mbcql + '</td>' +
-                         '<td><input value=' + d.cureData.mbcql + '></td>' +
+                         '<td><input value=' + paraArr[14] + '></td>' +
                          '</tr>' +
 
                          '<tr> ' +
                          '<td>' + languageData.zdxqyl + '</td>' +
-                         '<td><input value=' + d.cureData.zdxqyl + '></td>' +
+                         '<td><input value=' + paraArr[10] + '></td>' +
                          '<td>' + languageData.zxxqyl + '</td>' +
-                         '<td><input value=' + d.cureData.zxxqyl + '></td>' +
+                         '<td><input value=' + paraArr[11] + '></td>' +
                          '</tr>' +
 
                          '<tr> ' +
                          '<td>' + languageData.hqsf + '</td>' +
-                         '<td><input value=' + d.cureData.hqsf + '></td>' +
+                         '<td><input value=' + paraArr[17] + '></td>' +
                          '</tr>' +
                          '</table>'
                      );
@@ -202,41 +227,57 @@
                      table.append(
                          '<table class="table" id="setParaTable" cellspacing="30" >' +
 
+
+                         '<tr> ' +
+                         '<td>' + languageData.mode + '</td>' +
+                         '<td><select id="modeSel" onchange="changeMode()">\n' +
+                         '<option value="APAP" >APAP</option>' +
+                         '<option value ="CPAP">CPAP</option>' +
+                         '  <option value="S">S</option>\n' +
+                         '  <option value="S-Auto" selected="selected">S-Auto</option>\n' +
+                         '  <option value="T">T</option>\n' +
+                         '  <option value="S/T">S/T</option>\n' +
+                         '</select></td>' +
+                         '</tr>' +
+
+
+
+
                          '<tr> ' +
                          '<td>' + languageData.xqyl + '</td>' +
-                         '<td><input value=' + d.cureData.xqyl + '></td>' +
+                         '<td><input value=' + paraArr[12] + '></td>' +
                          '<td>' + languageData.hqyl + '</td>' +
-                         '<td><input value=' + d.cureData.hqyl + '></td>' +
+                         '<td><input value=' + paraArr[13] + '></td>' +
                          '</tr>' +
 
                          '<tr> '+
                          '<td>' + languageData.zdxqyl + '</td>' +
-                         '<td><input value=' + d.cureData.zdxqyl + '></td>' +
+                         '<td><input value=' + paraArr[10] + '></td>' +
                          '<td>' + languageData.hqsf + '</td>' +
-                         '<td><input value=' + d.cureData.hqsf + '></td>' +
+                         '<td><input value=' + paraArr[11] + '></td>' +
                          '</tr>'+
 
 
                          '<tr> '+
                          '<td>' + languageData.ksyl + '</td>' +
-                         '<td><input value=' + d.cureData.ksyl + '></td>' +
+                         '<td><input value=' + paraArr[6] + '></td>' +
                          '<td>' + languageData.ycsj + '</td>' +
-                         '<td><input value=' + d.cureData.ycsj + '></td>' +
+                         '<td><input value=' + paraArr[7] + '></td>' +
                          '</tr>'+
 
                          '<tr> ' +
                          '<td>' + languageData.xqlmd + '</td>' +
-                         '<td><input value=' + d.cureData.xqlmd + '></td>' +
+                         '<td><input value=' + paraArr[18] + '></td>' +
                          '<td>' + languageData.hqlmd + '</td>' +
-                         '<td><input value=' + d.cureData.hqlmd + '></td>' +
+                         '<td><input value=' + paraArr[19] + '></td>' +
                          '</tr>' +
 
 
                          '<tr> ' +
                          '<td>' + languageData.ylsspd + '</td>' +
-                         '<td>' + d.cureData.ylsspd + '</td>' +
+                         '<td><input value=' + paraArr[20] + '></td>' +
                          '<td>' + languageData.ylxjpd + '</td>' +
-                         '<td>' + d.cureData.ylxjpd + '</td>' +
+                         '<td><input value=' + paraArr[21] + '></td>' +
                          '</tr>' +
                          '</table>'
                      );
@@ -244,61 +285,75 @@
                  case "T":
                      table.append(
                          '<table class="table" id="setParaTable" cellspacing="30" >' +
+
+                         '<tr> ' +
+                         '<td>' + languageData.mode + '</td>' +
+                         '<td><select id="modeSel" onchange="changeMode()">\n' +
+                         '<option value="APAP" >APAP</option>' +
+                         '<option value ="CPAP">CPAP</option>' +
+                         '  <option value="S">S</option>\n' +
+                         '  <option value="S-Auto">S-Auto</option>\n' +
+                         '  <option value="T" selected="selected" >T</option>\n' +
+                         '  <option value="S/T">S/T</option>\n' +
+                         '</select></td>' +
+                         '</tr>' +
+
+
                          '<tr> ' +
                          '<td>' + languageData.xqyl + '</td>' +
-                         '<td><input value=' + d.cureData.xqyl + '></td>' +
+                         '<td><input value=' + paraArr[12] + '></td>' +
                          '<td>' + languageData.hqyl + '</td>' +
-                         '<td><input value=' + d.cureData.hqyl + '></td>' +
+                         '<td><input value=' + paraArr[13] + '></td>' +
                          '</tr>' +
 
                          '<tr> ' +
                          '<td>' + languageData.ksyl + '</td>' +
-                         '<td><input value=' + d.cureData.ksyl + '></td>' +
+                         '<td><input value=' + paraArr[6] + '></td>' +
                          '<td>' + languageData.ycsj + '</td>' +
-                         '<td><input value=' + d.cureData.ycsj + '></td>' +
+                         '<td><input value=' + paraArr[7] + '></td>' +
                          '</tr>' +
 
                          '<tr> ' +
                          '<td>' + languageData.hxpl + '</td>' +
-                         '<td><input value=' + d.cureData.hxpl + '></td>' +
+                         '<td><input value=' + paraArr[15] + '></td>' +
                          '<td>' + languageData.xqsj + '</td>' +
-                         '<td><input value=' + d.cureData.xqsj + '></td>' +
+                         '<td><input value=' + paraArr[16] + '></td>' +
                          '</tr>' +
 
 
                          '<tr> ' +
                          '<td>' + languageData.xqlmd + '</td>' +
-                         '<td><input value=' + d.cureData.xqlmd + '></td>' +
+                         '<td><input value=' + paraArr[18] + '></td>' +
                          '<td>' + languageData.hqlmd + '</td>' +
-                         '<td><input value=' + d.cureData.hqlmd + '></td>' +
+                         '<td><input value=' + paraArr[19] + '></td>' +
                          '</tr>' +
 
                          '<tr> ' +
                          '<td>' + languageData.zdxqyl + '</td>' +
-                         '<td><input value=' + d.cureData.zdxqyl + '></td>' +
+                         '<td><input value=' + paraArr[10] + '></td>' +
                          '<td>' + languageData.zxxqyl + '</td>' +
-                         '<td><input value=' + d.cureData.zxxqyl + '></td>' +
+                         '<td><input value=' + paraArr[11] + '></td>' +
                          '</tr>' +
 
 
                          '<tr> ' +
                          '<td>' + languageData.ylsspd + '</td>' +
-                         '<td>' + d.cureData.ylsspd + '</td>' +
+                         '<td><input value=' + paraArr[20] + '></td>' +
                          '<td>' + languageData.ylxjpd + '</td>' +
-                         '<td>' + d.cureData.ylxjpd + '</td>' +
+                         '<td><input value=' + paraArr[21] + '></td>' +
                          '</tr>' +
 
                          '<tr> ' +
                          '<td>' + "AVAPS" + '</td>' +
-                         '<td>' + d.cureData.avaps + '</td>' +
+                         '<td><input value=' + paraArr[22] + '></td>' +
                          '<td>' + languageData.mbcql + '</td>' +
-                         '<td>' + d.cureData.mbcql + '</td>' +
+                         '<td><input value=' + paraArr[14] + '></td>' +
                          '</tr>' +
 
 
                          '<tr> ' +
                          '<td>' + languageData.hqsf + '</td>' +
-                         '<td>' + d.cureData.hqsf + '</td>' +
+                         '<td>' + paraArr[17] + '</td>' +
                          '</tr>' +
                          '</table>'
                      );
@@ -307,6 +362,18 @@
                  case "S/T":
                      table.append(
                          '<table class="table" id="setParaTable" cellspacing="30" >' +
+
+                         '<tr> ' +
+                         '<td>' + languageData.mode + '</td>' +
+                         '<td><select id="modeSel" onchange="changeMode()">\n' +
+                         '<option value="APAP" >APAP</option>' +
+                         '<option value ="CPAP">CPAP</option>' +
+                         '  <option value="S">S</option>\n' +
+                         '  <option value="S-Auto">S-Auto</option>\n' +
+                         '  <option value="T"  >T</option>\n' +
+                         '  <option value="S/T" selected="selected">S/T</option>\n' +
+                         '</select></td>' +
+                         '</tr>' +
 
                          '<tr> ' +
                          '<td>' + languageData.xqyl + '</td>' +
@@ -373,9 +440,10 @@
                          '</table>');
                      break;
              }
+             }
          },
-         error: function () {
-             console.log("error");
+         error: function (result) {
+             console.log(result.msg);
          }
      })
 
@@ -489,15 +557,17 @@
              table.append(
                  '<table class="table" id="setParaTable" cellspacing="30" >' +
                  '<h4><b>设备参数</b></h4>' +
+
+
                  '<tr> ' +
-                 '<td>' + "模式" + '</td>' +
+                 '<td>' + languageData.mode + '</td>' +
                  '<td><select id="modeSel" onchange="changeMode()">\n' +
-                 '<option value="0" selected="selected">CPAP</option>'+
-                 '  <option>APAP</option>\n' +
-                 // '  <option>S</option>\n' +
-                 // '  <option>S-Auto</option>\n' +
-                 // '  <option>T</option>\n' +
-                 // '  <option>S/T</option>\n' +
+                 '<option value="APAP">APAP</option>' +
+                 '<option value ="CPAP" selected="selected">CPAP</option>' +
+                 '  <option value="S">S</option>\n' +
+                 '  <option value="S-Auto">S-Auto</option>\n' +
+                 '  <option value="T">T</option>\n' +
+                 '  <option value="S/T">S/T</option>\n' +
                  '</select></td>' +
                  '</tr>' +
 
@@ -520,18 +590,18 @@
              table.append(
                  '<table class="table" id="setParaTable" cellspacing="30" >' +
                  '<h4><b>设备参数</b></h4>' +
-
                  '<tr> ' +
-                 '<td>' + "模式" + '</td>' +
+                 '<td>' + languageData.mode + '</td>' +
                  '<td><select id="modeSel" onchange="changeMode()">\n' +
-                 '<option value="0" selected="selected">APAP</option>'+
-                 '  <option>CPAP</option>\n' +
-                 // '  <option>S</option>\n' +
-                 // '  <option>S-Auto</option>\n' +
-                 // '  <option>T</option>\n' +
-                 // '  <option>S/T</option>\n' +
+                 '<option value="APAP" selected="selected">APAP</option>' +
+                 '<option value ="CPAP">CPAP</option>' +
+                 '  <option value="S">S</option>\n' +
+                 '  <option value="S-Auto">S-Auto</option>\n' +
+                 '  <option value="T">T</option>\n' +
+                 '  <option value="S/T">S/T</option>\n' +
                  '</select></td>' +
                  '</tr>' +
+
 
 
                  '<tr> ' +
@@ -554,6 +624,366 @@
 
                  '</table>'
              );
+             break;
+         case "CPAP":
+             table.append(
+                 '<table class="table" id="setParaTable" cellspacing="30" >' +
+                 '<h4><b>'+languageData.devicePara+'</b></h4>' +
+
+                 '<tr> ' +
+                 '<td>' + languageData.mode + '</td>' +
+                 '<td><select id="modeSel" onchange="changeMode()">\n' +
+                 '<option value="APAP">APAP</option>' +
+                 '<option value ="CPAP" selected="selected">CPAP</option>' +
+                 '  <option value="S">S</option>\n' +
+                 '  <option value="S-Auto">S-Auto</option>\n' +
+                 '  <option value="T">T</option>\n' +
+                 '  <option value="S/T">S/T</option>\n' +
+                 '</select></td>' +
+                 '</tr>' +
+
+
+                 '<tr> ' +
+                 '<td>' +  languageData.hqsf + '</td>' +
+                 '<td><input id="breatheRel" value=' + paraArr[17]+ '></td>' +
+                 '<td>' +  languageData.zlyl + '</td>' +
+                 '<td><input id="cureStress" value=' + paraArr[5] + '></td>' +
+                 '</tr>' +
+                 '<tr> ' +
+                 '<td>' + languageData.ksyl + '</td>' +
+                 '<td><input id="starStress" value=' + paraArr[6] + '></td>' +
+                 '<td>' + languageData.ycsj + '</td>' +
+                 '<td><input id="delayTime" value=' + paraArr[7] + '></td>' +
+                 '</tr>' +
+                 '</table>'
+             );
+             break;
+         case "APAP":
+             table.append(
+                 '<table class="table" id="setParaTable" cellspacing="30" >' +
+                 '<h4><b>'+languageData.devicePara+'</b></h4>' +
+
+
+
+                 '<tr> ' +
+                 '<td>' + languageData.mode + '</td>' +
+                 '<td><select id="modeSel" onchange="changeMode()">\n' +
+                 '<option value="APAP" selected="selected">APAP</option>' +
+                 '<option value ="CPAP">CPAP</option>' +
+                 '  <option value="S">S</option>\n' +
+                 '  <option value="S-Auto">S-Auto</option>\n' +
+                 '  <option value="T">T</option>\n' +
+                 '  <option value="S/T">S/T</option>\n' +
+                 '</select></td>' +
+                 '</tr>' +
+
+
+
+
+                 '<tr> ' +
+                 '<td>' + languageData.ksyl + '</td>' +
+                 '<td><input id="starStress" ></td>' +
+                 '<td>' + languageData.ycsj + '</td>' +
+                 '<td><input id="delayTime" ></td>' +
+                 '</tr>' +
+
+                 '<tr> ' +
+                 '<td>' + languageData.maxKpa + '</td>' +
+                 '<td><input id="maxStress" ></td>' +
+                 '<td>' + languageData.minKpa + '</td>' +
+                 '<td><input id="minStress" ></td>' +
+                 '</tr>' +
+                 '<tr> ' +
+                 '<td>' + languageData.hqsf + '</td>' +
+                 '<td><input id="breatheRel"></td>' +
+                 '</tr>' +
+
+                 '</table>'
+             );
+             break;
+
+         case "S":
+
+             table.append(
+                 '<table class="table" id="setParaTable" cellspacing="30" >' +
+
+                 '<tr> ' +
+                 '<td>' + languageData.mode + '</td>' +
+                 '<td><select id="modeSel" onchange="changeMode()">\n' +
+                 '<option value="APAP" >APAP</option>' +
+                 '<option value ="CPAP">CPAP</option>' +
+                 '  <option value="S" selected="selected">S</option>\n' +
+                 '  <option value="S-Auto">S-Auto</option>\n' +
+                 '  <option value="T">T</option>\n' +
+                 '  <option value="S/T">S/T</option>\n' +
+                 '</select></td>' +
+                 '</tr>' +
+
+
+                 '<tr> ' +
+                 '<td>' + languageData.xqyl + '</td>' +
+                 '<td><input id="inhaleStress"></td>' +
+                 '<td>' + languageData.hqyl + '</td>' +
+                 '<td><input id="exhaleStress"></td>' +
+                 '</tr>' +
+
+
+                 '<tr> ' +
+                 '<td>' + languageData.ksyl + '</td>' +
+                 '<td><input value=' + paraArr[6] + '></td>' +
+                 '<td>' + languageData.ycsj + '</td>' +
+                 '<td><input value=' + paraArr[7] + '></td>' +
+                 '</tr>' +
+
+                 '<tr> ' +
+                 '<td>' + languageData.xqlmd + '</td>' +
+                 '<td><input value=' + paraArr[18] + '></td>' +
+                 '<td>' + languageData.hqlmd + '</td>' +
+                 '<td><input value=' + paraArr[19] + '></td>' +
+                 '</tr>' +
+
+
+                 '<tr> ' +
+                 '<td>' + languageData.ylsspd + '</td>' +
+                 '<td><input value=' + paraArr[20] + '></td>' +
+                 '<td>' + languageData.ylxjpd + '</td>' +
+                 '<td><input value=' + paraArr[21]  + '></td>' +
+                 '</tr>' +
+
+                 '<tr> ' +
+                 '<td>' + "AVAPS" + '</td>' +
+                 '<td><input value=' + paraArr[22] + '></td>' +
+                 '<td>' + languageData.mbcql + '</td>' +
+                 '<td><input value=' + paraArr[14] + '></td>' +
+                 '</tr>' +
+
+                 '<tr> ' +
+                 '<td>' + languageData.zdxqyl + '</td>' +
+                 '<td><input value=' + paraArr[10] + '></td>' +
+                 '<td>' + languageData.zxxqyl + '</td>' +
+                 '<td><input value=' + paraArr[11] + '></td>' +
+                 '</tr>' +
+
+                 '<tr> ' +
+                 '<td>' + languageData.hqsf + '</td>' +
+                 '<td><input value=' + paraArr[17] + '></td>' +
+                 '</tr>' +
+                 '</table>'
+             );
+             break;
+         case "S-Auto":
+             table.append(
+                 '<table class="table" id="setParaTable" cellspacing="30" >' +
+                 '<tr> ' +
+                 '<td>' + languageData.mode + '</td>' +
+                 '<td><select id="modeSel" onchange="changeMode()">\n' +
+                 '<option value="APAP" >APAP</option>' +
+                 '<option value ="CPAP">CPAP</option>' +
+                 '  <option value="S">S</option>\n' +
+                 '  <option value="S-Auto" selected="selected">S-Auto</option>\n' +
+                 '  <option value="T">T</option>\n' +
+                 '  <option value="S/T">S/T</option>\n' +
+                 '</select></td>' +
+                 '</tr>' +
+
+
+
+
+                 '<tr> ' +
+                 '<td>' + languageData.xqyl + '</td>' +
+                 '<td><input value=' + paraArr[12] + '></td>' +
+                 '<td>' + languageData.hqyl + '</td>' +
+                 '<td><input value=' + paraArr[13] + '></td>' +
+                 '</tr>' +
+
+                 '<tr> '+
+                 '<td>' + languageData.zdxqyl + '</td>' +
+                 '<td><input value=' + paraArr[10] + '></td>' +
+                 '<td>' + languageData.hqsf + '</td>' +
+                 '<td><input value=' + paraArr[11] + '></td>' +
+                 '</tr>'+
+
+
+                 '<tr> '+
+                 '<td>' + languageData.ksyl + '</td>' +
+                 '<td><input value=' + paraArr[6] + '></td>' +
+                 '<td>' + languageData.ycsj + '</td>' +
+                 '<td><input value=' + paraArr[7] + '></td>' +
+                 '</tr>'+
+
+                 '<tr> ' +
+                 '<td>' + languageData.xqlmd + '</td>' +
+                 '<td><input value=' + paraArr[18] + '></td>' +
+                 '<td>' + languageData.hqlmd + '</td>' +
+                 '<td><input value=' + paraArr[19] + '></td>' +
+                 '</tr>' +
+
+
+                 '<tr> ' +
+                 '<td>' + languageData.ylsspd + '</td>' +
+                 '<td><input value=' + paraArr[20] + '></td>' +
+                 '<td>' + languageData.ylxjpd + '</td>' +
+                 '<td><input value=' + paraArr[21] + '></td>' +
+                 '</tr>' +
+                 '</table>'
+             );
+             break;
+         case "T":
+             table.append(
+                 '<table class="table" id="setParaTable" cellspacing="30" >' +
+
+                 '<tr> ' +
+                 '<td>' + languageData.mode + '</td>' +
+                 '<td><select id="modeSel" onchange="changeMode()">\n' +
+                 '<option value="APAP" >APAP</option>' +
+                 '<option value ="CPAP">CPA     P</option>' +
+                 '  <option value="S">S</option>\n' +
+                 '  <option value="S-Auto">S-Auto</option>\n' +
+                 '  <option value="T" selected="selected" >T</option>\n' +
+                 '  <option value="S/T">S/T</option>\n' +
+                 '</select></td>' +
+                 '</tr>' +
+
+
+                 '<tr> ' +
+                 '<td>' + languageData.xqyl + '</td>' +
+                 '<td><input value=' + paraArr[12] + '></td>' +
+                 '<td>' + languageData.hqyl + '</td>' +
+                 '<td><input value=' + paraArr[13] + '></td>' +
+                 '</tr>' +
+
+                 '<tr> ' +
+                 '<td>' + languageData.ksyl + '</td>' +
+                 '<td><input value=' + paraArr[6] + '></td>' +
+                 '<td>' + languageData.ycsj + '</td>' +
+                 '<td><input value=' + paraArr[7] + '></td>' +
+                 '</tr>' +
+
+                 '<tr> ' +
+                 '<td>' + languageData.hxpl + '</td>' +
+                 '<td><input value=' + paraArr[15] + '></td>' +
+                 '<td>' + languageData.xqsj + '</td>' +
+                 '<td><input value=' + paraArr[16] + '></td>' +
+                 '</tr>' +
+
+
+                 '<tr> ' +
+                 '<td>' + languageData.xqlmd + '</td>' +
+                 '<td><input value=' + paraArr[18] + '></td>' +
+                 '<td>' + languageData.hqlmd + '</td>' +
+                 '<td><input value=' + paraArr[19] + '></td>' +
+                 '</tr>' +
+
+                 '<tr> ' +
+                 '<td>' + languageData.zdxqyl + '</td>' +
+                 '<td><input value=' + paraArr[10] + '></td>' +
+                 '<td>' + languageData.zxxqyl + '</td>' +
+                 '<td><input value=' + paraArr[11] + '></td>' +
+                 '</tr>' +
+
+
+                 '<tr> ' +
+                 '<td>' + languageData.ylsspd + '</td>' +
+                 '<td><input value=' + paraArr[20] + '></td>' +
+                 '<td>' + languageData.ylxjpd + '</td>' +
+                 '<td><input value=' + paraArr[21] + '></td>' +
+                 '</tr>' +
+
+                 '<tr> ' +
+                 '<td>' + "AVAPS" + '</td>' +
+                 '<td><input value=' + paraArr[22] + '></td>' +
+                 '<td>' + languageData.mbcql + '</td>' +
+                 '<td><input value=' + paraArr[14] + '></td>' +
+                 '</tr>' +
+
+
+                 '<tr> ' +
+                 '<td>' + languageData.hqsf + '</td>' +
+                 '<td>' + paraArr[17] + '</td>' +
+                 '</tr>' +
+                 '</table>'
+             );
+             break;
+
+         case "S/T":
+             table.append(
+                 '<table class="table" id="setParaTable" cellspacing="30" >' +
+
+                 '<tr> ' +
+                 '<td>' + languageData.mode + '</td>' +
+                 '<td><select id="modeSel" onchange="changeMode()">\n' +
+                 '<option value="APAP" >APAP</option>' +
+                 '<option value ="CPAP">CPAP</option>' +
+                 '  <option value="S">S</option>\n' +
+                 '  <option value="S-Auto">S-Auto</option>\n' +
+                 '  <option value="T"  >T</option>\n' +
+                 '  <option value="S/T" selected="selected">S/T</option>\n' +
+                 '</select></td>' +
+                 '</tr>' +
+
+                 '<tr> ' +
+                 '<td>' + languageData.xqyl + '</td>' +
+                 '<td><input value=' + d.cureData.xqyl + '></td>' +
+                 '<td>' + languageData.hqyl + '</td>' +
+                 '<td><input value=' + d.cureData.hqyl + '></td>' +
+                 '</tr>' +
+
+                 '<tr> ' +
+                 '<td>' + languageData.ksyl + '</td>' +
+                 '<td><input value=' + d.cureData.ksyl + '></td>' +
+                 '<td>' + languageData.ycsj + '</td>' +
+                 '<td><input value=' + d.cureData.ycsj + '></td>' +
+                 '</tr>' +
+
+                 '<tr> ' +
+                 '<td>' + languageData.hxpl + '</td>' +
+                 '<td><input value=' + d.cureData.hxpl + '></td>' +
+                 '<td>' + languageData.xqsj + '</td>' +
+                 '<td><input value=' + d.cureData.xqsj + '></td>' +
+                 '</tr>' +
+
+
+
+                 '<tr> ' +
+                 '<td>' + languageData.xqlmd + '</td>' +
+                 '<td><input value=' + d.cureData.xqlmd + '></td>' +
+                 '<td>' + languageData.hqlmd + '</td>' +
+                 '<td><input value=' + d.cureData.hqlmd + '></td>' +
+                 '</tr>' +
+
+                 '<tr> ' +
+                 '<td>' + languageData.zdxqyl + '</td>' +
+                 '<td><input value=' + d.cureData.zdxqyl + '></td>' +
+                 '<td>' + languageData.zxxqyl + '</td>' +
+                 '<td><input value=' + d.cureData.zxxqyl + '></td>' +
+                 '</tr>' +
+
+                 '<tr> ' +
+                 '<td>' + languageData.ylsspd + '</td>' +
+                 '<td>' + d.cureData.ylsspd + '</td>' +
+                 '<td>' + languageData.ylxjpd + '</td>' +
+                 '<td>' + d.cureData.ylxjpd + '</td>' +
+                 '</tr>' +
+
+                 '<tr> ' +
+                 '<td>' + "AVAPS" + '</td>' +
+                 '<td>' + d.cureData.avaps + '</td>' +
+                 '<td>' + languageData.mbcql + '</td>' +
+                 '<td>' + d.cureData.mbcql + '</td>' +
+                 '</tr>' +
+
+                 '<tr> ' +
+                 '<td>' + languageData.zdxqyl + '</td>' +
+                 '<td><input value=' + d.cureData.zdxqyl + '></td>' +
+                 '<td>' + languageData.zxxqyl + '</td>' +
+                 '<td><input value=' + d.cureData.zxxqyl + '></td>' +
+                 '</tr>' +
+
+                 '<tr> ' +
+                 '<td>' + languageData.hqsf + '</td>' +
+                 '<td>' + d.cureData.hqsf + '</td>' +
+                 '</tr>' +
+                 '</table>');
              break;
          default:
              alert("出现错误");

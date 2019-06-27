@@ -46,7 +46,7 @@ spring:
           max-active: 8
           #最大阻塞等待时间(负数表示没限制)
           max-wait: -1ms
-          #最大空闲
+          #最大空闲xX
           max-idle: 8
           #最小空闲
           min-idle: 0
@@ -61,11 +61,16 @@ spring:
 mybatis:
     mapperLocations: classpath:mapper/**/*.xml
     configLocation: classpath:mybatis.xml
-# netty配置
+# netty配置z
 n:
-  port: 2222
-  url: localhost
+  #url: 172.18.72.186
   #url: 192.168.123.1
   #url: 172.18.72.186
+  url: localhost
+  #port: 2222
+  port: 8080
+
+
+
 logging:
   file: log/cloud.log

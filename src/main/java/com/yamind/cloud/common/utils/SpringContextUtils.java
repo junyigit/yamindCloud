@@ -31,6 +31,9 @@ public class SpringContextUtils implements ApplicationContextAware {
 	public static <T> T getBean(String name, Class<T> requiredType) {
 		return applicationContext.getBean(name, requiredType);
 	}
+	public 	static <T> T getBean(Class<T> clazz) {
+		return applicationContext.getBean(clazz);
+	}
 
 	public static boolean containsBean(String name) {
 		return applicationContext.containsBean(name);
@@ -43,5 +46,6 @@ public class SpringContextUtils implements ApplicationContextAware {
 	public static Class<? extends Object> getType(String name) {
 		return applicationContext.getType(name);
 	}
+
 
 }

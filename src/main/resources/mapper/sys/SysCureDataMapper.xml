@@ -7,26 +7,18 @@
 
 	<!--历史数据-设备信息列表-->
 	<select id="listForPage" resultType="com.yamind.cloud.modules.sys.entity.SysCureDataEntity">
-
 		SELECT
 		c.id,
 		DATE_FORMAT(c.cure_time,"%Y-%m-%d")as cureTime,
-		c.mode,
 		c.bootSerial,
+		c.real_flow,
+		c.leakage,
 		c.cure_stress,
-		c.min_stress,
-		c.max_stress,
-		c.max_inhaleStress,
-		c.inhale_stress,
-		c.exhale_stress,
 		c.respiratory_rate,
-		c.inhale_time,
-		c.inhale_sensitivity,
-		c.exhale_sensitivity,
-		c.stress_up,
-		c.stress_down,
-		c.avaps,
-		c.soft_version
+		c.tidal_volume
+		c.minu_throughput,
+		c.ai,
+		c.hi
 		FROM
 		sys_curedata c
 		<where>
@@ -35,7 +27,6 @@
 		group by DATE_FORMAT(c.cure_time, "%Y-%m-%d" )
 		ORDER BY
 		c.id ASC
-
 	</select>
 
 
@@ -44,22 +35,15 @@
 		SELECT
 		c.id,
 		DATE_FORMAT(c.cure_time,"%Y-%m-%d")as cureTime,
-		c.mode,
 		c.bootSerial,
+		c.real_flow,
+		c.leakage,
 		c.cure_stress,
-		c.min_stress,
-		c.max_stress,
-		c.max_inhaleStress,
-		c.inhale_stress,
-		c.exhale_stress,
 		c.respiratory_rate,
-		c.inhale_time,
-		c.inhale_sensitivity,
-		c.exhale_sensitivity,
-		c.stress_up,
-		c.stress_down,
-		c.avaps,
-		c.soft_version
+		c.tidal_volume,
+		c.minu_throughput,
+		c.ai,
+		c.hi
 		FROM
 		sys_curedata c
 		<where>
@@ -147,25 +131,49 @@
 	<insert id="save" parameterType="com.yamind.cloud.modules.sys.entity.SysCureDataEntity" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO sys_curedata (
 			cure_time,
-			mode,
 			bootSerial,
-			real_flow,
+			real_flow1,
+			real_flow2,
+			real_flow3,
+			real_flow4,
+			real_flow5,
+			leakage,
 			cure_stress,
+			cure_stress2,
+			cure_stress3,
+			cure_stress4,
+			cure_stress5,
+			respiratory_rate,
+			tidal_volume,
 			minu_throughput,
 			ai,
 			hi,
-			soft_version
+			xhb,
+			inhale_stress,
+			exhale_stress
 		)
 		VALUES (
   			#{cureTime},
-			#{mode},
 			#{bootSerial},
-			#{realFlow},
-			#{cureStress},
+			#{realFlow1},
+			#{realFlow2},
+			#{realFlow3},
+			#{realFlow4},
+			#{realFlow5},
+			#{leakage},
+			#{cureStress1},
+			#{cureStress2},
+			#{cureStress3},
+			#{cureStress4},
+			#{cureStress5},
+			#{respiratoryRate},
+			#{tidalVolume},
 			#{minusTroughput},
 			#{aiCount},
 			#{hiCount},
-			#{softVersion}
+			#{xhb},
+			#{inhaleStress},
+			#{exhaleStress}
 		)
 	</insert>
 
@@ -200,6 +208,17 @@
 			AND bootSerial =#{serialId} ORDER BY #{colName} ASC
 	</select>
 
+	<!--查询统计信息数据-->
+	<select id="listForColData2" resultType="com.yamind.cloud.modules.sys.entity.SysCureDataEntity" parameterType="java.util.Map" fetchSize="1000">
+		SELECT
+			${colName}
+		FROM
+		sys_curedata
+		WHERE
+			cure_time BETWEEN #{startDate} and #{endDate}
+			AND bootSerial =#{serialId}
+	</select>
+
 
 
 	<!--按日期查询95值 统计信息信息数据-->
@@ -223,26 +242,25 @@
 		c.id,
 		DATE_FORMAT(c.cure_time, "%H:%i:%s" ) as cureTime,
 		c.bootSerial,
-		c.mode,
-		c.real_flow,
+		c.real_flow1,
+		c.real_flow2,
+		c.real_flow3,
+		c.real_flow4,
+		c.real_flow5,
+		c.leakage,
 		c.cure_stress,
-		c.min_stress,
-		c.max_stress,
-		c.max_inhaleStress,
-		c.inhale_stress,
-		c.exhale_stress,
 		c.respiratory_rate,
-		c.inhale_time,
-		c.inhale_sensitivity,
-		c.exhale_sensitivity,
-		c.stress_up,
-		c.stress_down,
-		c.avaps,
-		c.soft_version
+		c.tidal_volume,
+		c.minu_throughput,
+		c.ai,
+		c.hi,
+		c.xhb,
+		c.inhale_stress,
+		c.exhale_stress
 		FROM
 		sys_curedata c
 		<where>
-				c.cure_time BETWEEN #{startTime} and #{endTime}
+				c.cure_time BETWEEN #{seleceTime} and #{endTime}
 			AND c.bootSerial =#{serialId} ORDER BY c.cure_time ASC
 		</where>
 	</select>

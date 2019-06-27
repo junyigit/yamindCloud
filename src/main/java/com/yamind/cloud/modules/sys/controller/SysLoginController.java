@@ -29,8 +29,6 @@ public class SysLoginController extends AbstractController {
 	private SysUserService sysUserService;
 
 
-
-
 	/**
 	 * 登录
 	 */

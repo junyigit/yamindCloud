@@ -20,6 +20,9 @@ public interface SysCureDataMapper extends BaseMapper<SysCureDataEntity>{
     //根据列计算中位值
     List<String> listForColData(Map<String,Object> param);
 
+    //根据列计算中位值
+    List<SysCureDataEntity> listForColData2(Map<String,Object> param);
+
     // 计算95值 获取方法
     int getStatCount(Map<String,Object> param);
 
@@ -37,6 +40,7 @@ public interface SysCureDataMapper extends BaseMapper<SysCureDataEntity>{
 
     // 根据时间获取 曲线图里面的数据
     List<SysCureDataEntity> findMapListWithDate(Map<String,Object> param);
+
 
     void delectOldTimeData();
 }

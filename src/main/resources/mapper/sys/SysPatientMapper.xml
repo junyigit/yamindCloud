@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 
 <mapper namespace="com.yamind.cloud.modules.sys.dao.SysPadientMapper">
-
-
 
 
     <select id="listForPage" resultType="com.yamind.cloud.modules.sys.entity.SysPatientEntity">
@@ -20,7 +19,8 @@
         u.diagnose,
         u.doctor,
         u.card,
-        u.homeAddres
+        u.homeAddres,
+        u.status
         FROM
         sys_padient u
         <where>
@@ -45,7 +45,8 @@
 			diagnose,
 			doctor,
 			card,
-			homeAddres
+			homeAddres,
+			status
 		)
 		VALUES (
 			#{name},
@@ -59,7 +60,8 @@
 			#{diagnose},
 			#{doctor},
             #{card},
-			#{homeAddres}
+			#{homeAddres},
+			0
 		)
 	</insert>
 
@@ -67,7 +69,7 @@
 
     <select id="getObjectById" resultType="com.yamind.cloud.modules.sys.entity.SysPatientEntity">
 		SELECT
-          u.id,
+        u.id,
         u.name,
         u.age,
         u.height,
@@ -86,7 +88,16 @@
 			u.id = #{id}
 	</select>
 
-
+    <delete id="batchRemove">
+        DELETE
+        FROM
+        sys_padient
+        WHERE
+        id IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 
     <update id="update">
         UPDATE sys_padient
@@ -107,4 +118,5 @@
         WHERE
         id = #{id}
     </update>
+
 </mapper>

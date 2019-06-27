@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="include/header_css::header('新增-患者信息')"></head>
+<head th:include="include/header_css::header('新增-患者信息')">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="css/add.css">
+</head>
 
 <body>
 <div id="dyLTE" class="container-fluid" v-cloak>
 
-    <table class="table table-bordered" id="form">
+    <table class="table table-full-width" id="form">
         <tr>
             <td class="formTitle"><b>[[#{patient.name}]]</b></td>
             <td class="formValue">
@@ -31,12 +34,12 @@
 
 
         <tr>
-            <td class="formTitle formTitle-top"><b>bmi</b></td>
+            <td class="formTitle formTitle-top"><b>BMI</b></td>
             <td class="formValue">
                 <input type="text" class="form-control" placeholder="" v-model="pat.bmi">
             </td>
 
-            <td class="formTitle formTitle-top"><b>pbw</b></td>
+            <td class="formTitle formTitle-top"><b>PBW</b></td>
             <td class="formValue">
                 <input type="text" class="form-control" placeholder="" v-model="pat.pbw">
             </td>
@@ -66,7 +69,6 @@
                 <input type="text" class="form-control" placeholder="" v-model="pat.doctor">
             </td>
         </tr>
-
 
         <tr>
             <br/>

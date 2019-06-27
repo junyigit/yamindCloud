@@ -71,7 +71,7 @@ public class SysRoleController extends AbstractController {
 	public R getRoleById(@RequestBody Long id) {
 		return sysRoleService.getRoleById(id);
 	}
-	
+
 	/**
 	 * 修改角色
 	 * @param role

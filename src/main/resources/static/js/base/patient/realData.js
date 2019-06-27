@@ -4,7 +4,10 @@ $(function () {
     var myChart = echarts.init(document.getElementById('main'));
     var myChart1 = echarts.init(document.getElementById('main1'));
 
+    //定义全局变量
+    lastTime =0;
 
+    //请求切换多语言
     $.ajax({
         url: "/json/language.json",//json文件位置
         type: "GET",//请求方式为get
@@ -18,7 +21,8 @@ $(function () {
                 lauguageData = data.en;
                 console.log("seleted english!!");
             }
-            console.log("RealData ----Seleted Json is :" + JSON.stringify(lauguageData));
+               //打印语言
+         //   console.log("RealData ----Seleted Json is :" + JSON.stringify(lauguageData));
         }
     })
 
@@ -34,7 +38,7 @@ $(function () {
      * 10秒
      */
     $('#tenSecond').on('click',function(event){
-        colNum=11;
+        colNum=10*5+1;
         colArr.length=0;
         for (var i =1;i<colNum;i++){
             colArr.push(i);
@@ -56,7 +60,7 @@ $(function () {
      * 20秒
      */
     $('#towsecond').on('click',function(event){
-        colNum=21;
+        colNum=20*5+1;
         colArr.length=0;
         for (var i =1;i<colNum;i++){
             colArr.push(i);
@@ -81,7 +85,7 @@ $(function () {
      * 30秒
      */
     $('#threeSecond').on('click',function(event){
-        colNum=31;
+        colNum=30*5+1;
         colArr.length=0;
         for (var i =1;i<colNum;i++){
             colArr.push(i);
@@ -151,27 +155,29 @@ $(function () {
         }]
     };
 
+
+
+
     option1 = {
         title: {
             text: lauguageData.realll
-        },tooltip: {
+        }
+        ,tooltip: {
             trigger: 'axis',
             showDelay:100,
             formatter: function (params) {
                 params = params[0];
                 var date = params.name;
-                return '<div><p>当前时间第：'+params.name+'秒</p></div>'+'<p>当前流量值 : '+ params.value+'</p>';
+                return '<div><p>当前时间第：'+params.name+'秒</p></div>'+'<p>当前流量值值 : '+ params.value[1]+'</p>';
             },
             axisPointer: {
-                animation: true
+                animation: false
             }
         },
-
         xAxis: {
             type: 'category',
             data:colArr,
             position:"bottom",     //x 轴的位置。"top"，"bottom"，默认 grid 中的第一个 x 轴在 grid 的下方（'bottom'），第二个 x 轴视第一个 x 轴的位置放在另一侧
-            //offset:0,
             splitLine: {
                 show: false
             }
@@ -186,7 +192,6 @@ $(function () {
             splitLine: {
                 show: true
             }
-
         },
         series: [{
             name: '模拟数据',
@@ -198,8 +203,12 @@ $(function () {
         }]
     };
 
-    setInterval(function () {
 
+
+    /**
+     * 定时器 更新Table及
+     */
+    setInterval(function () {
         var serialId = getUrlParam(window.location.href,'serialId');
         console.info(serialId);
         $.ajax({
@@ -211,20 +220,33 @@ $(function () {
                 "serialId":serialId
             },//数据，这里使用的是Json格式进行传输
             success : function(result) {//返回数据根据结果进行相应的处理
-                var table =$(".realdata");
-                if ( result!=null ) {
-                    var temp= result.data;
-                    var d=eval('('+temp+')');
-                    //alert(d.cureData.ll);
-                    $(".realdata").empty(); //清空table（除了第一行以外）
 
+                console.log("接受数据为:"+result.dataMsg);
+                //获取HTML网页TABLE的句柄
+                var table =$(".realdata");
+
+                if ( result!=null ) {
+
+
+
+                    //数据部分
+                    var dataMsg= result.dataMsg;
+                    var dataArr = dataMsg.split(",");
+                    //设置信息部分
+                    var paraMsg= result.paraMsg;
+                    if (paraMsg !=null) {
+                        var paraArr = paraMsg.split(",");
+                    }
+
+
+                    //清空数据
+                    $(".realdata").empty(); //清空table（除了第一行以外）
 
                     var date1=new Date();
                     var second = date1.getSeconds();//秒
                     //console.log("秒为"+second);
 
                     //填充数据
-                    //data.shift();
                     if (data.length >colNum){
                         data.length=0;
                     }
@@ -232,74 +254,107 @@ $(function () {
                     if (data1.length >colNum){
                         data1.length=0;
                     }
-                    data.push(d.cureData.yl);
-                    data1.push(d.cureData.ll);
 
-                    console.log(data);
-                    myChart.setOption({
-                        series: [{
-                            data: data
-                        }]
-                    });
-                    //设置曲线图参数
-                    myChart1.setOption({
-                        series: [{
-                            data: data1
-                        }]
-                    });
-                    switch (d.mode){
+
+
+                    //时间转换  用于判断设备是否在线
+                    var localTime=Date.parse(new Date())/1000;
+
+
+                    console.log("lastTime :"+lastTime);
+
+                    console.log("dataArr[2] :"+dataArr[2]);
+
+
+                    if (lastTime !=dataArr[2] && lastTime !=0){
+
+                        console.log("正在发送");
+
+                        //压力数组
+                        data.push(dataArr[9],dataArr[10],dataArr[11],dataArr[12],dataArr[13]);
+                        //流量数组
+                        data1.push(dataArr[3],dataArr[4],dataArr[5],dataArr[6],dataArr[7]);
+
+
+                        console.log("压力值:"+data);
+
+                        console.log("流量为:"+dataArr[3],dataArr[4],dataArr[5],dataArr[6],dataArr[7]);
+
+
+                        myChart1.setOption({
+                            series: [{
+                                data: data1
+                            }]
+                        });
+                        //设置曲线图的数据源
+                        myChart.setOption({
+                            series: [{
+                                data: data
+                            }]
+                        });
+                    }else{
+                        console.log("设备断线");
+                    }
+
+
+
+
+                    //把当前时间戳保存 用于下次对比
+                    lastTime=dataArr[2];
+                    switch (paraArr[4]){
                         case "CPAP":
+                            console.log("模式为:"+paraArr[19]);
                             table.append(
                                 '<table class="table" id="realtable1" cellspacing="50">'+
                                 '<h4><b>'+lauguageData.realData+'</b></h4>' +
                                 '<tr> ' +
                                 '<td>' + lauguageData.realyl + '</td>' +
-                                '<td>' + d.cureData.yl + '</td>' +
+                                '<td>' + dataArr[9] + '</td>' +
                                 '<td>' + lauguageData.realll + '</td>' +
-                                '<td>' + d.cureData.ll + '</td>' +
+                                '<td>' + dataArr[3] + '</td>' +
                                 '</tr>' +
                                 '</table>'+
                                 '<table class="table" id="realtable2" cellspacing="30" >'+
                                 '<h4><b>'+ lauguageData.devicePara+ '</b></h4>'+
 
-                                returnSoft(d)+
+                                returnSoft(paraArr)+
 
                                 '<tr> ' +
                                 '<td>' + lauguageData.inRelese + '</td>' +
-                                '<td>' + d.cureData.hqsf + '</td>' +
+                                '<td>' + paraArr[13] + '</td>' +
                                 '<td>' + lauguageData.treatmentPres + '</td>' +
-                                '<td>' + d.cureData.zlyl+ '</td>' +
+                                '<td>' + paraArr[5]+ '</td>' +
                                 '</tr>'+
                                 '</table>'
                             )
                             break;
                         case "APAP":
-
+                            console.log("模式为:"+paraArr[4]);
                             table.append(
                                 '<table class="table" id="realtable1" cellspacing="50">'+
                                 '<h4><b>'+lauguageData.realData+'</b></h4>' +
                                 '<tr> ' +
                                 '<td>' + lauguageData.realyl + '</td>' +
-                                '<td>' + d.cureData.yl + '</td>' +
+                                '<td>' + dataArr[9] + '</td>' +
                                 '<td>' + lauguageData.realll + '</td>' +
-                                '<td>' + d.cureData.ll + '</td>' +
+                                '<td>' + dataArr[3] + '</td>' +
                                 '</tr>' +
                                 '</table>'+
                                 '<table class="table" id="realtable2" cellspacing="30" >'+
                                 '<h4><b>'+ lauguageData.devicePara+ '</b></h4>'+
 
-                                returnSoft(d)+
+                                returnSoft(paraArr)+
 
                                 '<tr> ' +
                                 '<td>' + lauguageData.hqsf + '</td>' +
-                                '<td>' + d.cureData.hqsf + '</td>' +
+                                '<td>' + paraArr[17] + '</td>' +
                                 '</tr>'+
 
                                 '<tr> ' +
                                 '<td>' + lauguageData.maxKpa + '</td>' +
-                                '<td>' + d.cureData.zdyl+ '</td>' +
+                                '<td>' + paraArr[8]+ '</td>' +
                                 '<td>' + lauguageData.minKpa+ '</td>' +
-                                '<td>' + d.cureData.zxyl+ '</td>' +
+                                '<td>' + paraArr[9]+ '</td>' +
                                 '</tr>'+
                                 '</table>'
 
@@ -307,28 +362,29 @@ $(function () {
                             break;
 
                         case "S":
+                            console.log("模式为:"+paraArr[4]);
                             table.append(
                                 '<table class="table" id="realtable1" cellspacing="50">'+
                                 '<h4><b>'+lauguageData.realData+'</b></h4>' +
                                 '<tr> ' +
                                 '<td>' + lauguageData.realyl + '</td>' +
-                                '<td>' + d.cureData.yl + '</td>' +
+                                '<td>' + dataArr[9] + '</td>' +
                                 '<td>' + lauguageData.realll + '</td>' +
-                                '<td>' + d.cureData.ll + '</td>' +
+                                '<td>' + dataArr[3] + '</td>' +
                                 '</tr>' +
 
                                 '<tr> ' +
                                 '<td>' + lauguageData.xhb + '</td>' +
-                                '<td>' + d.cureData.xhb + '</td>' +
+                                '<td>' + dataArr[19] + '</td>' +
                                 '<td>' + lauguageData.hxpl + '</td>' +
-                                '<td>' + d.cureData.hxpl + '</td>' +
+                                '<td>' + dataArr[16] + '</td>' +
                                 '</tr>'+
 
                                 '<tr> ' +
                                 '<td>' + lauguageData.cql + '</td>' +
-                                '<td>' + d.cureData.cql + '</td>' +
+                                '<td>' + dataArr[14] + '</td>' +
                                 '<td>' + lauguageData.fztql + '</td>' +
-                                '<td>' + d.cureData.fztql + '</td>' +
+                                '<td>' + dataArr[15] + '</td>' +
                                 '</tr>'+
 
 
@@ -336,42 +392,42 @@ $(function () {
                                 '<table class="table" id="realtable2" cellspacing="30" >'+
                                 '<h4><b>'+ lauguageData.devicePara+ '</b></h4>'+
 
-                                returnSoft(d)+
+                                returnSoft(paraArr)+
 
                                 '<tr> ' +
                                 '<td>' + lauguageData.xqyl + '</td>' +
-                                '<td>' + d.cureData.xqyl + '</td>' +
+                                '<td>' + paraArr[12] + '</td>' +
                                 '<td>' + lauguageData.hqyl + '</td>' +
-                                '<td>' + d.cureData.hqyl + '</td>' +
+                                '<td>' + paraArr[13]  + '</td>' +
                                 '</tr>' +
 
                                 '<tr> ' +
                                 '<td>' + lauguageData.xqlmd + '</td>' +
-                                '<td>' + d.cureData.xqlmd + '</td>' +
+                                '<td>' + paraArr[18]  + '</td>' +
                                 '<td>' + lauguageData.hqlmd + '</td>' +
-                                '<td>' + d.cureData.hqlmd + '</td>' +
+                                '<td>' + paraArr[19]  + '</td>' +
                                 '</tr>' +
 
 
                                 '<tr> ' +
                                 '<td>' + lauguageData.ylsspd + '</td>' +
-                                '<td>' + d.cureData.ylsspd + '</td>' +
+                                '<td>' + paraArr[20]  + '</td>' +
                                 '<td>' + lauguageData.ylxjpd + '</td>' +
-                                '<td>' + d.cureData.ylxjpd + '</td>' +
+                                '<td>' + paraArr[21]  + '</td>' +
                                 '</tr>' +
 
                                 '<tr> ' +
                                 '<td>' + "AVAPS" + '</td>' +
-                                '<td>' + d.cureData.avaps+ '</td>' +
+                                '<td>' + paraArr[22] + '</td>' +
                                 '<td>' + lauguageData.mbcql + '</td>' +
-                                '<td>' + d.cureData.mbcql+ '</td>' +
+                                '<td>' + paraArr[14] + '</td>' +
                                 '</tr>'+
 
                                 '<tr> ' +
                                 '<td>' + lauguageData.zdxqyl+ '</td>' +
-                                '<td>' + d.cureData.zdxqyl + '</td>' +
+                                '<td>' + paraArr[10]  + '</td>' +
                                 '<td>' + lauguageData.zxxqyl + '</td>' +
-                                '<td>' + d.cureData.zxxqyl + '</td>' +
+                                '<td>' + paraArr[11]  + '</td>' +
                                 '</tr>' +
                                 '</table>'
                             )
@@ -383,63 +439,63 @@ $(function () {
 
                                 '<tr> ' +
                                 '<td>' + lauguageData.realyl + '</td>' +
-                                '<td>' + d.cureData.yl + '</td>' +
+                                '<td>' + dataArr[9] + '</td>' +
                                 '<td>' + lauguageData.realll + '</td>' +
-                                '<td>' + d.cureData.ll + '</td>' +
+                                '<td>' + dataArr[3] + '</td>' +
                                 '</tr>' +
 
                                 '<tr> ' +
                                 '<td>' + lauguageData.xhb + '</td>' +
-                                '<td>' + d.cureData.xhb + '</td>' +
+                                '<td>' + dataArr[19] + '</td>' +
                                 '<td>' + lauguageData.hxpl + '</td>' +
-                                '<td>' + d.cureData.hxpl + '</td>' +
+                                '<td>' + dataArr[16] + '</td>' +
                                 '</tr>'+
 
                                 '<tr> ' +
                                 '<td>' + lauguageData.cql + '</td>' +
-                                '<td>' + d.cureData.cql + '</td>' +
+                                '<td>' + dataArr[14] + '</td>' +
                                 '<td>' + lauguageData.fztql + '</td>' +
-                                '<td>' + d.cureData.fztql + '</td>' +
+                                '<td>' + dataArr[15] + '</td>' +
                                 '</tr>'+
 
                                 '</table>'+
                                 '<table class="table" id="realtable2" cellspacing="30" >'+
                                 '<h4><b>'+ lauguageData.devicePara+ '</b></h4>'+
 
-                                returnSoft(d)+
+                                returnSoft(paraArr)+
 
                                 '<tr> ' +
                                 '<td>' + lauguageData.zdxqyl + '</td>' +
-                                '<td>' + d.cureData.zdxqyl+ '</td>' +
+                                '<td>' + paraArr[10]+ '</td>' +
                                 '</tr>'+
                                 '<tr> ' +
                                 '<td>' + lauguageData.xqyl + '</td>' +
-                                '<td>' + d.cureData.xqyl + '</td>' +
+                                '<td>' + paraArr[12] + '</td>' +
                                 '<td>' + lauguageData.hqyl + '</td>' +
-                                '<td>' + d.cureData.hqyl + '</td>' +
+                                '<td>' + paraArr[13]  + '</td>' +
                                 '</tr>' +
 
                                 '<tr> ' +
                                 '<td>' + lauguageData.xqlmd + '</td>' +
-                                '<td>' + d.cureData.xqlmd + '</td>' +
+                                '<td>' + paraArr[18]  + '</td>' +
                                 '<td>' + lauguageData.hqlmd + '</td>' +
-                                '<td>' + d.cureData.hqlmd + '</td>' +
+                                '<td>' + paraArr[19]  + '</td>' +
                                 '</tr>' +
 
                                 '<tr> ' +
                                 '<td>' + lauguageData.ylsspd + '</td>' +
-                                '<td>' + d.cureData.ylsspd + '</td>' +
+                                '<td>' + paraArr[20]  + '</td>' +
                                 '<td>' + lauguageData.ylxjpd + '</td>' +
-                                '<td>' + d.cureData.ylxjpd + '</td>' +
+                                '<td>' + paraArr[21]  + '</td>' +
                                 '</tr>' +
                                 '</table>'
                             )
                             break;
                         case "T":
-                            table.append(returnStData(d))
+                            table.append(returnStData(paraArr,dataArr))
                             break;
                         case "S/T":
-                            table.append(returnStData(d))
+                            table.append(returnStData(paraArr,dataArr))
                             break;
                     }
                 } else {
@@ -453,6 +509,11 @@ $(function () {
 // 使用刚指定的配置项和数据显示图表。
     myChart.setOption(option);
     myChart1.setOption(option1);
+
+
+    myChart.group = 'group1';
+    myChart1.group = 'group1';
+    echarts.connect('group1');
 
     window.onresize = function(){
         myChart.resize();
@@ -489,30 +550,30 @@ function tableUpdate() {
     $(".realdata").each()
 }
 
-function returnSoft(d) {
+function returnSoft(paraArr) {
 
     return softInfo =   '<tr> ' +
         '<td>' + lauguageData.serial + '</td>' +
-        '<td>' + d.serialId + '</td>' +
+        '<td>' + paraArr[1]+ '</td>' +
         '<td>' + lauguageData.type + '</td>' +
-        '<td>' + d.bootModel + '</td>' +
+        '<td>' + paraArr[3] + '</td>' +
         '</tr>'+
 
         '<tr> ' +
         '<td>' + lauguageData.softVersion + '</td>' +
-        '<td>' + d.softVersion+ '</td>' +
-        '<td>' + lauguageData.time + '</td>' +
-        '<td>' + d.serviceTime + '</td>' +
+        '<td>' + paraArr[23]+ '</td>' +
+        // '<td>' + lauguageData.time + '</td>' +
+        // '<td>' + paraArr[2] + '</td>' +
         '</tr>'+
         '<tr> ' +
         '<td>' + lauguageData.mode + '</td>' +
-        '<td>' + d.mode + '</td>' +
+        '<td>' + paraArr[4] + '</td>' +
         '</tr> ';
 
 }
 
 
-function returnStData(d) {
+function returnStData(paraArr,dataArr) {
 
     return stmodel =
         '<table class="table" id="realtable1" cellspacing="50">' +
@@ -520,28 +581,28 @@ function returnStData(d) {
 
         '<tr> ' +
         '<td>' + lauguageData.realyl + '</td>' +
-        '<td>' + d.cureData.yl + '</td>' +
+        '<td>' + dataArr[9] + '</td>' +
         '<td>' + lauguageData.realll + '</td>' +
-        '<td>' + d.cureData.ll + '</td>' +
+        '<td>' + dataArr[3] + '</td>' +
         '</tr>' +
 
         '<tr> ' +
         '<td>' + lauguageData.xhb + '</td>' +
-        '<td>' + d.cureData.xhb + '</td>' +
+        '<td>' + dataArr[19] + '</td>' +
         '<td>' + lauguageData.hxpl + '</td>' +
-        '<td>' + d.cureData.hxpl + '</td>' +
+        '<td>' + dataArr[16] + '</td>' +
         '</tr>' +
 
         '<tr> ' +
         '<td>' + lauguageData.cql + '</td>' +
-        '<td>' + d.cureData.cql + '</td>' +
+        '<td>' + dataArr[14] + '</td>' +
         '<td>' + lauguageData.fztql + '</td>' +
-        '<td>' + d.cureData.fztql + '</td>' +
+        '<td>' + dataArr[15] + '</td>' +
         '</tr>' +
 
         '<tr> ' +
         '<td>' + lauguageData.lql + '</td>' +
-        '<td>' + d.cureData.lql + '</td>' +
+        '<td>' + dataArr[8] + '</td>' +
         '</tr>' +
 
 
@@ -549,49 +610,49 @@ function returnStData(d) {
         '<table class="table" id="realtable2" cellspacing="30" >' +
         '<h4><b>'+ lauguageData.devicePara+ '</b></h4>'+
 
-        returnSoft(d) +
+        returnSoft(paraArr) +
         '<tr> ' +
         '<td>' + lauguageData.xqyl + '</td>' +
-        '<td>' + d.cureData.xqyl + '</td>' +
+        '<td>' + paraArr[12] + '</td>' +
         '<td>' + lauguageData.hqyl + '</td>' +
-        '<td>' + d.cureData.hqyl + '</td>' +
+        '<td>' + paraArr[13]  + '</td>' +
         '</tr>' +
 
         '<tr> ' +
         '<td>' + lauguageData.hxpl + '</td>' +
-        '<td>' + d.cureData.hxpl + '</td>' +
+        '<td>' + paraArr[15] + '</td>' +
         '<td>' + lauguageData.xqsj + '</td>' +
-        '<td>' + d.cureData.xqsj + '</td>' +
+        '<td>' + paraArr[16] + '</td>' +
         '</tr>' +
 
 
         '<tr> ' +
         '<td>' + lauguageData.xqlmd + '</td>' +
-        '<td>' + d.cureData.xqlmd + '</td>' +
+        '<td>' + paraArr[18] + '</td>' +
         '<td>' + lauguageData.hqlmd + '</td>' +
-        '<td>' + d.cureData.hqlmd + '</td>' +
+        '<td>' + paraArr[19] + '</td>' +
         '</tr>' +
 
         '<tr> ' +
         '<td>' + lauguageData.zdxqyl+ '</td>' +
-        '<td>' + d.cureData.zdxqyl + '</td>' +
+        '<td>' + paraArr[8]  + '</td>' +
         '<td>' + lauguageData.zxxqyl + '</td>' +
-        '<td>' + d.cureData.zxxqyl + '</td>' +
+        '<td>' + paraArr[9]  + '</td>' +
         '</tr>' +
 
 
         '<tr> ' +
         '<td>' + lauguageData.ylsspd + '</td>' +
-        '<td>' + d.cureData.ylsspd + '</td>' +
+        '<td>' + paraArr[18]  + '</td>' +
         '<td>' + lauguageData.ylxjpd + '</td>' +
-        '<td>' + d.cureData.ylxjpd + '</td>' +
+        '<td>' + paraArr[19]  + '</td>' +
         '</tr>' +
 
         '<tr> ' +
         '<td>' + "AVAPS" + '</td>' +
-        '<td>' + d.cureData.avaps + '</td>' +
+        '<td>' + paraArr[20] + '</td>' +
         '<td>' + lauguageData.mbcql + '</td>' +
-        '<td>' + d.cureData.mbcql + '</td>' +
+        '<td>' + paraArr[12] + '</td>' +
         '</tr>' +
 
         // '<tr> ' +
@@ -603,6 +664,8 @@ function returnStData(d) {
         '</table>';
 
 }
+
+
 /**
  * 获取cookie值
  * @param cookie_name
@@ -623,7 +686,6 @@ function getCookie(cookie_name) {
 
         if (cookie_end == -1) {
             cookie_end = allcookies.length;
-
         }
         //得到想要的cookie的值
         var value = unescape(allcookies.substring(cookie_pos, cookie_end));

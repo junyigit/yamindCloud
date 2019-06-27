@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yamind.cloud.modules.sys.dao.SysParamaterSetMapper">
+
+
+	<select id="getParamaterBySerial" resultType="com.yamind.cloud.modules.sys.entity.SysParamaterSetEntity">
+		SELECT
+			serialId,
+			useDate,
+			bootType,
+			mode,
+			cure_stress,
+			start_stress,
+			delay_time,
+			min_stress,
+			max_stress,
+			tidalVolume,
+			max_inhaleStress,
+			min_inhaleStress,
+			exhale_stress,
+			inhale_stress,
+			respiratory_rate,
+			inhale_time,
+			exhale_release,
+			inhale_sensitivity,
+			exhale_sensitivity,
+			stress_up,
+			stress_down,
+			avaps,
+			soft_version
+		FROM
+		sys_device_set s
+		WHERE
+			s.serialId = #{serialId} AND s.useDate =#{seleceTime}
+		ORDER BY
+			s.useDate DESC
+	</select>
+
+
+
+	<!--查询设置信息-->
+	<select id="listForPage" resultType="com.yamind.cloud.modules.sys.entity.SysParamaterSetEntity">
+		SELECT
+			serialId,
+			useDate,
+			bootType,
+			mode,
+			cure_stress,
+			start_stress,
+			delay_time,
+			min_stress,
+			max_stress,
+			tidalVolume,
+			max_inhaleStress,
+			min_inhaleStress,
+			exhale_stress,
+			inhale_stress,
+			respiratory_rate,
+			inhale_time,
+			exhale_release,
+			inhale_sensitivity,
+			exhale_sensitivity,
+			stress_up,
+			stress_down,
+			avaps,
+			soft_version
+		FROM
+		sys_device_set s
+		<where>
+			<if test="serialId != null and serialId.trim() != ''">
+				AND s.serialId LIKE concat('%',#{serialId},'%')
+			</if>
+		</where>
+		ORDER BY
+			s.useDate DESC
+	</select>
+
+
+
+
+
+
+	<!--保存设置信息-->
+	<insert id="save" parameterType="com.yamind.cloud.modules.sys.entity.SysParamaterSetEntity" useGeneratedKeys="true" keyProperty="id">
+		INSERT  INTO sys_device_set (
+			serialId,
+			useDate,
+			bootType,
+			mode,
+			cure_stress,
+			start_stress,
+			delay_time,
+			min_stress,
+			max_stress,
+			tidalVolume,
+			max_inhaleStress,
+			min_inhaleStress,
+			exhale_stress,
+			inhale_stress,
+			respiratory_rate,
+			inhale_time,
+			exhale_release,
+			inhale_sensitivity,
+			exhale_sensitivity,
+			stress_up,
+			stress_down,
+			avaps,
+			soft_version
+		)
+		VALUES (
+				#{serialId},
+				#{useDate},
+				#{bootType},
+				#{mode},
+				#{cureStress},
+				#{startStress},
+				#{delayTime},
+				#{minStress},
+				#{maxStress},
+				#{tidalVolume},
+				#{maxInhaleStress},
+				#{minInhaleStress},
+				#{exhaleStress},
+				#{inhaleStress},
+				#{respiratoryRate},
+				#{inhaleTime},
+				#{exhaleRelease},
+				#{inhaleSensitivity},
+				#{exhaleSensitivity},
+				#{stressUp},
+				#{stressDown},
+				#{avaps},
+				#{softVersion}
+		) ON DUPLICATE KEY UPDATE bootType =#{bootType},
+			mode=#{mode},
+			cure_stress=#{cureStress},
+			start_stress=#{startStress},
+			delay_time=#{delayTime},
+			min_stress=#{minStress},
+			max_stress=#{maxStress},
+			tidalVolume=#{tidalVolume},
+			max_inhaleStress=#{maxInhaleStress},
+			min_inhaleStress=#{minInhaleStress},
+			exhale_stress=#{exhaleStress},
+			inhale_stress=#{inhaleStress},
+			respiratory_rate=#{respiratoryRate},
+			inhale_time=#{inhaleTime},
+			exhale_release=#{exhaleRelease},
+			inhale_sensitivity=#{inhaleSensitivity},
+			exhale_sensitivity=#{exhaleSensitivity},
+			stress_up=#{stressUp},
+			stress_down=#{stressDown},
+			avaps=#{avaps},
+			soft_version=#{softVersion}
+	</insert>
+
+</mapper>

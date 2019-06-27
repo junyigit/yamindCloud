@@ -90,6 +90,14 @@ public class SysPatientEntity {
     private String homeAddres;
 
 
+    /**
+     * 状态信息
+     * @return
+     */
+
+    private Integer status;
+
+
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
@@ -197,6 +205,15 @@ public class SysPatientEntity {
 
     public void setSerialNum(String serialNum) {
         this.serialNum = serialNum;
+    }
+
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
 }

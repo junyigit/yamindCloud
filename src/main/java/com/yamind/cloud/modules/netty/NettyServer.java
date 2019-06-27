@@ -1,15 +1,19 @@
 package com.yamind.cloud.modules.netty;
 
+import com.yamind.cloud.common.utils.SpringContextUtils;
+import com.yamind.cloud.modules.SpringUtil;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
+import io.netty.handler.codec.LineBasedFrameDecoder;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;
@@ -20,10 +24,14 @@ public class NettyServer {
 
     private static final Logger log = LoggerFactory.getLogger(NettyServer.class);
 
-    private final EventLoopGroup bossGroup = new NioEventLoopGroup();
-    private final EventLoopGroup workerGroup = new NioEventLoopGroup();
+    private final EventLoopGroup bossGroup = new NioEventLoopGroup(1); // 负责接收客户端连接
+    private final EventLoopGroup workerGroup = new NioEventLoopGroup(); // 数据读写线程
 
     private Channel channel;
+
+    @Autowired
+    private QueueThreadExecutor queueThreadExecutor;
+  //  private QueueThreadExecutor queueThreadExecutor = QueueThreadExecutor.getInstance();
 
     /**
      * 启动服务
@@ -40,6 +48,7 @@ public class NettyServer {
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
 
             f = b.bind(address).syncUninterruptibly();
+            queueThreadExecutor.start(); // start queueThread
             channel = f.channel();
         } catch (Exception e) {
             log.error("Netty start error:", e);
@@ -50,7 +59,6 @@ public class NettyServer {
                 log.error("Netty server start up Error!");
             }
         }
-
         return f;
     }
 

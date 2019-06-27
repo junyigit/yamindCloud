@@ -34,12 +34,6 @@ public class SysCureDataServiceImpl implements SysCureDataService {
         return sysCureDataMapper.getGroupCureData(params);
     }
 
-    public Page<SysCureDataEntity> listForCureSetData(Map<String, Object> params){
-        Query form = new Query(params);
-        Page<SysCureDataEntity> page = new Page<>(form);
-        sysCureDataManager.listForCureSetData(page, form);
-        return page;
-    }
 
 
     public List<SysCureDataEntity> listForHistoryStatData(Map<String, Object> params){
@@ -64,12 +58,17 @@ public class SysCureDataServiceImpl implements SysCureDataService {
     }
 
 
+    public List<SysCureDataEntity> listForColData2(Map<String,Object> param){
+        return sysCureDataMapper.listForColData2(param);
+    }
+
+
     public List<String> listForDateStatInfo(Map<String,Object> param){
         return sysCureDataMapper.listForDateStatInfo(param);
     }
 
-    public R save(SysCureDataEntity data){
-        int count = sysCureDataManager.save(data);
+    public R saveData(SysCureDataEntity user){
+        int count = sysCureDataManager.save(user);
         return CommonUtils.msg(count);
     }
 

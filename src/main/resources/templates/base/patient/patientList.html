@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="include/header_css::header('患者管理')"></head>
+<head th:include="include/header_css::header('患者管理')">
+    <link rel="stylesheet" href="css/add.css">
+</head>
 <body>
 <div id="dyLTE" class="container-fluid" v-cloak>
     <div class="row">
@@ -74,10 +76,11 @@
                 var ck = $('#dataGrid').bootstrapTable('getSelections'), ids = [];
                 if (checkedArray(ck)) {
                     $.each(ck, function(idx, item) {
-                        ids[idx] = item.userId;
+                        ids[idx] = item.id;
+                        console.log(item.id);
                     });
                     $.RemoveForm({
-                        url : '../../sys/user/remove?_' + $.now(),
+                        url : '../../sys/patient/remove?_' + $.now(),
                         param : ids,
                         success : function(data) {
                             vm.load();
@@ -162,6 +165,15 @@
 
         },
         {
+            field : "status",
+            title : [[#{patient.status}]],
+            width : "40px",
+            formatter: function (value, row, index) {
+                return changeStatus(value);
+            }
+
+        },
+        {
             field : "operation",
             title : [[#{operating}]],
             width : "150px",
@@ -172,6 +184,21 @@
             }
         }]
     })
+
+
+    /**
+     * 切换状态
+     * @param value
+     */
+    function changeStatus(value) {
+
+        if (value ==1){
+            return "在线";
+        }else{
+            return "离线";
+        }
+
+    }
 </script>
 </body>
 </html>

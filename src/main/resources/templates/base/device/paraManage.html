@@ -34,29 +34,26 @@
 <script th:src="@{/js/base/device/paraManage.js}"></script>
 <script th:inline="javascript">
     $('#dataGrid').bootstrapTableEx({
-        url : '../../sys/device/list?_' + $.now(),
+        url : '../../sys/paraSet/list?_' + $.now(),
         height : $(window).height() - 56,
         queryParams : function(params) {
+            params.serialId = vm.keyword;
             return params;
         },
         columns : [ {
             checkbox : true
-        }, {
-            field : "patientName",
-            title : [[#{para.name}]],
-            width : "50px"
         },{
-            field : "diagnose",
-            title : [[#{para.diagnosis}]],
-            width : "50px"
-        }, {
-            field : "devSerial",
+            field : "serialId",
             title : [[#{para.deviceNo}]],
             width : "50px"
         },{
-            field : "devType",
+            field : "bootType",
             title : [[#{para.type}]],
             width : "50px"
+        }, {
+            field : "mode",
+            title : [[#{para.mode}]],
+            width : "40px"
         }, {
             field : "softVersion",
             title : [[#{para.softVersion}]],

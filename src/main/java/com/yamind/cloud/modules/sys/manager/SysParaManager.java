@@ -7,11 +7,8 @@ import com.yamind.cloud.modules.sys.entity.SysParamaterSetEntity;
 
 import java.util.List;
 
-public interface SysDeviceManager {
+public interface SysParaManager {
 
 
-    List<SysParamaterSetEntity> listForParaSet(Page<SysParamaterSetEntity> page, Query search);
-
-
-    int saveDevice(SysParamaterSetEntity dev);
+    List<SysParamaterSetEntity> listUserSetInfo(Page<SysParamaterSetEntity> page, Query search);
 }
