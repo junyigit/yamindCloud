@@ -1,9 +1,7 @@
 package com.yamind.cloud.modules.sys.controller;
 
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-import com.yamind.cloud.common.annotation.SysLog;
-import com.yamind.cloud.common.entity.R;
+import com.yamind.cloud.common.annotation.SysLog;import com.yamind.cloud.common.entity.R;
 import com.yamind.cloud.modules.sys.entity.SysCureDataEntity;
 import com.yamind.cloud.modules.sys.entity.SysParamaterSetEntity;
 import com.yamind.cloud.modules.sys.entity.SysPatientEntity;
@@ -11,7 +9,6 @@ import com.yamind.cloud.modules.sys.service.SysCureDataService;
 import com.yamind.cloud.modules.sys.service.SysParamaterSetService;
 import com.yamind.cloud.modules.sys.service.SysPatientService;
 
-import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -206,15 +203,14 @@ public class SysPatientController extends AbstractController{
             return R.error("当前时间段没有监测到治疗数据!");
         }
 
-
-
         //查询最大值最小值
         r.put("maxAvg",sysCureDataService.getStatDataMaxAndAvg(map)); //参数:最大值最小值的
 
 
+
         int useDay =sysCureDataService.getUseDayCount(map);
 
-
+        //单位转换为小时
         double useHours = new BigDecimal((float)size/3600).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 
         //使用信息
@@ -232,20 +228,30 @@ public class SysPatientController extends AbstractController{
             median =(size/2)+1;
         }
 
+        long startTime = System.currentTimeMillis();    //获取开始时间
+
 
         List<SysCureDataEntity> colsData = new ArrayList<>();
         map.put("colName","inhale_stress,cure_stress,exhale_stress,tidal_volume,minu_throughput,respiratory_rate");
         colsData = sysCureDataService.listForColData2(map);
-        System.out.println(colData.toString());
 
-        colData=sysCureDataService.listForColData(map);  //压力的中位值
-        r.put("cureStress",Double.parseDouble(colData.get(median)));
 
-        System.out.println(colsData.get(median).getCureStress1());
+
+
+
+        r.put("cureStress",colsData.get(median).getCureStress1());
+        r.put("inhaleStress",colsData.get(median).getInhaleStress());
+        r.put("exhaleStress",colsData.get(median).getExhaleStress());
+        r.put("tidalVolume",colsData.get(median).getTidalVolume());
+        r.put("minuThroughput",colsData.get(median).getMinusTroughput());
+        r.put("respiratoryRate",colsData.get(median).getRespiratoryRate());
+
+
 
 
         //按字段排序查询[统计信息]数据
-       /* map.put("colName","cure_stress");
+        /*
+        map.put("colName","cure_stress");
         colData=sysCureDataService.listForColData(map);  //压力的中位值
         r.put("cureStress",Double.parseDouble(colData.get(median)));
 
@@ -270,7 +276,9 @@ public class SysPatientController extends AbstractController{
 
         map.put("colName","respiratory_rate");
         colData=sysCureDataService.listForColData(map);  //呼吸频率中位值
-        r.put("respiratoryRate",Double.parseDouble(colData.get(median)));*/
+        r.put("respiratoryRate",Double.parseDouble(colData.get(median)));
+        */
+
 
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -297,6 +305,10 @@ public class SysPatientController extends AbstractController{
             while (sDte.getTime() <eDte.getTime()){
                 map.put("niceStart",sDte);
                 map.put("niceEnd",addDays(sDte,1));
+
+
+
+
 
                 //获取压力平均95值
                 map.put("niceCol","cure_stress");
@@ -340,6 +352,7 @@ public class SysPatientController extends AbstractController{
                 if (sData.size()!=0) {
                     sigleNice6+= Double.parseDouble(sData.get((int)Math.ceil(sData.size() * (0.95))-1));
                 }
+
                 sDte=addDays(sDte,1);//时间再加一天
 
             }
@@ -347,6 +360,11 @@ public class SysPatientController extends AbstractController{
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+
+        long endTime = System.currentTimeMillis();    //获取结束时间
+
+        System.out.println("程序运行时间：" + (endTime - startTime) + "ms");    //输出程序运行时间
 
 
         //存储压力95的list cure_stress
@@ -398,7 +416,7 @@ public class SysPatientController extends AbstractController{
         }
 
         //判断设置信息是否为空
-        if (!StringUtils.isBlank(dataMsg)){
+        if (!StringUtils.isBlank(paraMsg)){
             r.put("paraMsg",paraMsg);
         }
 
@@ -423,7 +441,7 @@ public class SysPatientController extends AbstractController{
     /**
      * 定时任务-删除大于7天的历史数据
      */
-    @Scheduled(cron = "0 30 0 * * ?")
+    @Scheduled(cron = "0 0 0 * * *")
     public void delTimeOutHistory() {
         System.out.println("删除过期的历史数据");
         sysCureDataService.delectData();

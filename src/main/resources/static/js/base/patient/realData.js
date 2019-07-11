@@ -635,24 +635,24 @@ function returnStData(paraArr,dataArr) {
 
         '<tr> ' +
         '<td>' + lauguageData.zdxqyl+ '</td>' +
-        '<td>' + paraArr[8]  + '</td>' +
+        '<td>' + paraArr[10]  + '</td>' +
         '<td>' + lauguageData.zxxqyl + '</td>' +
-        '<td>' + paraArr[9]  + '</td>' +
+        '<td>' + paraArr[11]  + '</td>' +
         '</tr>' +
 
 
         '<tr> ' +
         '<td>' + lauguageData.ylsspd + '</td>' +
-        '<td>' + paraArr[18]  + '</td>' +
+        '<td>' + paraArr[20]  + '</td>' +
         '<td>' + lauguageData.ylxjpd + '</td>' +
-        '<td>' + paraArr[19]  + '</td>' +
+        '<td>' + paraArr[21]  + '</td>' +
         '</tr>' +
 
         '<tr> ' +
         '<td>' + "AVAPS" + '</td>' +
-        '<td>' + paraArr[20] + '</td>' +
+        '<td>' + paraArr[22] + '</td>' +
         '<td>' + lauguageData.mbcql + '</td>' +
-        '<td>' + paraArr[12] + '</td>' +
+        '<td>' + paraArr[14] + '</td>' +
         '</tr>' +
 
         // '<tr> ' +

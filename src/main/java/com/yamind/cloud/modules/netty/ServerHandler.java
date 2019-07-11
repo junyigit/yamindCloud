@@ -4,8 +4,11 @@ import com.yamind.cloud.common.utils.SpringContextUtils;
 import com.yamind.cloud.modules.SpringUtil;
 import com.yamind.cloud.modules.sys.service.SysDeviceService;
 import com.yamind.cloud.modules.sys.service.impl.SysDeviceServiceImpl;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.util.CharsetUtil;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +34,8 @@ public class ServerHandler extends SimpleChannelInboundHandler<Object> {
 
     private static String clientAddr="";
 
+    public static final ByteBuf PLUS_BUF = Unpooled.copiedBuffer("%", CharsetUtil.UTF_8);
+
 
     /**
      * 写入txt
@@ -51,28 +56,26 @@ public class ServerHandler extends SimpleChannelInboundHandler<Object> {
     @Override
     public void channelRead0(ChannelHandlerContext ctx, Object msg) {
 
-        InetSocketAddress insocket = (InetSocketAddress) ctx.channel().remoteAddress();
+        //InetSocketAddress insocket = (InetSocketAddress) ctx.channel().remoteAddress();
 
         //获取IP地址
-        String clientIP = insocket.getAddress().getHostAddress();
+        //String clientIP = insocket.getAddress().getHostAddress();
 
         //控制台输出接受到的数据
         //System.out.println("connetIP is : " + clientIP +"server receive message :"+ msg);
-
-        //返回接受数据给发送方
-        //ctx.channel().writeAndFlush(msg);
-
         //赋值给clientAddr
         //clientAddr =clientIP;
 
         //打印数据
-       System.out.println((String)msg);
+        String msgStr = (String) msg;
+        System.out.println(msgStr);
        //out.println("queueThreadExecutor: "+ queueThreadExecutor);
         //将消息加入到队列
-        queueThreadExecutor.addMsg((String) msg);
+        queueThreadExecutor.addMsg(msgStr);
 
+        //返回接受数据给发送方
+        //ctx.channel().writeAndFlush(Unpooled.copiedBuffer(PLUS_BUF));
     }
-
 
     /**
      * 发现连接的时候调用
@@ -107,22 +110,8 @@ public class ServerHandler extends SimpleChannelInboundHandler<Object> {
      */
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-     //  看具体怎么处理
+        cause.printStackTrace();                //打印异常堆栈跟踪
+        ctx.close();                            //关闭通道
     }
-
-    /**
-     * 判断是否为JSON数据
-     * @param content
-     * @return
-     */
-    public boolean isJson(Object content){
-        try {
-            JSONObject jsonStr= JSONObject.fromObject(content);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
 
 }

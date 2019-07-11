@@ -135,7 +135,7 @@ public class SysDeviceServiceImpl implements SysDeviceService {
                     sysCureDataEntity.setRealFlow2(Float.parseFloat(recvArr[4]));//实时流量2
                     sysCureDataEntity.setRealFlow3(Float.parseFloat(recvArr[5]));//实时流量3
                     sysCureDataEntity.setRealFlow4(Float.parseFloat(recvArr[6]));//实时流量4
-                    sysCureDataEntity.setRealFlow5(Float.parseFloat(recvArr[7]));//实时流量5
+                    sysCureDataEntity.setRealFlow5(Float.parseFloat(recvArr[7]));//实时流量50
 
                     sysCureDataEntity.setLeakage(Float.parseFloat(recvArr[8])); //漏气量
 
@@ -157,7 +157,7 @@ public class SysDeviceServiceImpl implements SysDeviceService {
 
                     sysCureDataService.saveData(sysCureDataEntity);
 
-                    //数据信息存入Redis
+                    //存入redis
                     redisTemplate.opsForList().leftPush(recvArr[1],data);
 
                     return 0;
