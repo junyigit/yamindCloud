@@ -43,7 +43,6 @@ public class JSONUtils {
         try {
 			return objectMapper.writeValueAsString(obj);
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         return null;

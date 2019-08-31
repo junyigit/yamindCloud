@@ -103,7 +103,11 @@ $(function () {
 
                 for (var i = 0, length = mapData.length; i < length; i++) {
                     curetime.push(mapData[i].cureTime);
-                    cureArr.push(mapData[i].cureStress);
+                    cureArr.push(mapData[i].cureStress1);
+                    cureArr.push(mapData[i].cureStress2);
+                    cureArr.push(mapData[i].cureStress3);
+                    cureArr.push(mapData[i].cureStress4);
+                    cureArr.push(mapData[i].cureStress5);
                     // minArr.push(mapData[i].minStress);
                     // maxArr.push(mapData[i].maxStress);
                     inhale.push(mapData[i].inhaleStress);

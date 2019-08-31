@@ -34,8 +34,8 @@ public class ServerHandler extends SimpleChannelInboundHandler<Object> {
 
     private static String clientAddr="";
 
-    public static final ByteBuf PLUS_BUF = Unpooled.copiedBuffer("%", CharsetUtil.UTF_8);
 
+    public static final ByteBuf PLUS_BUF = Unpooled.unreleasableBuffer(Unpooled.copiedBuffer("%", CharsetUtil.UTF_8));
 
     /**
      * 写入txt
@@ -60,7 +60,6 @@ public class ServerHandler extends SimpleChannelInboundHandler<Object> {
 
         //获取IP地址
         //String clientIP = insocket.getAddress().getHostAddress();
-
         //控制台输出接受到的数据
         //System.out.println("connetIP is : " + clientIP +"server receive message :"+ msg);
         //赋值给clientAddr
@@ -72,16 +71,14 @@ public class ServerHandler extends SimpleChannelInboundHandler<Object> {
        //out.println("queueThreadExecutor: "+ queueThreadExecutor);
         //将消息加入到队列
         queueThreadExecutor.addMsg(msgStr);
-
         //返回接受数据给发送方
-        //ctx.channel().writeAndFlush(Unpooled.copiedBuffer(PLUS_BUF));
+       // ctx.channel().writeAndFlush(PLUS_BUF);
     }
 
     /**
      * 发现连接的时候调用
      * @param ctx
      */
-
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         InetSocketAddress insocket1 = (InetSocketAddress) ctx.channel().remoteAddress();
@@ -89,7 +86,6 @@ public class ServerHandler extends SimpleChannelInboundHandler<Object> {
         ChannelMap.addChannel(clientIP,ctx.channel());
         System.out.println("发现新的客户端连接，IP为["+clientIP+"]");
     }
-
 
     /**
      * 断开连接的时候调用

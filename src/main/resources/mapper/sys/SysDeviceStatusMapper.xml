@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yamind.cloud.modules.sys.dao.SysDeviceStatusMapper">
+
+
+    <insert id="save" parameterType="com.yamind.cloud.modules.sys.entity.SysDeviceStatusEntity" useGeneratedKeys="true"
+            keyProperty="id">
+		INSERT  INTO sys_device_status (
+			serialId,
+			startTime,
+			stopTime,
+	  		status
+		)
+		VALUES (
+				#{serialId},
+				#{startTime},
+				#{stopTime},
+				#{status}
+		) ON DUPLICATE KEY UPDATE
+			serialId = VALUES(serialId),
+
+			<if test="startTime != null and startTime != ''">
+				startTime = VALUES(startTime),
+			</if>
+			<if test="stopTime != null and stopTime!= ''">
+				stopTime = VALUES(stopTime),
+			</if>
+			status = VALUES(status)
+	</insert>
+
+	<select id="getDeviceStatusBySerialId" resultType="com.yamind.cloud.modules.sys.entity.SysDeviceStatusEntity">
+		SELECT
+		c.id,
+		c.serialId,
+		c.startTime,
+		c.stopTime,
+		c.status
+		FROM
+		sys_device_status c
+		<where>
+			c.serialId=#{serialId}
+		</where>
+	</select>
+</mapper>

@@ -63,8 +63,8 @@ mybatis:
 # netty配置z
 n:
   #url: 172.18.72.186
-  #url: 192.168.123.1
-  url: 172.18.72.186
+  url: 192.168.123.1
+  #url: 172.18.72.186
   #url: localhost
   port: 2222
   #port: 8080

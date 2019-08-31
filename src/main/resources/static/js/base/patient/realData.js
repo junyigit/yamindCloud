@@ -375,7 +375,7 @@ $(function () {
 
                                 '<tr> ' +
                                 '<td>' + lauguageData.xhb + '</td>' +
-                                '<td>' + dataArr[19] + '</td>' +
+                                '<td>' + +'1:'+dataArr[19] + '</td>' +
                                 '<td>' + lauguageData.hxpl + '</td>' +
                                 '<td>' + dataArr[16] + '</td>' +
                                 '</tr>'+
@@ -386,7 +386,6 @@ $(function () {
                                 '<td>' + lauguageData.fztql + '</td>' +
                                 '<td>' + dataArr[15] + '</td>' +
                                 '</tr>'+
-
 
                                 '</table>'+
                                 '<table class="table" id="realtable2" cellspacing="30" >'+
@@ -446,7 +445,7 @@ $(function () {
 
                                 '<tr> ' +
                                 '<td>' + lauguageData.xhb + '</td>' +
-                                '<td>' + dataArr[19] + '</td>' +
+                                '<td>' + +'1:'+dataArr[19] + '</td>' +
                                 '<td>' + lauguageData.hxpl + '</td>' +
                                 '<td>' + dataArr[16] + '</td>' +
                                 '</tr>'+
@@ -588,7 +587,7 @@ function returnStData(paraArr,dataArr) {
 
         '<tr> ' +
         '<td>' + lauguageData.xhb + '</td>' +
-        '<td>' + dataArr[19] + '</td>' +
+        '<td>' +'1:'+ dataArr[19] + '</td>' +
         '<td>' + lauguageData.hxpl + '</td>' +
         '<td>' + dataArr[16] + '</td>' +
         '</tr>' +

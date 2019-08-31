@@ -2,13 +2,19 @@ package com.yamind.cloud.modules.sys.service.impl;
 
 import com.yamind.cloud.common.entity.Page;
 import com.yamind.cloud.common.entity.Query;
+import com.yamind.cloud.common.utils.HttpClientUtils;
 import com.yamind.cloud.modules.sys.dao.SysParamaterSetMapper;
 import com.yamind.cloud.modules.sys.entity.SysCureDataEntity;
+import com.yamind.cloud.modules.sys.entity.SysDeviceStatusEntity;
 import com.yamind.cloud.modules.sys.entity.SysParamaterSetEntity;
 import com.yamind.cloud.modules.sys.manager.SysDeviceManager;
 import com.yamind.cloud.modules.sys.service.SysCureDataService;
 import com.yamind.cloud.modules.sys.service.SysDeviceService;
+import com.yamind.cloud.modules.sys.service.SysDeviceStatusService;
 import com.yamind.cloud.modules.sys.service.SysParamaterSetService;
+import io.netty.handler.codec.json.JsonObjectDecoder;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -24,6 +30,8 @@ public class SysDeviceServiceImpl implements SysDeviceService {
     SysDeviceManager sysDeviceManager;
     @Autowired
     SysCureDataService sysCureDataService;
+    @Autowired
+    SysDeviceStatusService sysDeviceStatusService;
     @Autowired
     SysParamaterSetService sysParamaterSetService;
     @Autowired
@@ -52,79 +60,93 @@ public class SysDeviceServiceImpl implements SysDeviceService {
     public int saveRecvHistoryData(String data) {
 
         String[] recvArr = data.split(",");
+        switch (recvArr[0]){
+            case "P":
+                if (recvArr.length == 24) {
 
-        if (recvArr[0].equals("P")) {
+                    SysParamaterSetEntity sysParamaterSetEntity = new SysParamaterSetEntity();
 
-            if (recvArr.length == 24) {
+                    //序列号
+                    sysParamaterSetEntity.setSerialId(recvArr[1]);
 
-                SysParamaterSetEntity sysParamaterSetEntity = new SysParamaterSetEntity();
-                //序列号
-                sysParamaterSetEntity.setSerialId(recvArr[1]);
-                //转换时间
-                String currentTime = timeStamp2Date(recvArr[2], "yyyy-MM-dd HH:mm:ss");
-                //设置时间
-                sysParamaterSetEntity.setUseDate(currentTime);
-                //机器型号
-                sysParamaterSetEntity.setBootType(recvArr[3]);
-                //模式
-                sysParamaterSetEntity.setMode(recvArr[4]);
-                //治疗压力
-                sysParamaterSetEntity.setCureStress(Float.parseFloat(recvArr[5]));
+                    //转换时间
+                    String currentTime = timeStamp2Date(recvArr[2], "yyyy-MM-dd HH:mm:ss");
 
-                //开始压力
-                sysParamaterSetEntity.setStartStress(Float.parseFloat(recvArr[6]));
+                    //设置时间
+                    sysParamaterSetEntity.setUseDate(currentTime);
 
-                //延迟时间
-                sysParamaterSetEntity.setDelayTime(Integer.parseInt(recvArr[7]));
+                    //机器型号
+                    sysParamaterSetEntity.setBootType(recvArr[3]);
+
+                    //模式
+                    sysParamaterSetEntity.setMode(recvArr[4]);
+                    //治疗压力
+                    sysParamaterSetEntity.setCureStress(Float.parseFloat(recvArr[5]));
+
+                    //开始压力
+                    sysParamaterSetEntity.setStartStress(Float.parseFloat(recvArr[6]));
+
+                    //延迟时间
+                    sysParamaterSetEntity.setDelayTime(Integer.parseInt(recvArr[7]));
+
+                    //最大压力
+                    sysParamaterSetEntity.setMaxStress(Float.parseFloat(recvArr[8]));
+
+                    //最小压力
+                    sysParamaterSetEntity.setMinStress(Float.parseFloat(recvArr[9]));
+
+                    //最大吸气压力
+                    sysParamaterSetEntity.setMaxInhaleStress(Float.parseFloat(recvArr[10]));
+
+                    //最小吸气压力
+                    sysParamaterSetEntity.setMinInhaleStress(Float.parseFloat(recvArr[11]));
+
+                    //吸气压力
+                    sysParamaterSetEntity.setInhaleStress(Float.parseFloat(recvArr[12]));
+
+                    //呼气压力
+                    sysParamaterSetEntity.setExhaleStress(Float.parseFloat(recvArr[13]));
+
+                    //目标潮气量
+                    sysParamaterSetEntity.setTidalVolume(Integer.parseInt(recvArr[14]));
+
+                    //呼吸频率
+                    sysParamaterSetEntity.setRespiratoryRate(Float.parseFloat(recvArr[15]));
+
+                    //吸气时间
+                    sysParamaterSetEntity.setInhaleTime(Float.parseFloat(recvArr[16]));
+
+                    //呼吸释放
+                    sysParamaterSetEntity.setExhaleRelease(Integer.parseInt(recvArr[17]));
+
+                    //吸气灵敏度
+                    sysParamaterSetEntity.setInhaleSensitivity(Integer.parseInt(recvArr[18]));
+
+                    //呼气灵敏度
+                    sysParamaterSetEntity.setExhaleSensitivity(Integer.parseInt(recvArr[19]));
+
+                    //压力上升坡度
+                    sysParamaterSetEntity.setStressUp(Integer.parseInt(recvArr[20]));
+
+                    //压力下降坡度
+                    sysParamaterSetEntity.setStressDown(Integer.parseInt(recvArr[21]));
+
+                    //avaps
+                    sysParamaterSetEntity.setAvaps(Integer.parseInt(recvArr[22]));
+
+                    //软件版本号
+                    sysParamaterSetEntity.setSoftVersion(recvArr[23]);
 
 
-                //最大压力
-                sysParamaterSetEntity.setMaxStress(Float.parseFloat(recvArr[8]));
-                //最小压力
-                sysParamaterSetEntity.setMinStress(Float.parseFloat(recvArr[9]));
-                //最大吸气压力
-                sysParamaterSetEntity.setMaxInhaleStress(Float.parseFloat(recvArr[10]));
-                //最小吸气压力
-                sysParamaterSetEntity.setMinInhaleStress(Float.parseFloat(recvArr[11]));
-                //吸气压力
-                sysParamaterSetEntity.setInhaleStress(Float.parseFloat(recvArr[12]));
-                //呼气压力
-                sysParamaterSetEntity.setExhaleStress(Float.parseFloat(recvArr[13]));
-                //目标潮气量
-                sysParamaterSetEntity.setTidalVolume(Integer.parseInt(recvArr[14]));
-                //呼吸频率
-                sysParamaterSetEntity.setRespiratoryRate(Float.parseFloat(recvArr[15]));
-                //吸气时间
-                sysParamaterSetEntity.setInhaleTime(Float.parseFloat(recvArr[16]));
-                //呼吸释放
-                sysParamaterSetEntity.setExhaleRelease(Integer.parseInt(recvArr[17]));
-                //吸气灵敏度
-                sysParamaterSetEntity.setInhaleSensitivity(Integer.parseInt(recvArr[18]));
-                //呼气灵敏度
-                sysParamaterSetEntity.setExhaleSensitivity(Integer.parseInt(recvArr[19]));
-                //压力上升坡度
-                sysParamaterSetEntity.setStressUp(Integer.parseInt(recvArr[20]));
-                //压力下降坡度
-                sysParamaterSetEntity.setStressDown(Integer.parseInt(recvArr[21]));
-                //avaps
-                sysParamaterSetEntity.setAvaps(Integer.parseInt(recvArr[22]));
-                //软件版本号
-                sysParamaterSetEntity.setSoftVersion(recvArr[23]);
+                    sysParamaterSetService.savePara(sysParamaterSetEntity);
+                    //存入redis
+                    redisTemplate.opsForValue().set("P"+recvArr[1],data);
 
-
-                sysParamaterSetService.savePara(sysParamaterSetEntity);
-
-                //存入redis
-                redisTemplate.opsForValue().set("P"+recvArr[1],data);
-                return 0;
-            } else {
-                System.err.println(data);
-            }
-        }
-
-            if (recvArr[0].equals("D")) {
-
-
+                } else {
+                    System.err.println(data);
+                }
+                break;
+            case "D":
                 if (recvArr.length == 22) {
                     //创建实体类接收存储数据
                     SysCureDataEntity sysCureDataEntity = new SysCureDataEntity();
@@ -160,13 +182,141 @@ public class SysDeviceServiceImpl implements SysDeviceService {
                     //存入redis
                     redisTemplate.opsForList().leftPush(recvArr[1],data);
 
-                    return 0;
                 } else {
                     System.err.println(data);
                 }
+                break;
+            case "S":
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        try {
+                                System.out.println("kaishi");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },0,1000);
+
+
+                SysDeviceStatusEntity sysDeviceStatusEntity = new SysDeviceStatusEntity();
+
+                System.out.println("序列号为:"+recvArr[1]+"开始运行了");
+
+                //设置序列号
+                sysDeviceStatusEntity.setSerialId(recvArr[1]);
+                //转换时间
+                String startTime = timeStamp2Date(recvArr[2], "yyyy-MM-dd HH:mm:ss");
+                //设置开始时间
+                sysDeviceStatusEntity.setStartTime(startTime);
+                //设置状态
+                sysDeviceStatusEntity.setStatus(1);
+
+                sysDeviceStatusService.saveData(sysDeviceStatusEntity);
+
+                break;
+
+            case "T":
+                System.out.println("序列号为:"+recvArr[1]+"结束了");
+                SysDeviceStatusEntity sysDeviceStatusEntity2 = new SysDeviceStatusEntity();
+
+                //设置序列号
+                sysDeviceStatusEntity2.setSerialId(recvArr[1]);
+                //转换时间
+                String entTime = timeStamp2Date(recvArr[2], "yyyy-MM-dd HH:mm:ss");
+                //设置开始时间
+                sysDeviceStatusEntity2.setStopTime(entTime);
+
+                //设置状态
+                sysDeviceStatusEntity2.setStatus(0);
+                sysDeviceStatusService.saveData(sysDeviceStatusEntity2);
+
+
+
+                ////////////////////////////////////////////
+
+
+                //推送JSON包
+                JSONObject boeCpod = new JSONObject();
+
+
+                //测量数据Json
+                JSONObject measureJson = new JSONObject();
+
+                Map<String,Object> map = new HashMap<>();
+                SysParamaterSetEntity sysParamaterSetEntity = new SysParamaterSetEntity();
+                SysDeviceStatusEntity sysDeviceStatusEntity1 = new SysDeviceStatusEntity();
+
+                sysDeviceStatusEntity1 = sysDeviceStatusService.getDeviceStatusBySerialId(recvArr[1]);
+                map.put("serialId",recvArr[1]);
+                map.put("startDate",sysDeviceStatusEntity1.getStartTime());
+                map.put("endDate",sysDeviceStatusEntity1.getStopTime());
+                map.put("seleceTime",timeStamp2Date(recvArr[2], "yyyy-MM-dd"));
+
+                //获取平均压力和AHI
+                Map<String,String> avgMap = new HashMap<>();
+                avgMap = sysCureDataService.getStatDataMaxAndAvg(map);
+                //获取序列号设置信息
+                sysParamaterSetEntity =  sysParamaterSetService.getParamaterBySerial(map);
+
+
+
+
+                //序列号
+                boeCpod.put("deviceSN",recvArr[1]);
+                //MeasureArr数组内容
+                measureJson.put("startTime",sysDeviceStatusEntity1.getStartTime());
+                measureJson.put("endTime",sysDeviceStatusEntity1.getStopTime());
+                measureJson.put("pint",sysParamaterSetEntity.getStartStress());
+                measureJson.put("pset",sysParamaterSetEntity.getCureStress());
+
+                //设置信息 - 最大压力和最小压力
+                measureJson.put("pmax",sysParamaterSetEntity.getMaxStress());
+                measureJson.put("pmin",sysParamaterSetEntity.getMinStress());
+
+
+                //没有该字段 赋值为0
+                measureJson.put("heat","");
+                measureJson.put("erp","");
+
+                //设置AI、HI、AHI平均值
+                measureJson.put("aiAvg",avgMap.get("aipjz"));
+                measureJson.put("hiAvg",avgMap.get("hipjz"));
+                measureJson.put("ahiAvg",avgMap.get("pjahi"));
+
+                //压力平均值
+                measureJson.put("pAvg",avgMap.get("ylpjz"));
+                //漏气量平均值
+                measureJson.put("leakAvg",avgMap.get("lqlpjz"));
+
+
+
+                measureJson.put("detail","");
+                ////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+                boeCpod.put("measureData",measureJson);
+                boeCpod.put("spo2Statistic","");
+                boeCpod.put("realTime","false");
+                boeCpod.put("createAt",Calendar.getInstance().getTimeInMillis());
+                System.out.println(boeCpod);
+                String test = HttpClientUtils.httpPost("http://copdtest.appsbu.com:8000/api/device/daya-resperitor-reciver",boeCpod);
+                System.out.println(test);
+                break;
         }
-        return 0;
+            return 0;
     }
+
+
     /***
      * 时间戳转换
      * @param seconds

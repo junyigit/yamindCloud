@@ -61,7 +61,6 @@ public class QueueThreadExecutor {
                 logger.info("队列线程已启动.......");
                 while (!Thread.currentThread().isInterrupted()) { // 如果线程没有被中断
                     final String str = queue.take();  // 获取队列数据
-                //    sysDeviceService.saveRecvHistoryData(str);
                     /*
                      *  如果队列线程处理速度与生产速度不匹配，使用线程池进行异步处理保存数据
                      *  就注释这里，你是一个线程处理所有数据，设备不只有一个，

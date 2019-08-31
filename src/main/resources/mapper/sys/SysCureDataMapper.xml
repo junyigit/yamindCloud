@@ -3,8 +3,6 @@
 
 <mapper namespace="com.yamind.cloud.modules.sys.dao.SysCureDataMapper">
 
-
-
 	<!--历史数据-设备信息列表-->
 	<select id="listForPage" resultType="com.yamind.cloud.modules.sys.entity.SysCureDataEntity">
 		SELECT
@@ -116,7 +114,8 @@
 		AVG(c.tidal_volume) as cqlpjz,
 		MAX(c.tidal_volume) as cqlzdz,
 		AVG(c.respiratory_rate) as hxplpjz,
-		MAX(c.respiratory_rate) as hxplzdz
+		MAX(c.respiratory_rate) as hxplzdz,
+		AVG(c.leakage) as lqlpjz
 		FROM
 		sys_curedata c
 	WHERE
@@ -220,7 +219,6 @@
 	</select>
 
 
-
 	<!--按日期查询95值 统计信息信息数据-->
 	<select id="listForDateStatInfo" parameterType="java.lang.String" resultType="String" fetchSize="1000">
 		SELECT
@@ -232,9 +230,6 @@
 		AND bootSerial =#{serialId} ORDER BY #{niceCol} ASC
 		</where>
 	</select>
-
-
-
 
 	<!--按序列号查询 分组数据  曲线图处用-->
 	<select id="findMapWithSerial"  resultType="com.yamind.cloud.modules.sys.entity.SysCureDataEntity">
@@ -249,6 +244,10 @@
 		c.real_flow5,
 		c.leakage,
 		c.cure_stress,
+		c.cure_stress2,
+		c.cure_stress3,
+		c.cure_stress4,
+		c.cure_stress5,
 		c.respiratory_rate,
 		c.tidal_volume,
 		c.minu_throughput,

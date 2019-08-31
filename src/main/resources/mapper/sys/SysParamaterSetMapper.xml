@@ -39,6 +39,8 @@
 
 
 
+
+
 	<!--查询设置信息-->
 	<select id="listForPage" resultType="com.yamind.cloud.modules.sys.entity.SysParamaterSetEntity">
 		SELECT
