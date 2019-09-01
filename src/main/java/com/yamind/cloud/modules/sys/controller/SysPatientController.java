@@ -449,6 +449,14 @@ public class SysPatientController extends AbstractController{
 
 
 
+    /**
+     * 定时任务-每十秒钟执行一次 推送数据到京东方
+     */
+    @Scheduled(fixedRate = 10000)
+    public void sendDataToBoe() {
+        System.out.println("定时song推送");
+    }
+
 
 
 }
