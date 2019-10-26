@@ -10,7 +10,6 @@ import com.yamind.cloud.common.entity.Page;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
 public interface SysParamaterSetService {
 
 

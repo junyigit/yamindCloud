@@ -46,7 +46,6 @@ public class SysCureDataEntity implements Serializable {
     /**
      * 漏气量
      */
-
     private float leakage;
 
     /**
@@ -76,7 +75,6 @@ public class SysCureDataEntity implements Serializable {
     /**
      * 分钟通气量
      */
-
     private float minusTroughput;
 
 

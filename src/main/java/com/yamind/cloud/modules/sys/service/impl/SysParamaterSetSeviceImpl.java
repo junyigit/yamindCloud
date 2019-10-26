@@ -42,4 +42,6 @@ public class SysParamaterSetSeviceImpl implements SysParamaterSetService {
         return sysParamaterSetMapper.getParamaterBySerial(params);
     }
 
+
+
 }

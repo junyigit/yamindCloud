@@ -6,14 +6,14 @@ server:
         min-spare-threads: 30
     port: 9999
     #打开注释，则通过【http://localhost/dp-lte】访问
-    #context-path: /dp-lte
+    context-path: /
 spring:
     messages:
       basename: messages
 
   # 环境 dev:开发环境|test:测试环境|prod:生成环境
     profiles:
-        active: dev
+        active: test
     # jackson时间格式化
     jackson:
         time-zone: GMT+8
@@ -26,14 +26,14 @@ spring:
     # thymeleaf 模板引擎
     thymeleaf:
         cache: false
-#        prefix: classpath:/templates/
+        prefix: classpath:/templates/
         suffix: .html
         mode: LEGACYHTML5
         encoding: UTF-8
 #        servlet: #(sp2x版本增加servlet节点，2018年8月23日)
-#          content-type: text/html
-#    resources: # 指定静态资源的路径
-#        static-locations: classpath:/static/,classpath:/templates/
+#         content-type: text/html
+    resources: # 指定静态资源的路径
+        static-locations:  classpath:/static/,classpath:/templates/
     redis:
       #数据库索引
       host: localhost
@@ -60,18 +60,10 @@ spring:
 mybatis:
     mapperLocations: classpath:mapper/**/*.xml
     configLocation: classpath:mybatis.xml
-# netty配置z
-n:
-  #url: 172.18.72.186
-  url: 192.168.123.1
-  #url: 172.18.72.186
-  #url: localhost
-  port: 2222
-  #port: 8080
 
-
-
-logging:
-  file: log/cloud.log
+# mob
+appkey: 2c9bff6aecbf4
+appSecret: e8bc2d0095271e4db48e9d47f408ad6f
+mobVerifyReqUrl: https://webapi.sms.mob.com/sms/verify
 
 

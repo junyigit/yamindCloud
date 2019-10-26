@@ -70,7 +70,8 @@ public class ServerHandler extends SimpleChannelInboundHandler<Object> {
         System.out.println(msgStr);
        //out.println("queueThreadExecutor: "+ queueThreadExecutor);
         //将消息加入到队列
-        queueThreadExecutor.addMsg(msgStr);
+        queueThreadExecutor.executeSaveMsg(msgStr);
+
         //返回接受数据给发送方
        // ctx.channel().writeAndFlush(PLUS_BUF);
     }

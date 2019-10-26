@@ -1,6 +1,8 @@
 package com.yamind.cloud.modules.sys.oauth2;
 
 import com.yamind.cloud.common.utils.ShiroUtils;
+import com.yamind.cloud.modules.app.dao.UserMapper;
+import com.yamind.cloud.modules.app.entity.UserEntity;
 import com.yamind.cloud.modules.sys.entity.SysUserEntity;
 import com.yamind.cloud.modules.sys.entity.SysUserTokenEntity;
 import com.yamind.cloud.modules.sys.manager.SysUserManager;
@@ -28,6 +30,8 @@ public class OAuth2Realm extends AuthorizingRealm {
 	
 	@Autowired
 	private SysUserManager sysUserManager;
+	@Autowired
+    private UserMapper userMapper;
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -59,19 +63,34 @@ public class OAuth2Realm extends AuthorizingRealm {
 
         //根据accessToken，查询用户信息
         SysUserTokenEntity tokenEntity = sysUserManager.getByToken(accessToken);
+        UserEntity appUser = new UserEntity();
+        SysUserEntity sysUser = new SysUserEntity();
+        SimpleAuthenticationInfo info =null;
         //token失效
         if(tokenEntity == null || tokenEntity.getGmtExpire().getTime() < System.currentTimeMillis()){
             throw new IncorrectCredentialsException("token失效，请重新登录");
         }
 
-        //查询用户信息
-        SysUserEntity user = sysUserManager.getById(tokenEntity.getUserId());
-        //账号锁定
-        if(user.getStatus() == 0){
-            throw new LockedAccountException("账号已被锁定,请联系管理员");
+        int length = tokenEntity.getUserId().length();// 获取密码的长度
+
+        if (length>10){
+
+            appUser =userMapper.getUserMobile(tokenEntity.getUserId());
+
+            info = new SimpleAuthenticationInfo(appUser, accessToken, getName());
+        }else{
+            //查询用户信息
+            sysUser = sysUserManager.getById(Long.parseLong(tokenEntity.getUserId()));
+            //账号锁定
+            if(sysUser.getStatus() == 0){
+                throw new LockedAccountException("账号已被锁定,请联系管理员");
+            }
+            info = new SimpleAuthenticationInfo(sysUser, accessToken, getName());
         }
 
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, accessToken, getName());
         return info;
     }
 }
+
+
+

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yamind.cloud.modules.app.dao.IdeaImageMapper">
+
+
+
+	<!--保存治疗数据sql-->
+	<insert id="save" parameterType="com.yamind.cloud.modules.app.entity.IdeaImageEntity" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO user_question_img (
+			question_id,
+			img_name,
+			img_type,
+			img_path
+		)
+		VALUES (
+  			#{questionId},
+			#{imgName},
+			#{imgType},
+			#{imgPath}
+			)
+	</insert>
+
+
+	<select id="listFroIdeaImg" resultType="com.yamind.cloud.modules.app.entity.IdeaImageEntity">
+		SELECT
+		question_id,
+		img_name,
+		img_type,
+		img_path
+		FROM
+		user_question_img c
+		<where>
+			c.question_id=#{ideaId}
+		</where>
+	</select>
+
+
+</mapper>

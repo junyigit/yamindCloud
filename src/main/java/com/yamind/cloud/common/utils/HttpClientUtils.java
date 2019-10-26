@@ -60,7 +60,7 @@ public class HttpClientUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String httpPost(String url, JSONObject obj) throws Exception {
+	public static String httpPost(String url, JSONObject obj) {
 		Map<String, Object> params = null;
 		if (null != obj) {
 			params = new HashMap<>();
@@ -85,11 +85,12 @@ public class HttpClientUtils {
 		RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(CONNECT_TIMEOUT)
 				.setSocketTimeout(SOCKET_TIMEOUT).build();
 		// 创建HttpClient
-		CloseableHttpClient httpClinet = HttpClients.createDefault();
+		CloseableHttpClient httpClinet = null;
 		CloseableHttpResponse response = null;
-		HttpPost httpPost = new HttpPost(url);
-		httpPost.setConfig(requestConfig);
 		try {
+			httpClinet = createHttpsClient();
+			HttpPost httpPost = new HttpPost(url);
+			httpPost.setConfig(requestConfig);
 			if (null != params) {
 				List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 				for (Object key : params.keySet()) {
@@ -123,7 +124,6 @@ public class HttpClientUtils {
 	 */
 	public static String httpPost(String url, String json) {
 		String result = null;
-
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		CloseableHttpResponse response = null;
 

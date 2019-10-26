@@ -19,6 +19,7 @@ function initialPage() {
 
 window.operateEvents = {
 
+    //TODO 待修改 修改实时数据
     "click #selectBtn": function (e, value, row, index) {
         $.ajax({
             type: "POST",

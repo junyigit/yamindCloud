@@ -10,8 +10,4 @@ public interface SysPadientMapper extends BaseMapper<SysPatientEntity> {
 
         List<SysPatientEntity> findAll();
 
-
-
-
-
 }

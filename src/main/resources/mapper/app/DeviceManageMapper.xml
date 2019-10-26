@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yamind.cloud.modules.app.dao.DeviceManageMapper">
+
+
+
+	<!--历史数据-设备信息列表-->
+	<select id="getGroupCureData" parameterType="java.lang.String" resultType="com.yamind.cloud.modules.sys.entity.SysCureDataEntity">
+		SELECT
+		c.id,
+		DATE_FORMAT(c.cure_time,"%Y-%m-%d")as cureTime,
+		c.bootSerial,
+		c.real_flow,
+		c.leakage,
+		c.cure_stress,
+		c.respiratory_rate,
+		c.tidal_volume,
+		c.minu_throughput,
+		c.ai,
+		c.hi
+		FROM
+		sys_curedata c
+		<where>
+				AND c.bootSerial LIKE concat('%',#{serialId},'%')
+		</where>
+		group by DATE_FORMAT(c.cure_time, "%Y-%m-%d" )
+		ORDER BY
+		c.id DESC
+	</select>
+
+
+
+	<!--保存治疗数据sql-->
+	<insert id="bindUserDeviceInfo" parameterType="com.yamind.cloud.modules.app.entity.DeviceDataEntity" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO user_device (
+			user_id,
+			device_serial,
+			device_type,
+			bind_time,
+			mac
+		)
+		VALUES (
+  			#{userId},
+			#{deviceSerial},
+			#{deviceType},
+			#{bindTime},
+			#{mac}
+			)
+	</insert>
+
+
+	<!--删除用户解绑设备-->
+	<delete id="deleteUserDeviceInfo">
+		DELETE FROM user_device WHERE user_id=#{userId} and device_serial=#{serial}
+	</delete>
+</mapper>

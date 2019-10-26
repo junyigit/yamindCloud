@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yamind.cloud.modules.app.dao.IdeaManageMapper">
+
+
+
+	<!--保存治疗数据sql-->
+	<insert id="save" parameterType="com.yamind.cloud.modules.app.entity.IdeaDataEntity" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO user_question (
+			user_id,
+			user_name,
+			user_phone,
+			idea_type,
+			create_time,
+			content
+		)
+		VALUES (
+  			#{userId},
+			#{userName},
+			#{phone},
+			#{type},
+			#{time},
+			#{content}
+			)
+	</insert>
+
+	<select id="listFroUserIdea" resultType="com.yamind.cloud.modules.app.entity.IdeaDataEntity">
+		SELECT
+		c.id,
+		c.user_id,
+		c.user_name,
+		c.user_phone,
+		c.idea_type,
+		c.create_time,
+		c.content
+		FROM
+		user_question c
+		<where>
+			c.user_id=#{userId}
+		</where>
+	</select>
+
+</mapper>

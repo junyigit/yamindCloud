@@ -31,7 +31,7 @@ public class NettyServer {
 
     @Autowired
     private QueueThreadExecutor queueThreadExecutor;
-  //  private QueueThreadExecutor queueThreadExecutor = QueueThreadExecutor.getInstance();
+  //private QueueThreadExecutor queueThreadExecutor = QueueThreadExecutor.getInstance();
 
     /**
      * 启动服务
@@ -48,10 +48,9 @@ public class NettyServer {
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
 
             f = b.bind(address).syncUninterruptibly();
-            queueThreadExecutor.start(); // start queueThread
             channel = f.channel();
         } catch (Exception e) {
-            log.error("Netty start error:", e);
+                log.error("Netty start error:", e);
         } finally {
             if (f != null && f.isSuccess()) {
                 log.info("Netty server listening " + address.getHostName() + " on port " + address.getPort() + " and ready for connections...");

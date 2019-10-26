@@ -15,6 +15,7 @@ import com.yamind.cloud.modules.sys.service.SysParamaterSetService;
 import io.netty.handler.codec.json.JsonObjectDecoder;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -187,17 +188,6 @@ public class SysDeviceServiceImpl implements SysDeviceService {
                 }
                 break;
             case "S":
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        try {
-                                System.out.println("kaishi");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },0,1000);
-
 
                 SysDeviceStatusEntity sysDeviceStatusEntity = new SysDeviceStatusEntity();
 
@@ -213,6 +203,28 @@ public class SysDeviceServiceImpl implements SysDeviceService {
                 sysDeviceStatusEntity.setStatus(1);
 
                 sysDeviceStatusService.saveData(sysDeviceStatusEntity);
+
+
+
+
+                ///////////////
+
+                //推送JSON包
+                JSONObject boeCpodS = new JSONObject();
+
+                //序列号
+                boeCpodS.put("deviceSN",recvArr[1]);
+                boeCpodS.put("measureData","");
+                boeCpodS.put("spo2Statistic","");
+                boeCpodS.put("type","begin");
+                boeCpodS.put("createAt",Calendar.getInstance().getTimeInMillis());
+                System.out.println(boeCpodS);
+                String startHttp = HttpClientUtils.httpPost("http://copdtest.appsbu.com:8000/api/device/daya-resperitor-receiver",boeCpodS.toString());
+                com.alibaba.fastjson.JSONObject startJson = com.alibaba.fastjson.JSONObject.parseObject(startHttp);
+                String startResult = startJson.getString("status");
+                if("ok".equals(startResult)){
+                    System.out.println("成功推送开始命令:"+boeCpodS.toString());
+                }
 
                 break;
 
@@ -231,14 +243,10 @@ public class SysDeviceServiceImpl implements SysDeviceService {
                 sysDeviceStatusEntity2.setStatus(0);
                 sysDeviceStatusService.saveData(sysDeviceStatusEntity2);
 
-
-
                 ////////////////////////////////////////////
-
 
                 //推送JSON包
                 JSONObject boeCpod = new JSONObject();
-
 
                 //测量数据Json
                 JSONObject measureJson = new JSONObject();
@@ -260,13 +268,12 @@ public class SysDeviceServiceImpl implements SysDeviceService {
                 sysParamaterSetEntity =  sysParamaterSetService.getParamaterBySerial(map);
 
 
-
-
                 //序列号
                 boeCpod.put("deviceSN",recvArr[1]);
+
                 //MeasureArr数组内容
-                measureJson.put("startTime",sysDeviceStatusEntity1.getStartTime());
-                measureJson.put("endTime",sysDeviceStatusEntity1.getStopTime());
+                measureJson.put("startTime",StringUtils.substringBefore(sysDeviceStatusEntity1.getStartTime(),"."));
+                measureJson.put("endTime",StringUtils.substringBefore(sysDeviceStatusEntity1.getStopTime(),"."));
                 measureJson.put("pint",sysParamaterSetEntity.getStartStress());
                 measureJson.put("pset",sysParamaterSetEntity.getCureStress());
 
@@ -288,29 +295,22 @@ public class SysDeviceServiceImpl implements SysDeviceService {
                 measureJson.put("pAvg",avgMap.get("ylpjz"));
                 //漏气量平均值
                 measureJson.put("leakAvg",avgMap.get("lqlpjz"));
-
-
-
+                //详细数据为空
                 measureJson.put("detail","");
                 ////////////////////////////////////////////
 
 
-
-
-
-
-
-
-
-
-
                 boeCpod.put("measureData",measureJson);
                 boeCpod.put("spo2Statistic","");
-                boeCpod.put("realTime","false");
+                boeCpod.put("type","end");
                 boeCpod.put("createAt",Calendar.getInstance().getTimeInMillis());
-                System.out.println(boeCpod);
-                String test = HttpClientUtils.httpPost("http://copdtest.appsbu.com:8000/api/device/daya-resperitor-reciver",boeCpod);
-                System.out.println(test);
+
+                String endHttp = HttpClientUtils.httpPost("http://copdtest.appsbu.com:8000/api/device/daya-resperitor-receiver",boeCpod.toString());
+                com.alibaba.fastjson.JSONObject endJson = com.alibaba.fastjson.JSONObject.parseObject(endHttp);
+                String endResult = endJson.getString("status");
+                if("ok".equals(endResult)){
+                    System.out.println("成功推送结束命令:"+boeCpod.toString());
+                }
                 break;
         }
             return 0;

@@ -1,5 +1,8 @@
 $(function () {
 
+
+
+
     $.ajax({
         url: "/json/language.json",//json文件位置
         type: "GET",//请求方式为get
@@ -16,6 +19,7 @@ $(function () {
             }
         }
     })
+
 
     initialPage();
     getGrid();
@@ -54,12 +58,16 @@ $(function () {
                     "serialId": serialId,
                     "startDate":startDate,
                     "endDate":endTime
-                }, success : function(result) {//返回数据根据结果进行相应的处理
+                },beforeSend:function (xhr) {
+                    $("#cisLoading").show();
+                },success : function(result) {//返回数据根据结果进行相应的处理
                     $("#tjxx").empty();
                     var table =$("#tjxx");
                     table.append(
                         returnMode2(result)
                     )
+                }, complete:function (XMLHttpRequest, status) {
+                    $("#cisLoading").hide();
                 },error:function(err){
                 }
             })
@@ -74,6 +82,7 @@ $(function () {
     $("#findMap").click(function(){
 
         $("#operGroup").hide();
+        console.log("start:"+ new Date());
         //获取日期控件选择日期
         var date = $("#dateMap").val();
         $.ajax({
@@ -99,8 +108,6 @@ $(function () {
                 var outhale =[]; //呼气压力
 
 
-
-
                 for (var i = 0, length = mapData.length; i < length; i++) {
                     curetime.push(mapData[i].cureTime);
                     cureArr.push(mapData[i].cureStress1);
@@ -119,201 +126,201 @@ $(function () {
                     flowArr.push(mapData[i].realFlow5);
                 }
 
+                console.log("end:"+ new Date());
 
-                    switch (result.mode) {
-                        case "CPAP":
-                                option = {
-                                    title: {
-                                        left: 'center',
-                                        text: lauguageData.treatmentPres+'(hPa)',
-                                    },tooltip: {
-                                        trigger: 'axis',
-                                        showDelay:100,
-                                        formatter: function (params) {
-                                            params = params[0];
-                                            var date = params.name;
-                                            return '<div><p>当前时间第：'+params.name+'秒</p></div>'+'<p>当前压力值 : '+ params.value+'</p>';
-                                        }},
-                                    xAxis: {
-                                        type: 'category',
-                                        boundaryGap: false,
-                                        data: curetime
-                                    },
-                                    yAxis: {
-                                        type: 'value',
-                                        max:30,
-                                        min:0,
-                                        boundaryGap: [0, '100%']
-                                    },
-                                    dataZoom: [{
-                                        type: 'inside',
-                                    },{
+                switch (result.mode) {
+                    case "CPAP":
+                        option = {
+                            title: {
+                                left: 'center',
+                                text: lauguageData.treatmentPres+'(hPa)',
+                            },tooltip: {
+                                trigger: 'axis',
+                                showDelay:100,
+                                formatter: function (params) {
+                                    params = params[0];
+                                    var date = params.name;
+                                    return '<div><p>当前时间第：'+params.name+'秒</p></div>'+'<p>当前压力值 : '+ params.value+'</p>';
+                                }},
+                            xAxis: {
+                                type: 'category',
+                                boundaryGap: false,
+                                data: curetime
+                            },
+                            yAxis: {
+                                type: 'value',
+                                max:30,
+                                min:0,
+                                boundaryGap: [0, '100%']
+                            },
+                            dataZoom: [{
+                                type: 'inside',
+                            },{
 
-                                    }],
+                            }],
+                            series: [
+                                {
+                                    name: '治疗压力',
+                                    type: 'line',
+                                    smooth: 0.3,
+                                    symbol:'none',
+                                    color:["#CE0000"],
+                                    data: cureArr
+                                }
+                            ]
+                        };
+                        myChart1.setOption(option);
+                        break;
 
-                                    series: [
-                                        {
-                                            name: '治疗压力',
-                                            type: 'line',
-                                            smooth: 0.3,
-                                            symbol:'none',
-                                            color:["#CE0000"],
-                                            data: cureArr
-                                        }
-                                    ]
-                                };
-                                myChart1.setOption(option);
-                            break;
-
-                        case "APAP":
-                            option = {
-                                title: {
-                                    left: 'center',
-                                    text: '治疗压力(hPa)',
-                                },tooltip: {
-                                    trigger: 'axis',
-                                    showDelay:100,
-                                    formatter: function (params) {
-                                        params = params[0];
-                                        var date = params.name;
-                                        return '<div><p>当前时间第：'+params.name+'秒</p></div>'+'<p>当前压力值 : '+ params.value+'</p>';
-                                    },
-                                    axisPointer: {
-                                        animation: false
-                                    }
+                    case "APAP":
+                        option = {
+                            title: {
+                                left: 'center',
+                                text: '治疗压力(hPa)',
+                            },tooltip: {
+                                trigger: 'axis',
+                                showDelay:100,
+                                formatter: function (params) {
+                                    params = params[0];
+                                    var date = params.name;
+                                    return '<div><p>当前时间第：'+params.name+'秒</p></div>'+'<p>当前压力值 : '+ params.value+'</p>';
                                 },
-                                xAxis: {
-                                    type: 'category',
-                                    boundaryGap: false,
-                                    data: curetime
+                                axisPointer: {
+                                    animation: false
+                                }
+                            },
+                            xAxis: {
+                                type: 'category',
+                                boundaryGap: false,
+                                data: curetime
+                            },
+                            yAxis: {
+                                type: 'value',
+                                max:30,
+                                min:0,
+                                boundaryGap: [0, '100%']
+                            },
+                            dataZoom: [{
+                                type: 'inside',
+                            },{
+
+                            }],
+
+                            series: [
+                                {
+                                    name: lauguageData.maxKpa,
+                                    type: 'line',
+                                    smooth: 0.3,
+                                    symbol:'none',
+                                    color:["#CE0000"],
+                                    data: cureArr
+                                }
+                                ,
+                                {
+                                    name: lauguageData.minKpa,
+                                    type: 'line',
+                                    smooth: 0.3,
+                                    symbol:'none',
+                                    color:["#00BB00"],
+                                    data: cureArr
+                                }
+                            ]
+                        };
+                        myChart1.setOption(option);
+                        break;
+                    default:
+                        option = {
+                            title: {
+                                left: 'center',
+                                text: lauguageData.treatmentPres+'(hPa)',
+                            },tooltip: {
+                                trigger: 'axis',
+                                showDelay:100,
+                                formatter: function (params) {
+                                    params = params[0];
+                                    var date = params.name;
+                                    return '<div><p>当前时间第：'+params.name+'秒</p></div>'+'<p>当前压力值 : '+ params.value+'</p>';
+                                }},
+                            xAxis: {
+                                type: 'category',
+                                boundaryGap: false,
+                                data: curetime
+                            },
+                            yAxis: {
+                                type: 'value',
+                                max:30,
+                                min:0,
+                                boundaryGap: [0, '100%']
+                            },
+                            dataZoom: [{
+                                type: 'inside',
+                            },{
+                            }],
+                            series: [
+                                {
+                                    name: lauguageData.xqyl,
+                                    type: 'line',
+                                    smooth: 0.3,
+                                    symbol:'none',
+                                    color:["#CE0000"],
+                                    data: inhale
                                 },
-                                yAxis: {
-                                    type: 'value',
-                                    max:30,
-                                    min:0,
-                                    boundaryGap: [0, '100%']
-                                },
-                                dataZoom: [{
-                                    type: 'inside',
-                                },{
-
-                                }],
-
-                                series: [
-                                    {
-                                        name: lauguageData.maxKpa,
-                                        type: 'line',
-                                        smooth: 0.3,
-                                        symbol:'none',
-                                        color:["#CE0000"],
-                                        data: cureArr
-                                    }
-                                    ,
-                                    {
-                                        name: lauguageData.minKpa,
-                                        type: 'line',
-                                        smooth: 0.3,
-                                        symbol:'none',
-                                        color:["#00BB00"],
-                                        data: cureArr
-                                    }
-                                ]
-                            };
-                            myChart1.setOption(option);
-                            break;
-                        default:
-                            option = {
-                                title: {
-                                    left: 'center',
-                                    text: lauguageData.treatmentPres+'(hPa)',
-                                },tooltip: {
-                                    trigger: 'axis',
-                                    showDelay:100,
-                                    formatter: function (params) {
-                                        params = params[0];
-                                        var date = params.name;
-                                        return '<div><p>当前时间第：'+params.name+'秒</p></div>'+'<p>当前压力值 : '+ params.value+'</p>';
-                                    }},
-                                xAxis: {
-                                    type: 'category',
-                                    boundaryGap: false,
-                                    data: curetime
-                                },
-                                yAxis: {
-                                    type: 'value',
-                                    max:30,
-                                    min:0,
-                                    boundaryGap: [0, '100%']
-                                },
-                                dataZoom: [{
-                                    type: 'inside',
-                                },{
-                                }],
-                                series: [
-                                    {
-                                        name: lauguageData.xqyl,
-                                        type: 'line',
-                                        smooth: 0.3,
-                                        symbol:'none',
-                                        color:["#CE0000"],
-                                        data: inhale
-                                    },
-                                    {
-                                        name: lauguageData.hqyl,
-                                        type: 'line',
-                                        smooth: 0.3,
-                                        symbol:'none',
-                                        color:["#00BB00"],
-                                        data: outhale
-                                    }
-                                ]
-                            };
-                            myChart1.setOption(option);
-                            break;
-                    }
+                                {
+                                    name: lauguageData.hqyl,
+                                    type: 'line',
+                                    smooth: 0.3,
+                                    symbol:'none',
+                                    color:["#00BB00"],
+                                    data: outhale
+                                }
+                            ]
+                        };
+                        myChart1.setOption(option);
+                        break;
+                }
 
 
-                    option2 = {
-                        title: {
-                            left: 'center',
-                            text: '气流量(L/min)',
-                        },tooltip: {
-                            trigger: 'axis',
-                            showDelay:100,
-                            formatter: function (params) {
-                                params = params[0];
-                                var date = params.name;
-                                return '<div><p>当前时间第：'+params.name+'秒</p></div>'+'<p>当前气流量 : '+ params.value+'</p>';
-                            }},
-                        xAxis: {
-                            type: 'category',
-                            boundaryGap: false,
-                            data: curetime
-                        },
-                        yAxis: {
-                            type: 'value',
-                            max:200,
-                            min:-200,
-                            boundaryGap: [0, '100%']
-                        },
-                        dataZoom: [{
-                            type: 'inside',
-                        },{
+                option2 = {
+                    title: {
+                        left: 'center',
+                        text: '气流量(L/min)',
+                    },tooltip: {
+                        trigger: 'axis',
+                        showDelay:100,
+                        formatter: function (params) {
+                            params = params[0];
+                            var date = params.name;
+                            return '<div><p>当前时间第：'+params.name+'秒</p></div>'+'<p>当前气流量 : '+ params.value+'</p>';
+                        }},
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: curetime
+                    },
+                    yAxis: {
+                        type: 'value',
+                        max:200,
+                        min:-200,
+                        boundaryGap: [0, '100%']
+                    },
+                    dataZoom: [{
+                        type: 'inside',
+                    },{
 
-                        }],
+                    }],
 
-                        series: [
-                            {
-                                name: '气流量',
-                                type: 'line',
-                                smooth: 0.3,
-                                symbol:'none',
-                                color:["#CE0000"],
-                                data: flowArr
-                            }
-                        ]
-                    };
-                    myChart2.setOption(option2);
+                    series: [
+                        {
+                            name: '气流量',
+                            type: 'line',
+                            smooth: 0.3,
+                            symbol:'none',
+                            color:["#CE0000"],
+                            data: flowArr
+                        }
+                    ]
+                };
+                myChart2.setOption(option2);
 
 
                 /**
@@ -333,127 +340,127 @@ $(function () {
 
 
 //初始化时间控件
-function initialPage() {
-    //日期选择
-    laydate.render({
-        elem: '#dateRange',
-        range: true,
-        theme: '#3C8DBC',
-        eventElem: '#dateRange',
-        trigger: 'click',
-        done: function(value, date, endDate){
-            dateRange = value;
-            startDate = formatDate(date.year + '-' + date.month + '-' + date.date, 'yyyy-MM-dd');
-            endTime = formatDate(endDate.year + '-' + endDate.month + '-' + endDate.date, 'yyyy-MM-dd');
-        }
-    });
-}
+    function initialPage() {
+        //日期选择
+        laydate.render({
+            elem: '#dateRange',
+            range: true,
+            theme: '#3C8DBC',
+            eventElem: '#dateRange',
+            trigger: 'click',
+            done: function(value, date, endDate){
+                dateRange = value;
+                startDate = formatDate(date.year + '-' + date.month + '-' + date.date, 'yyyy-MM-dd');
+                endTime = formatDate(endDate.year + '-' + endDate.month + '-' + endDate.date, 'yyyy-MM-dd');
+            }
+        });
+    }
 
 
 
-function getGrid() {
-    serialId = getUrlParam(window.location.href,'serialId');
-    $('#setInfo').bootstrapTableEx({
-        url: '../../sys/patient/getHistorySetData?_' + $.now(),
-        height: $(window).height() - 76,
-        striped: true,
-        queryParams: function (params) {
-            params.serialId = serialId;
-            return params;
-        },
-        columns: [{
-            checkbox: true
-        }, {
-            field: "useDate",
-            title: lauguageData.data,
-            width: "100px"
-        }, {
-            field: "mode",
-            title: lauguageData.mode,
-            width: "50px"
-        }, {
-            field: "cureStress",
-            title: lauguageData.treatmentPres,
-            width: "20px"
-        }, {
-            field: "minStress",
-            title: lauguageData.minKpa,
-            width: "50px"
-        }, {
-            field: "maxStress",
-            title: lauguageData.maxKpa,
-            width: "40px"
-        }, {
-            field: "maxInhaleStress",
-            title: lauguageData.zdxqyl,
-            width: "25px",
-        }, {
-            field: "inhaleStress",
-            title: lauguageData.xqyl,
-            width: "35px"
-        }, {
-            field: "exhaleStress",
-            title: lauguageData.hqyl,
-            width: "35px"
-        },
-        {
-            field: "respiratoryRate",
-            title: lauguageData.hxpl,
-            width: "40px"
-        },
-        {
+    function getGrid() {
+        serialId = getUrlParam(window.location.href,'serialId');
+        $('#setInfo').bootstrapTableEx({
+            url: '../../sys/patient/getHistorySetData?_' + $.now(),
+            height: $(window).height() - 76,
+            striped: true,
+            queryParams: function (params) {
+                params.serialId = serialId;
+                return params;
+            },
+            columns: [{
+                checkbox: true
+            }, {
+                field: "useDate",
+                title: lauguageData.data,
+                width: "100px"
+            }, {
+                field: "mode",
+                title: lauguageData.mode,
+                width: "50px"
+            }, {
+                field: "cureStress",
+                title: lauguageData.treatmentPres,
+                width: "20px"
+            }, {
+                field: "minStress",
+                title: lauguageData.minKpa,
+                width: "50px"
+            }, {
+                field: "maxStress",
+                title: lauguageData.maxKpa,
+                width: "40px"
+            }, {
+                field: "maxInhaleStress",
+                title: lauguageData.zdxqyl,
+                width: "25px",
+            }, {
+                field: "inhaleStress",
+                title: lauguageData.xqyl,
+                width: "35px"
+            }, {
+                field: "exhaleStress",
+                title: lauguageData.hqyl,
+                width: "35px"
+            },
+                {
+                    field: "respiratoryRate",
+                    title: lauguageData.hxpl,
+                    width: "40px"
+                },
+                {
 
-            field: "inhaleTime",
-            title: lauguageData.xqsj,
-            width: "40px"
-        },
-        {
-            field: "exhaleRelease",
-            title: lauguageData.hqsf,
-            width: "60px"
-        },
-        {
-            field: "inhaleSensitivity",
-            title: lauguageData.xqlmd,
-            width: "60px"
-        },
-        {
-            field: "exhaleSensitivity",
-            title: lauguageData.hqlmd,
-            width: "30px"
-        },
-        {
-            field: "stressUp",
-            title: lauguageData.ylsspd,
-            width: "80px"
+                    field: "inhaleTime",
+                    title: lauguageData.xqsj,
+                    width: "40px"
+                },
+                {
+                    field: "exhaleRelease",
+                    title: lauguageData.hqsf,
+                    width: "60px"
+                },
+                {
+                    field: "inhaleSensitivity",
+                    title: lauguageData.xqlmd,
+                    width: "60px"
+                },
+                {
+                    field: "exhaleSensitivity",
+                    title: lauguageData.hqlmd,
+                    width: "30px"
+                },
+                {
+                    field: "stressUp",
+                    title: lauguageData.ylsspd,
+                    width: "80px"
 
-        },
-        {
-            field: "stressDown",
-            title: lauguageData.ylxjpd,
-            width: "80px"
+                },
+                {
+                    field: "stressDown",
+                    title: lauguageData.ylxjpd,
+                    width: "80px"
 
-        },
-        {
-            field: "avaps",
-            title: "AVAPS",
-            width: "80px"
+                },
+                {
+                    field: "avaps",
+                    title: "AVAPS",
+                    width: "80px"
 
-        },
-        {
-            field: "softVersion",
-            title: lauguageData.softVersion,
-            width: "80px"
-        }]
-    })
-}
+                },
+                {
+                    field: "softVersion",
+                    title: lauguageData.softVersion,
+                    width: "80px"
+                }]
+        })
+    }
 
-/**
- * 返回模式1的HTML数据
- * @param p
- * @returns {string}
- */
-function returnMode1(p) {
+    /**
+     * 返回模式1的HTML数据
+     * @param p
+     * @returns {string}
+     */
+    function returnMode1(p) {
         return mode1 =
             '<table class="table" id="syxx" >' +
             '<h3><tr><b>'+lauguageData.syxx+'</b></tr></h3>' +
@@ -505,12 +512,12 @@ function returnMode1(p) {
     }
 
 
-/**
- * 返回模式2的HTML数据
- * @param p
- * @returns {string}
- */
-function returnMode2(p){
+    /**
+     * 返回模式2的HTML数据
+     * @param p
+     * @returns {string}
+     */
+    function returnMode2(p){
         return mode2=
 
             '<table class="table" id="syxx" >' +
@@ -620,7 +627,7 @@ function returnMode2(p){
             '<td>' + p.maxAvg.hxplzdz + '</td>' +
             '</tr>' +
             '</table>';
-        }
+    }
 
 
     /**

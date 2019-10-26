@@ -72,7 +72,7 @@
 		c.stress_up,
 		c.stress_down,
 		c.avaps,
-		c.soft_version
+--		c.soft_version
 		FROM
 		sys_curedata c
 		<where>
@@ -149,7 +149,8 @@
 			hi,
 			xhb,
 			inhale_stress,
-			exhale_stress
+			exhale_stress,
+			flag
 		)
 		VALUES (
   			#{cureTime},
@@ -172,7 +173,8 @@
 			#{hiCount},
 			#{xhb},
 			#{inhaleStress},
-			#{exhaleStress}
+			#{exhaleStress},
+			0
 		)
 	</insert>
 
@@ -231,6 +233,7 @@
 		</where>
 	</select>
 
+
 	<!--按序列号查询 分组数据  曲线图处用-->
 	<select id="findMapWithSerial"  resultType="com.yamind.cloud.modules.sys.entity.SysCureDataEntity">
 		SELECT
@@ -242,18 +245,18 @@
 		c.real_flow3,
 		c.real_flow4,
 		c.real_flow5,
-		c.leakage,
+--		c.leakage,
 		c.cure_stress,
 		c.cure_stress2,
 		c.cure_stress3,
 		c.cure_stress4,
 		c.cure_stress5,
-		c.respiratory_rate,
-		c.tidal_volume,
-		c.minu_throughput,
-		c.ai,
-		c.hi,
-		c.xhb,
+--		c.respiratory_rate,
+--		c.tidal_volume,
+--		c.minu_throughput,
+-- 		c.ai,
+-- 		c.hi,
+-- 		c.xhb,
 		c.inhale_stress,
 		c.exhale_stress
 		FROM
@@ -263,6 +266,39 @@
 			AND c.bootSerial =#{serialId} ORDER BY c.cure_time ASC
 		</where>
 	</select>
+
+
+	<!--获取数据状态  同步京东方数据-->
+	<select id="listForBoeDataFlag" resultType="com.yamind.cloud.modules.sys.entity.SysCureDataBoeEntity">
+		SELECT
+			c.id,
+			c.bootSerial,
+			c.cure_time,
+			c.leakage,
+			c.cure_stress,
+			c.ai,
+			c.hi
+		FROM
+			sys_curedata c
+		<where>
+			c.bootSerial =#{serialId} and c.flag = 0 limit 50
+		</where>
+
+	</select>
+
+	<!--更新字段  同步京东方数据-->
+	<update id="updateForFlag" parameterType="java.util.List">
+		<foreach collection="list" item="idList" index="index" open="" close="" separator=";">
+			UPDATE sys_curedata
+			<set>
+				flag=1
+			</set>
+			<where>
+				id = #{idList}
+			</where>
+		</foreach>
+	</update>
+
 
 
 
@@ -290,9 +326,8 @@
 		FROM
 		sys_curedata c
 		<where>
-				c.cure_time BETWEEN #{niceStart} and #{niceEnd}
-
-		AND c.bootSerial =#{serialId} ORDER BY c.cure_time ASC
+			c.cure_time BETWEEN #{niceStart} and #{niceEnd}
+			AND c.bootSerial =#{serialId} ORDER BY c.cure_time ASC
 		</where>
 	</select>
 

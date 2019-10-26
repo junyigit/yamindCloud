@@ -36,7 +36,7 @@ public interface SysUserService {
 	
 	R updatePswd(SysUserEntity user);
 	
-	R saveUserToken(Long userId);
+	R saveUserToken(String userId);
 	
 	R updateUserToken(Long userId);
 	

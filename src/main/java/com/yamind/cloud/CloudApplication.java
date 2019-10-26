@@ -55,7 +55,7 @@ public class CloudApplication extends SpringBootServletInitializer implements Co
 	protected SpringApplicationBuilder configure(
 			SpringApplicationBuilder builder) {
 
-		return builder.sources(this.getClass());
+		return builder.sources(CloudApplication.class);
 	}
 
 	@Override
