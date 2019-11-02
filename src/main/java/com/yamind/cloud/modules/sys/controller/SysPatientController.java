@@ -155,7 +155,6 @@ public class SysPatientController extends AbstractController {
 
     /**
      * 删除
-     *
      * @param id
      * @return
      */
@@ -171,7 +170,7 @@ public class SysPatientController extends AbstractController {
     @RequestMapping(value = "/isRealData", method = RequestMethod.POST)
     public R isRealData(@RequestParam String serialId) {
         String tempData = redisTemplate.opsForList().range(serialId, 0, 0).toString();
-        tempData = tempData = tempData.substring(1, tempData.length() - 1);
+        tempData  = tempData.substring(1, tempData.length() - 1);
         if (StringUtils.isBlank(tempData)) {
             return R.error(-1, "当前设备没有检测数据");
         } else {
@@ -253,7 +252,7 @@ public class SysPatientController extends AbstractController {
         colsData = sysCureDataService.listForColData2(map);
 
 
-        r.put("cureStress", colsData.get(median).getCureStress1());
+        r.put("cureStress", colsData.get(median).getCureStress());
         r.put("inhaleStress", colsData.get(median).getInhaleStress());
         r.put("exhaleStress", colsData.get(median).getExhaleStress());
         r.put("tidalVolume", colsData.get(median).getTidalVolume());
@@ -448,7 +447,7 @@ public class SysPatientController extends AbstractController {
      */
     @Scheduled(cron = "0 0 0 * * *")
     public void delTimeOutHistory() {
-        System.out.println("删除过期的历史数据");
+        logger.info("删除过期的历史数据");
         sysCureDataService.delectData();
     }
 
@@ -459,7 +458,10 @@ public class SysPatientController extends AbstractController {
     @Scheduled(fixedRate = 10000)
     public void sendDataToBoe() {
 
-        // TODO: 2019/10/18  京东方对接部分 
+        // TODO: 2019/10/18  京东方对接部分
+
+        Map<String, Object> map = new HashMap<>();
+
         //查询当前在线的设备数据表，根据在线的设备轮流查询实时数据，推送
         List<SysDeviceStatusEntity> sysDeviceStatusEntities = sysDeviceStatusService.listForOnlineDevice();
 
@@ -470,11 +472,12 @@ public class SysPatientController extends AbstractController {
             return ;
         }
 
-
         for (SysDeviceStatusEntity sysDeviceStatusEntity : sysDeviceStatusEntities) {
 
+            map.put("serialId",sysDeviceStatusEntity.getSerialId());
+            map.put("starTime",sysDeviceStatusEntity.getStartTime());
             //根据序列号查询当前序列号标志位为0 未上传的数据
-            List<SysCureDataBoeEntity> postData = sysCureDataService.listForBoeDataFlag(sysDeviceStatusEntity.getSerialId());
+            List<SysCureDataBoeEntity> postData = sysCureDataService.listForBoeDataFlag(map);
 
             //判断未上传数据是否为0
             if (postData !=null && postData.size() >0){
@@ -534,6 +537,7 @@ public class SysPatientController extends AbstractController {
                 //logger.info("[POST内容为:"+boeCpod.toString()+"]");
                 JSONObject json_test = JSONObject.parseObject(result);
                 String resultPost = json_test.getString("status");
+                System.out.println("[POST-序列号为："+sysDeviceStatusEntity.getSerialId()+"的状态:"+json_test+"]");
                 logger.info("[POST-序列号为："+sysDeviceStatusEntity.getSerialId()+"的状态:"+json_test+"]");
                 if("ok".equals(resultPost)) {
                     logger.info("[UPDATA-序列号为："+sysDeviceStatusEntity.getSerialId()+"内容为:" + idList + "]");

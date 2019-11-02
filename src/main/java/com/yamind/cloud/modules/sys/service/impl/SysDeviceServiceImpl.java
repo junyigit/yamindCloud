@@ -16,6 +16,8 @@ import io.netty.handler.codec.json.JsonObjectDecoder;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ import java.util.*;
 @Service("sysDeviceService")
 public class SysDeviceServiceImpl implements SysDeviceService {
 
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     SysDeviceManager sysDeviceManager;
@@ -40,7 +43,6 @@ public class SysDeviceServiceImpl implements SysDeviceService {
 
     @Autowired
     RedisTemplate redisTemplate;
-
 
 
     @Override
@@ -162,7 +164,7 @@ public class SysDeviceServiceImpl implements SysDeviceService {
 
                     sysCureDataEntity.setLeakage(Float.parseFloat(recvArr[8])); //漏气量
 
-                    sysCureDataEntity.setCureStress1(Float.parseFloat(recvArr[9]));//治疗压力
+                    sysCureDataEntity.setCureStress(Float.parseFloat(recvArr[9]));//治疗压力
                     sysCureDataEntity.setCureStress2(Float.parseFloat(recvArr[10]));//治疗压力
                     sysCureDataEntity.setCureStress3(Float.parseFloat(recvArr[11]));//治疗压力
                     sysCureDataEntity.setCureStress4(Float.parseFloat(recvArr[12]));//治疗压力
@@ -188,10 +190,9 @@ public class SysDeviceServiceImpl implements SysDeviceService {
                 }
                 break;
             case "S":
-
+                logger.info("序列号为:"+recvArr[1]+"开始运行了");
                 SysDeviceStatusEntity sysDeviceStatusEntity = new SysDeviceStatusEntity();
 
-                System.out.println("序列号为:"+recvArr[1]+"开始运行了");
 
                 //设置序列号
                 sysDeviceStatusEntity.setSerialId(recvArr[1]);
@@ -204,10 +205,6 @@ public class SysDeviceServiceImpl implements SysDeviceService {
 
                 sysDeviceStatusService.saveData(sysDeviceStatusEntity);
 
-
-
-
-                ///////////////
 
                 //推送JSON包
                 JSONObject boeCpodS = new JSONObject();
@@ -223,13 +220,15 @@ public class SysDeviceServiceImpl implements SysDeviceService {
                 com.alibaba.fastjson.JSONObject startJson = com.alibaba.fastjson.JSONObject.parseObject(startHttp);
                 String startResult = startJson.getString("status");
                 if("ok".equals(startResult)){
-                    System.out.println("成功推送开始命令:"+boeCpodS.toString());
+                    //System.out.println("[序列号为:"+recvArr[1]+"成功推送开始命令:"+boeCpodS.toString());
+                    logger.info("[序列号为:"+recvArr[1]+"成功推送开始命令:"+boeCpodS.toString());
                 }
 
                 break;
 
             case "T":
-                System.out.println("序列号为:"+recvArr[1]+"结束了");
+                logger.info("[序列号为:"+recvArr[1]+"结束了]");
+
                 SysDeviceStatusEntity sysDeviceStatusEntity2 = new SysDeviceStatusEntity();
 
                 //设置序列号
@@ -309,7 +308,8 @@ public class SysDeviceServiceImpl implements SysDeviceService {
                 com.alibaba.fastjson.JSONObject endJson = com.alibaba.fastjson.JSONObject.parseObject(endHttp);
                 String endResult = endJson.getString("status");
                 if("ok".equals(endResult)){
-                    System.out.println("成功推送结束命令:"+boeCpod.toString());
+                    //System.out.println("成功推送结束命令:"+boeCpod.toString());
+                    logger.info("[序列号为:"+recvArr[1]+"成功推送结束命令:"+boeCpod.toString());
                 }
                 break;
         }

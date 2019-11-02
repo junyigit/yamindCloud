@@ -44,7 +44,7 @@ public interface SysCureDataService {
     R saveData(SysCureDataEntity user);
 
     //同步数据到京东方
-    List<SysCureDataBoeEntity> listForBoeDataFlag(String serialId);
+    List<SysCureDataBoeEntity> listForBoeDataFlag(Map<String,Object> map);
 
 
     //删除过期的数据

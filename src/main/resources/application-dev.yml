@@ -43,5 +43,19 @@ n:
 #日志路径
 logging:
   file: log/cloud.log
-#存放资源路径
+
+
+#存放  -图片路径
 upload-path : /usr/proTest/temp/
+
+#存放反馈  -图片路径
+idea-upload-path : /usr/proTest/temp/idea
+
+#存放用户  -图片路径
+user-upload-path : /usr/proTest/temp/user
+
+#存放商品  -图片路径
+product-upload-path : /usr/proTest/temp/small
+
+#存放广告  -图片路径
+advert-upload-path : /usr/proTest/temp/advert

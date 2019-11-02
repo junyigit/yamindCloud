@@ -6,32 +6,22 @@
 
 
 	<!--历史数据-设备信息列表-->
-	<select id="getGroupCureData" parameterType="java.lang.String" resultType="com.yamind.cloud.modules.sys.entity.SysCureDataEntity">
+	<select id="listForDevice" parameterType="java.lang.String" resultType="com.yamind.cloud.modules.app.entity.DeviceDataEntity">
 		SELECT
-		c.id,
-		DATE_FORMAT(c.cure_time,"%Y-%m-%d")as cureTime,
-		c.bootSerial,
-		c.real_flow,
-		c.leakage,
-		c.cure_stress,
-		c.respiratory_rate,
-		c.tidal_volume,
-		c.minu_throughput,
-		c.ai,
-		c.hi
+		c.device_serial,
+		c.device_type,
+		c.bind_time,
+		c.mac
 		FROM
-		sys_curedata c
+		user_device c
 		<where>
-				AND c.bootSerial LIKE concat('%',#{serialId},'%')
+				AND c.user_id =#{userId}
 		</where>
-		group by DATE_FORMAT(c.cure_time, "%Y-%m-%d" )
-		ORDER BY
-		c.id DESC
 	</select>
 
 
 
-	<!--保存治疗数据sql-->
+	<!--用户绑定设备-->
 	<insert id="bindUserDeviceInfo" parameterType="com.yamind.cloud.modules.app.entity.DeviceDataEntity" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO user_device (
 			user_id,

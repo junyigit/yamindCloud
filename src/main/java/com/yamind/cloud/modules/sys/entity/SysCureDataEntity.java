@@ -51,12 +51,10 @@ public class SysCureDataEntity implements Serializable {
     /**
      * 治疗压力
      */
-    private float cureStress1;
+    private float cureStress;
     private float cureStress2;
     private float cureStress3;
     private float cureStress4;
-
-
     private float cureStress5;
 
 
@@ -110,8 +108,9 @@ public class SysCureDataEntity implements Serializable {
     private Float inhaleStress;
 
 
-    //呼气压力
-    private Float exhaleStress;
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     public Integer getId() {
         return id;
@@ -145,12 +144,60 @@ public class SysCureDataEntity implements Serializable {
         this.bootSerial = bootSerial;
     }
 
-    public float getCureStress1() {
-        return cureStress1;
+    public float getRealFlow1() {
+        return realFlow1;
     }
 
-    public void setCureStress1(float cureStress1) {
-        this.cureStress1 = cureStress1;
+    public void setRealFlow1(float realFlow1) {
+        this.realFlow1 = realFlow1;
+    }
+
+    public float getRealFlow2() {
+        return realFlow2;
+    }
+
+    public void setRealFlow2(float realFlow2) {
+        this.realFlow2 = realFlow2;
+    }
+
+    public float getRealFlow3() {
+        return realFlow3;
+    }
+
+    public void setRealFlow3(float realFlow3) {
+        this.realFlow3 = realFlow3;
+    }
+
+    public float getRealFlow4() {
+        return realFlow4;
+    }
+
+    public void setRealFlow4(float realFlow4) {
+        this.realFlow4 = realFlow4;
+    }
+
+    public float getRealFlow5() {
+        return realFlow5;
+    }
+
+    public void setRealFlow5(float realFlow5) {
+        this.realFlow5 = realFlow5;
+    }
+
+    public float getLeakage() {
+        return leakage;
+    }
+
+    public void setLeakage(float leakage) {
+        this.leakage = leakage;
+    }
+
+    public float getCureStress() {
+        return cureStress;
+    }
+
+    public void setCureStress(float cureStress) {
+        this.cureStress = cureStress;
     }
 
     public float getCureStress2() {
@@ -184,7 +231,6 @@ public class SysCureDataEntity implements Serializable {
     public void setCureStress5(float cureStress5) {
         this.cureStress5 = cureStress5;
     }
-
 
     public float getRespiratoryRate() {
         return respiratoryRate;
@@ -234,60 +280,12 @@ public class SysCureDataEntity implements Serializable {
         this.softVersion = softVersion;
     }
 
-    public float getLeakage() {
-        return leakage;
-    }
-
-    public void setLeakage(float leakage) {
-        this.leakage = leakage;
-    }
-
     public float getXhb() {
         return xhb;
     }
 
     public void setXhb(float xhb) {
         this.xhb = xhb;
-    }
-
-    public float getRealFlow1() {
-        return realFlow1;
-    }
-
-    public void setRealFlow1(float realFlow1) {
-        this.realFlow1 = realFlow1;
-    }
-
-    public float getRealFlow2() {
-        return realFlow2;
-    }
-
-    public void setRealFlow2(float realFlow2) {
-        this.realFlow2 = realFlow2;
-    }
-
-    public float getRealFlow3() {
-        return realFlow3;
-    }
-
-    public void setRealFlow3(float realFlow3) {
-        this.realFlow3 = realFlow3;
-    }
-
-    public float getRealFlow4() {
-        return realFlow4;
-    }
-
-    public void setRealFlow4(float realFlow4) {
-        this.realFlow4 = realFlow4;
-    }
-
-    public float getRealFlow5() {
-        return realFlow5;
-    }
-
-    public void setRealFlow5(float realFlow5) {
-        this.realFlow5 = realFlow5;
     }
 
     public Float getInhaleStress() {
@@ -305,5 +303,10 @@ public class SysCureDataEntity implements Serializable {
     public void setExhaleStress(Float exhaleStress) {
         this.exhaleStress = exhaleStress;
     }
+
+    //呼气压力
+    private Float exhaleStress;
+
+
 
 }

@@ -91,7 +91,6 @@ public class IdeaController extends AbstractController {
             r.put("code",200);
             r.put("data",ideaArry);
         }
-
         return r;
     }
 
@@ -111,25 +110,8 @@ public class IdeaController extends AbstractController {
 
         R result = new R();
         Map<String, Object> map = new HashMap<String, Object>();
-     //   IdeaDataEntity ideaDataEntity= new IdeaDataEntity();
         File targetFile = null;
-        String url = "";//返回存储路径
 
-        //获取app传来的用户参数
-        /*String userId = request.getParameter("userId");
-        String name = request.getParameter("name");
-        String phone = request.getParameter("phone");
-        String time = request.getParameter("time");
-        String content = request.getParameter("content");
-        String type = request.getParameter("type");
-
-
-        ideaDataEntity.setUserId(Long.parseLong(userId));
-        ideaDataEntity.setUserName(name);
-        ideaDataEntity.setPhone(phone);
-        ideaDataEntity.setContent(content);
-        ideaDataEntity.setType(Integer.parseInt(type));
-        ideaDataEntity.setTime(Integer.parseInt(time));*/
 
         if(ideaDataEntity !=null) {
             result = ideaManageService.saveIdea(ideaDataEntity);
@@ -144,18 +126,16 @@ public class IdeaController extends AbstractController {
 
                 IdeaImageEntity ideaImageEntity=new IdeaImageEntity();
 
-
-
                 String fileType = fileName.substring(fileName.lastIndexOf("."), fileName.length());//文件后缀
                 fileName = new Date().getTime() + "_" + new Random().nextInt(1000) + fileType;//新的文件名
 
                 //创建一个当前日期的文件夹
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-                String fileAdd = sdf.format(new Date());
+                //SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                //String fileAdd = sdf.format(new Date());
 
 
                 //获取文件夹路径
-                File file1 = new File(uploadPath + File.separator + fileAdd);
+                File file1 = new File(uploadPath + File.separator + "idea");
                 //如果文件夹不存在则创建
                 if (!file1.exists() && !file1.isDirectory()) {
                     file1.mkdir();
@@ -168,7 +148,7 @@ public class IdeaController extends AbstractController {
                     ideaImageEntity.setQuestionId(ideaDataEntity.getId().intValue());
                     ideaImageEntity.setImgName(fileName);
                     ideaImageEntity.setImgType(fileType);
-                    ideaImageEntity.setImgPath(fileAdd);
+                    ideaImageEntity.setImgPath("idea");
                     ideaImageService.saveIdeaImage(ideaImageEntity);
 
                     result.put("code", 200);
@@ -183,9 +163,6 @@ public class IdeaController extends AbstractController {
         }
         return result;
     }
-
-
-
 
 
 }

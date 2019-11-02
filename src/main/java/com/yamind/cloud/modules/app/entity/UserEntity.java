@@ -15,6 +15,10 @@ public class UserEntity implements Serializable {
 
     Long sex;
 
+
+
+    BigDecimal weight;
+
     BigDecimal height;
 
     String birthday;
@@ -114,6 +118,12 @@ public class UserEntity implements Serializable {
         this.status = status;
     }
 
+    public BigDecimal getWeight() {
+        return weight;
+    }
 
+    public void setWeight(BigDecimal weight) {
+        this.weight = weight;
+    }
 
 }

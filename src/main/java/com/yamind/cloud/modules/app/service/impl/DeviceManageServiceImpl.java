@@ -8,6 +8,9 @@ import com.yamind.cloud.modules.app.entity.DeviceDataEntity;
 import com.yamind.cloud.modules.app.service.DeviceManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Service("deviceManageService")
 public class DeviceManageServiceImpl implements DeviceManageService {
@@ -31,4 +34,7 @@ public class DeviceManageServiceImpl implements DeviceManageService {
 
     }
 
+    public List<DeviceDataEntity> listForDevice(@RequestParam String userId){
+        return deviceManageMapper.listForDevice(userId);
+    }
 }

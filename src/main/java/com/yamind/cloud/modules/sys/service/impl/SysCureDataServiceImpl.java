@@ -74,8 +74,8 @@ public class SysCureDataServiceImpl implements SysCureDataService {
     }
 
     //同步数据到京东方
-    public List<SysCureDataBoeEntity> listForBoeDataFlag(String serialId){
-        List<SysCureDataBoeEntity> boeList= sysCureDataMapper.listForBoeDataFlag(serialId);
+    public List<SysCureDataBoeEntity> listForBoeDataFlag(Map<String,Object> map){
+        List<SysCureDataBoeEntity> boeList= sysCureDataMapper.listForBoeDataFlag(map);
         return boeList;
     }
 

@@ -36,7 +36,7 @@
 			<if test="createTime != null">create_time = #{createTime} </if>
 		</set>
 		WHERE
-		mobile = #{mobile}
+		user_id = #{userId}
 	</update>
 
 	<select id="getUserMobile" resultType="com.yamind.cloud.modules.app.entity.UserEntity">
@@ -58,5 +58,34 @@
 			c.mobile=#{mobile}
 		</where>
 	</select>
+
+
+	<select id="listForUserInfo" resultType="com.yamind.cloud.modules.app.entity.UserEntity">
+		SELECT
+		u.user_id,
+		u.mobile,
+		u.photo,
+		u.nike_name,
+		u.sex,
+		u.height,
+		u.birthday,
+		u.create_time,
+		u.parent_id,
+		u.remark,
+		status
+		FROM
+		app_user u
+		<where>
+			<if test="mobile != null and mobile.trim() != ''">
+				u.mobile LIKE concat('%',#{mobile},'%')
+				OR u.nike_name LIKE concat('%',#{nike_name},'%')
+			</if>
+		</where>
+		ORDER BY
+		u.user_id DESC
+	</select>
+
+
+
 
 </mapper>

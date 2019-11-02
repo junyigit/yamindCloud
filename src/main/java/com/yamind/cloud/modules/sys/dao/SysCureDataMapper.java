@@ -43,7 +43,7 @@ public interface SysCureDataMapper extends BaseMapper<SysCureDataEntity>{
     List<SysCureDataEntity> findMapListWithDate(Map<String,Object> param);
 
     //同步数据到京东方服务器
-    List<SysCureDataBoeEntity> listForBoeDataFlag(String serialId);
+    List<SysCureDataBoeEntity> listForBoeDataFlag(Map<String,Object> map);
 
     int updateForFlag(List<Integer> idList);
 

@@ -39,9 +39,16 @@ public class LoginController extends AbstractController {
     @Autowired
     SysUserService sysUserService;
 
+    /**
+     * 登陆获取短信验证码并存入数据库
+     * @param phone
+     * @param code
+     * @return
+     */
     @SysLog("获取手机短信验证码")
     @RequestMapping(value = "/verifySmsCode", method = RequestMethod.POST)
     public R getSmsVerify(String phone, String code )  {
+        R r = new R();
         logger.info("[手机号为："+phone +"获取验证码: "+code +"]");
         JSONObject mobJson = new JSONObject();
         mobJson.put("appkey",appkey);
@@ -49,10 +56,10 @@ public class LoginController extends AbstractController {
         mobJson.put("zone",zone);
         mobJson.put("code",code);
 
-        //String resultJson = HttpClientUtils.httpPost(mobVerifyReqUrl,mobJson);
-        //JSONObject verifyResult = JSONObject.parseObject(resultJson);
+        String resultJson = HttpClientUtils.httpPost(mobVerifyReqUrl,mobJson);
+        JSONObject verifyResult = JSONObject.parseObject(resultJson);
         // 临时测试屏蔽
-        JSONObject verifyResult = JSONObject.parseObject("{status:200}");
+        //JSONObject verifyResult = JSONObject.parseObject("{status:200}");
         if ("200".equals(verifyResult.getString("status"))){
             // 保存用户 和 Token 信息
             UserEntity userEntity = new UserEntity();
@@ -63,16 +70,18 @@ public class LoginController extends AbstractController {
                 userEntity = userManageService.getUserMobile(phone);
             }
             //判断是否存在Token，如果存在则返回，如果不存在则创建
-            R r = sysUserService.saveUserToken(userEntity.getMobile());
+            r = sysUserService.saveUserToken(userEntity.getMobile());
             //判断用户信息是否保存成功
             if (result>0 && StringUtils.isNotEmpty(r.get("token").toString())){
                 //返回创建成功的token信息
-               return r.put("userId",userEntity.getUserId());
+                r.put("code",200);
+                r.put("userInfo",userEntity);
             }
         } else {
             return R.error("验证码错误");
         }
-        return R.error("未知错误");
+
+        return r;
     }
 
 

@@ -20,7 +20,6 @@ public class IdeaImageServiceImpl implements IdeaImageService {
     public R saveIdeaImage(IdeaImageEntity ideaImageEntity){
         int result = ideaImageMapper.save(ideaImageEntity);
         return CommonUtils.msgCustom("commit image success!",result);
-
     }
 
     public List<IdeaImageEntity> listFroIdeaImg(Long ideaId){

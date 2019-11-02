@@ -24,9 +24,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<Object> {
 
     private static Logger logger = LoggerFactory.getLogger(ServerHandler.class);
 
-    //private RedisTemplate redisTemplate;
 
-    //private SysDeviceService sysDeviceService = SpringContextUtils.getBean(SysDeviceServiceImpl.class);
 
     private QueueThreadExecutor queueThreadExecutor = SpringContextUtils.getBean(QueueThreadExecutor.class);
 

@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/app/deviceManage")
@@ -23,6 +25,25 @@ public class DeviceManageController extends AbstractController {
     private DeviceManageService deviceManageService;
 
 
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    public R listForDevice(@RequestParam String userId) {
+        R r = new R();
+        List<DeviceDataEntity> list = deviceManageService.listForDevice(userId);
+        if (list!=null &&list.size() >0){
+            r.put("code",200);
+            r.put("date",list);
+        }
+        return r;
+    }
+
+
+    /**
+     * app扫码绑定设备
+     * @param userId
+     * @param serial
+     * @param mac
+     * @return
+     */
     @RequestMapping(value = "/bindDevice", method = RequestMethod.POST)
     public R bindDeviceToUser(@RequestParam String userId, @RequestParam String serial, @RequestParam String mac) {
         R r = new R();
@@ -48,6 +69,9 @@ public class DeviceManageController extends AbstractController {
     public R delBindDevice(@RequestParam String userId, @RequestParam String serial){
         return deviceManageService.deleteUserDeviceInfo(userId,serial);
     }
+
+
+
 
 
 }

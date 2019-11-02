@@ -3,22 +3,7 @@ $(function () {
 
 
 
-    $.ajax({
-        url: "/json/language.json",//json文件位置
-        type: "GET",//请求方式为get
-        dataType: "json", //返回数据格式为json
-        async:false,
-        success: function(data) {//请求成功完成后要执行的方法
-            if (getCookie('lang') == "zh-cn" || getCookie('lang') == "zh_cn") {
-                lauguageData = data.zh;
-                console.log("选择了中文==="+lauguageData);
-            } else if (getCookie('lang') == "en-us" || getCookie('lang') == "en_us") {
-                lauguageData = data.en;
-                console.log("选择了英文==="+lauguageData);
-
-            }
-        }
-    })
+    lauguageData = returnLanguage();
 
 
     initialPage();
@@ -47,9 +32,8 @@ $(function () {
 
     // 统计信息---点击查询
     $("#dateHistory").click(function(){
-
+        $("#cisLoading").show();
         if (endTime !=0 && startDate !=0){
-            console.log("123123123213123131313");
             $.ajax({
                 type: "POST",
                 url: "/sys/patient/getHistoryStatInfo",
@@ -61,6 +45,11 @@ $(function () {
                 },beforeSend:function (xhr) {
                     $("#cisLoading").show();
                 },success : function(result) {//返回数据根据结果进行相应的处理
+                    if (result.code ==500){
+                        dialogMsg("当前选择日期没有数据！");
+                        return;
+                    }
+                    $("#cisLoading").hide();
                     $("#tjxx").empty();
                     var table =$("#tjxx");
                     table.append(
@@ -80,9 +69,10 @@ $(function () {
 
     // 曲线图---点击查询
     $("#findMap").click(function(){
+        $("#cisLoading").show();
 
-        $("#operGroup").hide();
-        console.log("start:"+ new Date());
+        $("#charts1").hide();
+        $("#charts2").hide();
         //获取日期控件选择日期
         var date = $("#dateMap").val();
         $.ajax({
@@ -94,6 +84,17 @@ $(function () {
                 "time":date
             }, success: function (result) {//返回数据根据结果进行相应的处理
 
+                $("#charts1").show();
+                $("#charts2").show();
+
+                if (result.code ==500){
+                    dialogMsg("当前日期没有治疗数据~");
+                    $("#cisLoading").hide();
+                    $("#charts1").hide();
+                    $("#charts2").hide();
+                    return;
+                }
+                $("#cisLoading").hide();
                 //控制器返回的选择当天数据
                 var mapData = result.map;
                 //保存时间的数组
@@ -110,7 +111,7 @@ $(function () {
 
                 for (var i = 0, length = mapData.length; i < length; i++) {
                     curetime.push(mapData[i].cureTime);
-                    cureArr.push(mapData[i].cureStress1);
+                    cureArr.push(mapData[i].cureStress);
                     cureArr.push(mapData[i].cureStress2);
                     cureArr.push(mapData[i].cureStress3);
                     cureArr.push(mapData[i].cureStress4);

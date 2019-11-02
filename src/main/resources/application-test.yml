@@ -39,11 +39,26 @@ spring:
 
 # netty配置
 n:
-  url: localhost
+  url: 192.168.123.1
   port: 2222
 #日志路径
 logging:
   file: log/cloud.log
 
-#存放资源路径
+
+#存放  -图片路径
 upload-path : D://upload-path//
+
+#存放反馈  -图片路径
+idea-upload-path : D://upload-path//idea
+
+#存放用户  -图片路径
+user-upload-path : D://upload-path//user
+
+#存放商品  -图片路径
+product-upload-path : D://upload-path//small
+
+#存放广告  -图片路径
+advert-upload-path : D://upload-path//advert
+
+

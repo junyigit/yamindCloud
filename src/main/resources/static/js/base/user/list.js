@@ -5,6 +5,23 @@
 $(function() {
 	initialPage();
 	getGrid();
+
+    $.ajax({
+        url: "/json/language.json",//json文件位置
+        type: "GET",//请求方式为get
+        dataType: "json", //返回数据格式为json
+        async:false,
+        success: function(data) {//请求成功完成后要执行的方法
+            if (getCookie('lang') == "zh-cn" || getCookie('lang') == "zh_cn") {
+                lauguageData = data.zh;
+                console.log("选择了中文==="+lauguageData);
+            } else if (getCookie('lang') == "en-us" || getCookie('lang') == "en_us") {
+                lauguageData = data.en;
+                console.log("选择了英文==="+lauguageData);
+
+            }
+        }
+    })
 });
 
 function   initialPage() {
@@ -13,58 +30,6 @@ function   initialPage() {
 			height : $(window).height() - 56
 		});
 	});
-}
-
-function getGrid() {
-	$('#dataGrid').bootstrapTableEx({
-		url : '../../sys/user/list?_' + $.now(),
-		height : $(window).height() - 56,
-		queryParams : function(params) {
-			params.username = vm.keyword;
-			return params;
-		},
-		columns : [ {
-			checkbox : true
-		}, {
-			field : "userId",
-			title : "编号",
-			width : "50px"
-		}, {
-			field : "username",
-			title : "用户名",
-			width : "200px"
-		}, {
-			field : "orgName",
-			title : "所属机构",
-			width : "200px"
-		}, {
-			field : "email",
-			title : "邮箱",
-			width : "300px"
-		}, {
-			field : "mobile",
-			title : "手机号",
-			width : "130px"
-		}, {
-			field : "status",
-			title : "状态",
-			width : "60px",
-			formatter : function(value, row, index) {
-				if (value == '0') {
-					return '<span class="label label-danger">禁用</span>';
-				} else if (value == '1') {
-					return '<span class="label label-success">正常</span>';
-				}
-			}
-		}, {
-			field : "gmtCreate",
-			title : "创建时间",
-			width : "200px"
-		}, {
-			field : "remark",
-			title : "备注"
-		} ]
-	})
 }
 
 var vm = new Vue({
@@ -78,7 +43,7 @@ var vm = new Vue({
 		},
 		save : function() {
 			dialogOpen({
-				title : '新增用户',
+				title : lauguageData.userId,
 				url : 'base/user/add.html?_' + $.now(),
                 width : '620px',
                 height : '524px',

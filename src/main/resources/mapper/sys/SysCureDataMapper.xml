@@ -161,7 +161,7 @@
 			#{realFlow4},
 			#{realFlow5},
 			#{leakage},
-			#{cureStress1},
+			#{cureStress},
 			#{cureStress2},
 			#{cureStress3},
 			#{cureStress4},
@@ -245,25 +245,18 @@
 		c.real_flow3,
 		c.real_flow4,
 		c.real_flow5,
---		c.leakage,
 		c.cure_stress,
 		c.cure_stress2,
 		c.cure_stress3,
 		c.cure_stress4,
 		c.cure_stress5,
---		c.respiratory_rate,
---		c.tidal_volume,
---		c.minu_throughput,
--- 		c.ai,
--- 		c.hi,
--- 		c.xhb,
 		c.inhale_stress,
 		c.exhale_stress
 		FROM
 		sys_curedata c
 		<where>
 				c.cure_time BETWEEN #{seleceTime} and #{endTime}
-			AND c.bootSerial =#{serialId} ORDER BY c.cure_time ASC
+			AND c.bootSerial =#{serialId} ORDER BY c.cure_time ASC limit 10000
 		</where>
 	</select>
 
@@ -281,7 +274,7 @@
 		FROM
 			sys_curedata c
 		<where>
-			c.bootSerial =#{serialId} and c.flag = 0 limit 50
+			c.bootSerial =#{serialId} and c.cure_time > #{starTime} and c.flag = 0 limit 50
 		</where>
 
 	</select>
