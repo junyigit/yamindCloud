@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,14 +42,13 @@ public class UserCenterController extends AbstractController {
      */
     @RequestMapping("/updateUserInfo")
     @ResponseBody
-    public R addAndUpdateUserInfo(UserEntity userEntity, @RequestParam(value = "uploadFile", required = false) MultipartFile file, HttpServletRequest request) {
+    public R addAndUpdateUserInfo(UserEntity userEntity, @RequestParam(value = "uploadFile", required = false) MultipartFile file, HttpServletRequest request)  throws IOException {
 
         R result = new R();
 
         //获取请求地址
         String returnUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath()+"//";
         File targetFile = null;
-
 
         if (null != userEntity.getUserId()) {
 
@@ -58,12 +58,11 @@ public class UserCenterController extends AbstractController {
 
             if (fileName != null && fileName != "") {
 
-
                 String fileType = fileName.substring(fileName.lastIndexOf("."), fileName.length());//文件后缀
                 fileName = new Date().getTime() + "_" + new Random().nextInt(1000) + fileType;//新的文件名
 
                 //获取文件夹路径
-                File file1 = new File(uploadPath + File.separator+"user");
+                File file1 = new File(uploadPath + File.separator+ "user");
                 //如果文件夹不存在则创建
                 if (!file1.exists() && !file1.isDirectory()) {
                     file1.mkdir();

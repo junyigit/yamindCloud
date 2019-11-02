@@ -3,7 +3,17 @@
 
 <mapper namespace="com.yamind.cloud.modules.app.dao.AdvertMapper">
 
-
+	<!--用户绑定设备-->
+	<insert id="save" parameterType="com.yamind.cloud.modules.app.entity.AdvertEntity" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO app_advert (
+			advert_name,
+			advert_img_path
+		)
+		VALUES (
+  			#{advertName},
+			#{advertImgPath}
+			)
+	</insert>
 
     <select id="listForAdvertList" resultType="com.yamind.cloud.modules.app.entity.AdvertEntity">
 		SELECT

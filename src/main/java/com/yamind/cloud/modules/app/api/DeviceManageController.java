@@ -29,7 +29,7 @@ public class DeviceManageController extends AbstractController {
     public R listForDevice(@RequestParam String userId) {
         R r = new R();
         List<DeviceDataEntity> list = deviceManageService.listForDevice(userId);
-        if (list!=null &&list.size() >0){
+        if (list!=null && list.size() >0){
             r.put("code",200);
             r.put("date",list);
         }

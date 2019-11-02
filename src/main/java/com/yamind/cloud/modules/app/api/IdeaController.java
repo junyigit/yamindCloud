@@ -37,7 +37,7 @@ public class IdeaController extends AbstractController {
     @Autowired
     IdeaImageService ideaImageService;
 
-    @Value("${upload-path}")
+    @Value("${idea-upload-path}")
     private String uploadPath;
 
 
@@ -134,8 +134,9 @@ public class IdeaController extends AbstractController {
                 //String fileAdd = sdf.format(new Date());
 
 
+
                 //获取文件夹路径
-                File file1 = new File(uploadPath + File.separator + "idea");
+                File file1 = new File(uploadPath  );
                 //如果文件夹不存在则创建
                 if (!file1.exists() && !file1.isDirectory()) {
                     file1.mkdir();

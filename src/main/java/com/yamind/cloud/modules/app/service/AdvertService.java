@@ -8,5 +8,9 @@ import java.util.List;
 public interface AdvertService {
 
 
+
+    int addAdvert(AdvertEntity advertEntity);
+
+    //获取广告列表
     List<AdvertEntity> listForAdvertList();
 }
