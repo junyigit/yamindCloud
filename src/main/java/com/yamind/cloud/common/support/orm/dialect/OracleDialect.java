@@ -37,7 +37,6 @@ public class OracleDialect extends Dialect {
 
     @Override
     public String getCountString(String sql) {
-        // TODO
         return null;
     }
 }

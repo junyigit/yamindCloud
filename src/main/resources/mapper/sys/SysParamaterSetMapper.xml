@@ -33,8 +33,8 @@
 		sys_device_set s
 		WHERE
 			s.serialId = #{serialId} AND s.useDate =#{seleceTime}
-		ORDER BY
-			s.useDate DESC
+-- 		ORDER BY
+-- 			s.useDate DESC
 	</select>
 
 
@@ -74,8 +74,9 @@
 				AND s.serialId LIKE concat('%',#{serialId},'%')
 			</if>
 		</where>
-		ORDER BY
-			s.useDate DESC
+
+-- 		ORDER BY
+-- 			s.useDate DESC
 	</select>
 
 

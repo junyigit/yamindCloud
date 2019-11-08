@@ -43,7 +43,7 @@
             },
             save : function() {
                 dialogOpen({
-                    title : [[#{add}]],
+                    title : "<i className=\"fa fa-search\"></i>"+ [[#{add}]],
                     url : 'base/patient/add.html?_' + $.now(),
                     width : '720px',
                     height : '530px',
@@ -91,6 +91,7 @@
         }
     })
 
+
     $('#dataGrid').bootstrapTableEx({
         url : '../../sys/patient/list?_' + $.now(),
         height : $(window).height() - 56,
@@ -107,7 +108,7 @@
         },{
             field : "name",
             title : [[#{patient.name}]],
-            width : "50px"
+            width : "80px"
         }, {
             field : "age",
             title : [[#{patient.age}]],
@@ -136,7 +137,7 @@
         {
             field : "serialNum",
             title : [[#{patient.deviceNo}]],
-            width : "40px"
+            width : "30px"
         },
         {
             field : "medicalRecord",

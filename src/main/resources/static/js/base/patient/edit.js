@@ -24,7 +24,7 @@ var vm = new Vue({
                 url: '../../sys/patient/update?_' + $.now(),
                 param: vm.pat,
                 success: function(data) {
-                    $.currentIframe().vm.load();
+                   $.currentIframe().vm.load();
                 }
             });
         }

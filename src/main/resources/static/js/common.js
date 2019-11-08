@@ -14,6 +14,34 @@ if(token == 'null'){
     parent.location.href = 'login.html';
 }
 
+/**
+ * 多语言的AJAX请求
+ * @returns {*}
+ */
+function returnLanguage(){
+    console.log("进入returnLanguage");
+    $.ajax({
+        url: "/json/language.json",//json文件位置
+        type: "GET",//请求方式为get
+        dataType: "json", //返回数据格式为json
+        async:false,
+        success: function(data) {//请求成功完成后要执行的方法
+            if (getCookie('lang') == "zh-cn" || getCookie('lang') == "zh_cn") {
+                lauguageData = data.zh;
+                console.log("选择了中文==="+lauguageData);
+            } else if (getCookie('lang') == "en-us" || getCookie('lang') == "en_us") {
+                lauguageData = data.en;
+                console.log("选择了英文==="+lauguageData);
+
+            }
+        }
+    })
+    return lauguageData;
+}
+
+
+
+
 //全局配置
 $.ajaxSetup({
 	dataType: "json",
@@ -27,6 +55,35 @@ $.ajaxSetup({
         }
     }
 })
+
+/**
+ * 获取cookie值
+ * @param cookie_name
+ * @returns {string}
+ */
+function getCookie(cookie_name) {
+    console.log("进入getCookie");
+    var allcookies = document.cookie;
+    //索引长度，开始索引的位置
+    var cookie_pos = allcookies.indexOf(cookie_name);
+
+    // 如果找到了索引，就代表cookie存在,否则不存在
+    if (cookie_pos != -1) {
+        // 把cookie_pos放在值的开始，只要给值加1即可
+        //计算取cookie值得开始索引，加的1为“=”
+        cookie_pos = cookie_pos + cookie_name.length + 1;
+        //计算取cookie值得结束索引
+        var cookie_end = allcookies.indexOf(";", cookie_pos);
+
+        if (cookie_end == -1) {
+            cookie_end = allcookies.length;
+        }
+        //得到想要的cookie的值
+        var value = unescape(allcookies.substring(cookie_pos, cookie_end));
+    }
+    return value;
+}
+
 
 //权限判断
 function hasPermission(permission) {
@@ -328,12 +385,12 @@ dialogMsg = function(msg, type) {
 	top.layer.msg(msg, {
 		icon: msgType[type],
 		time: 2000
-	}); 
+	});
 }
 
 dialogClose = function() {
 	var index = top.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-	top.layer.close(index); //再执行关闭 
+	top.layer.close(index); //再执行关闭
 }
 
 dialogLoading = function(flag) {

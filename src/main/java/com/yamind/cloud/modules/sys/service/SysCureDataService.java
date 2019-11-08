@@ -2,6 +2,7 @@ package com.yamind.cloud.modules.sys.service;
 
 import com.yamind.cloud.common.entity.Page;
 import com.yamind.cloud.common.entity.R;
+import com.yamind.cloud.modules.sys.entity.SysCureDataBoeEntity;
 import com.yamind.cloud.modules.sys.entity.SysCureDataEntity;
 
 import java.util.List;
@@ -42,7 +43,15 @@ public interface SysCureDataService {
     //保存治疗数据
     R saveData(SysCureDataEntity user);
 
+    //同步数据到京东方
+    List<SysCureDataBoeEntity> listForBoeDataFlag(Map<String,Object> map);
 
 
+    //删除过期的数据
     R delectData();
+
+
+    //更新sys_device_status表中已同步的数据
+    R updateForFlag(List<Integer> aiList);
+
 }

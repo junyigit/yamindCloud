@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Controller公共组件
- *
  * @author ZhouChenglin
  * @email yczclcn@163.com
  * @url www.chenlintech.com
@@ -18,7 +17,9 @@ public abstract class AbstractController {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 	
 	protected SysUserEntity getUser() {
+
 		return ShiroUtils.getUserEntity();
+
 	}
 
 	protected Long getUserId() {

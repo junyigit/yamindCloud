@@ -1,0 +1,64 @@
+spring:
+    datasource:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driverClassName: com.mysql.jdbc.Driver
+        druid:
+            masterDataSource:  #主库数据源
+              url: jdbc:mysql://120.79.198.31:3306/daya?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+              username: root
+              password: DAYAdaya123456
+            slaveDataSource:  #从库数据源
+              url: jdbc:mysql://120.79.198.31:3306/dayaSlave?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+              username: root
+              password: DAYAdaya123456
+            initial-size: 10
+            max-active: 100
+            min-idle: 10
+            max-wait: 600001
+            pool-prepared-statements: true
+            max-pool-prepared-statement-per-connection-size: 20
+            time-between-eviction-runs-millis: 60000
+            min-evictable-idle-time-millis: 300000
+            validation-query: SELECT 1 FROM DUAL
+            test-while-idle: false
+            test-on-borrow: false
+            test-on-return: false
+            stat-view-servlet:
+                enabled: true
+                url-pattern: /druid/*
+                #login-username: admin
+                #login-password: admin
+            filter:
+                stat:
+                    log-slow-sql: true
+                    slow-sql-millis: 1000
+                    merge-sql: true
+                wall:
+                    config:
+                        multi-statement-allow: true
+
+# netty配置
+n:
+  url: 192.168.123.1
+  port: 2222
+#日志路径
+logging:
+  file: log/cloud.log
+
+
+#存放  -图片路径
+upload-path : D://upload-path//
+
+#存放反馈  -图片路径
+idea-upload-path : D://upload-path//idea
+
+#存放用户  -图片路径
+user-upload-path : D://upload-path//user
+
+#存放商品  -图片路径
+product-upload-path : D://upload-path//small
+
+#存放广告  -图片路径
+advert-upload-path : D://upload-path//advert
+
+

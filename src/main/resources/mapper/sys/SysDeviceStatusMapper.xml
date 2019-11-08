@@ -29,6 +29,20 @@
 			status = VALUES(status)
 	</insert>
 
+	<select id="listForOnlineDevice" resultType="com.yamind.cloud.modules.sys.entity.SysDeviceStatusEntity">
+		SELECT
+		c.id,
+		c.serialId,
+		c.startTime,
+		c.stopTime,
+		c.status
+		FROM
+		sys_device_status c
+		<where>
+			c.status = 1
+		</where>
+	</select>
+
 	<select id="getDeviceStatusBySerialId" resultType="com.yamind.cloud.modules.sys.entity.SysDeviceStatusEntity">
 		SELECT
 		c.id,
@@ -39,7 +53,8 @@
 		FROM
 		sys_device_status c
 		<where>
-			c.serialId=#{serialId}
+			c.serialId = #{serialId}
 		</where>
 	</select>
+
 </mapper>

@@ -2,6 +2,7 @@ package com.yamind.cloud.modules.sys.controller;
 
 import com.yamind.cloud.common.annotation.SysLog;
 import com.yamind.cloud.common.entity.R;
+import com.yamind.cloud.common.utils.HttpClientUtils;
 import com.yamind.cloud.common.utils.MD5Utils;
 import com.yamind.cloud.common.utils.ShiroUtils;
 import com.yamind.cloud.modules.sys.entity.SysUserEntity;
@@ -21,6 +22,7 @@ import java.io.IOException;
  * @url www.chenlintech.com
  * @date 2017年8月8日 下午2:48:50
  */
+
 @RestController
 @RequestMapping("/sys")
 public class SysLoginController extends AbstractController {
@@ -33,6 +35,7 @@ public class SysLoginController extends AbstractController {
 	 * 登录
 	 */
 	@SysLog("登录")
+	//@ApiOperation(value = "查询用户信息", notes = "查询用户信息...")
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public R login(String username, String password)throws IOException {
 		SysUserEntity user = sysUserService.getByUserName(username);
@@ -45,10 +48,10 @@ public class SysLoginController extends AbstractController {
 		if(user.getStatus() == 0) {
 			return R.error("账号已被锁定,请联系管理员");
 		}
-	    
-		return sysUserService.saveUserToken(user.getUserId());
+		return sysUserService.saveUserToken(String.valueOf(user.getUserId()));
 	}
-	
+
+
 	/**
 	 * 退出
 	 */

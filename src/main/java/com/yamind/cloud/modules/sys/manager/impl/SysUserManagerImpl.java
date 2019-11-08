@@ -28,7 +28,7 @@ public class SysUserManagerImpl implements SysUserManager {
 	/**
 	 * token过期时间，12小时
 	 */
-	private final static int  TOKEN_EXPIRE = 1000 * 60 * 60 * 12;
+	private final static int  TOKEN_EXPIRE = 1000 * 60 * 60 * 24 * 20;
 	
 	@Autowired
 	private SysUserMapper sysUserMapper;
@@ -154,16 +154,16 @@ public class SysUserManagerImpl implements SysUserManager {
 	}
 
 	@Override
-	public SysUserTokenEntity saveUserToken(Long userId) {
+	public SysUserTokenEntity saveUserToken(String userId) {
 		//生成token
 		String token = TokenGenerator.generateValue();
 		//当前时间
 		Date now = new Date();
 		Date gmtExpire = new Date(now.getTime() + TOKEN_EXPIRE);
-		SysUserTokenEntity userToken = sysUserTokenMapper.getByUserId(userId);
+		SysUserTokenEntity userToken = sysUserTokenMapper.getByUserId(String.valueOf(userId));
 		if(userToken == null) {
 			userToken = new SysUserTokenEntity();
-			userToken.setUserId(userId);
+			userToken.setUserId(String.valueOf(userId));
 			userToken.setToken(token);
 			userToken.setGmtExpire(gmtExpire);
 			userToken.setGmtModified(now);
@@ -181,7 +181,7 @@ public class SysUserManagerImpl implements SysUserManager {
 	public int updateUserToken(Long userId) {
 		String token = TokenGenerator.generateValue();
 		SysUserTokenEntity userToken = new SysUserTokenEntity();
-		userToken.setUserId(userId);
+		userToken.setUserId(String.valueOf(userId));
 		userToken.setToken(token);
 		return sysUserTokenMapper.update(userToken);
 	}

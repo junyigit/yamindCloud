@@ -5,6 +5,7 @@ import com.yamind.cloud.common.entity.Query;
 import com.yamind.cloud.common.entity.R;
 import com.yamind.cloud.common.utils.CommonUtils;
 import com.yamind.cloud.modules.sys.dao.SysCureDataMapper;
+import com.yamind.cloud.modules.sys.entity.SysCureDataBoeEntity;
 import com.yamind.cloud.modules.sys.entity.SysCureDataEntity;
 import com.yamind.cloud.modules.sys.manager.SysCureDataManager;
 import com.yamind.cloud.modules.sys.service.SysCureDataService;
@@ -72,9 +73,26 @@ public class SysCureDataServiceImpl implements SysCureDataService {
         return CommonUtils.msg(count);
     }
 
+    //同步数据到京东方
+    public List<SysCureDataBoeEntity> listForBoeDataFlag(Map<String,Object> map){
+        List<SysCureDataBoeEntity> boeList= sysCureDataMapper.listForBoeDataFlag(map);
+        return boeList;
+    }
+
+
+
+
 
     public R delectData(){
         sysCureDataMapper.delectOldTimeData();
         return R.ok("success");
     }
+
+    public R updateForFlag(List<Integer> idList){
+
+        int count = sysCureDataMapper.updateForFlag(idList);;
+        return CommonUtils.msg(count);
+    }
+
+
 }

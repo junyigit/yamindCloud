@@ -43,7 +43,7 @@ public interface SysUserManager {
 	
 	SysUserTokenEntity getByToken(String token);
 	
-	SysUserTokenEntity saveUserToken(Long userId);
+	SysUserTokenEntity saveUserToken(String userId);
 	
 	int updateUserToken(Long userId);
 	

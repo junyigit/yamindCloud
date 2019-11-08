@@ -14,7 +14,7 @@ public class RequestController {
 
     @RequestMapping("/{path}.html")
     public String href(@PathVariable String path){
-     //   System.out.println("进来...");
+     // System.out.println("进来...");
         return path;
     }
 }

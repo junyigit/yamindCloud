@@ -51,7 +51,18 @@ public class CommonUtils {
 		}
 		return R.error(MsgConstant.MSG_OPERATION_FAILED);
 	}
-	
+
+	/**
+	 * 自定义消息
+	 * @param count
+	 * @return
+	 */
+	public static R msgCustom(String successMsg,int count) {
+		if(isIntThanZero(count)){
+			return R.ok(successMsg);
+		}
+		return R.error(MsgConstant.MSG_OPERATION_FAILED);
+	}
 	/**
 	 * 查询详情提示
 	 * @param data

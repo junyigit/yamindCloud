@@ -67,11 +67,21 @@
         "zdz": "最大值",
         "hxztdtqzs": "呼吸暂停低通气指数",
         "ksyl":"开始压力",
-        "ycsj":"延迟时间"
+        "ycsj":"延迟时间",
 
+        "add":"添加",
+        "edit":"编辑",
 
-
-
+        "userId": "用户ID",
+        "mobile": "手机号",
+        "photo": "头像",
+        "nikeName": "昵称",
+        "sex": "性别",
+        "height":"身高",
+        "birthday":"出生日期",
+        "gmtCreate":"创建时间",
+        "remark":"备注",
+        "status":"状态"
     },
     "en": {
 
@@ -143,7 +153,22 @@
         "zdz": "Max",
         "hxztdtqzs": "SAHS",
         "ksyl":"Start Pressure",
-        "ycsj":"Delay Time"
+        "ycsj":"Delay Time",
+
+        "add":"add",
+        "edit":"edit",
+
+        "userId": "userId",
+        "mobile": "mobile",
+        "photo": "photo",
+        "nikeName": "nikeName",
+        "sex": "sex",
+        "height":"height",
+        "birthday":"birthday",
+        "gmtCreate":"gmtCreate",
+        "remark":"remark",
+        "status":"status"
+
 
     }
 }

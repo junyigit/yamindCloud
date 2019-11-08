@@ -1,0 +1,69 @@
+# Tomcat
+server:
+    tomcat:
+        uri-encoding: UTF-8
+        max-threads: 1000
+        min-spare-threads: 30
+    port: 9999
+    #打开注释，则通过【http://localhost/dp-lte】访问
+    context-path: /
+spring:
+    messages:
+      basename: messages
+
+  # 环境 dev:开发环境|test:测试环境|prod:生成环境
+    profiles:
+        active: test
+    # jackson时间格式化
+    jackson:
+        time-zone: GMT+8
+        date-format: yyyy-MM-dd HH:mm:ss
+    servlet: #(sp2x版本http换成servlet，2018年8月23日)
+      multipart:
+            max-file-size: 100MB
+            max-request-size: 100MB
+            enabled: true
+    # thymeleaf 模板引擎
+    thymeleaf:
+        cache: false
+        prefix: classpath:/templates/
+        suffix: .html
+        mode: LEGACYHTML5
+        encoding: UTF-8
+#        servlet: #(sp2x版本增加servlet节点，2018年8月23日)
+#         content-type: text/html
+    resources: # 指定静态资源的路径
+        static-locations:  classpath:/static/,classpath:/templates/
+    redis:
+      #数据库索引
+      host: localhost
+      port: 6379
+      password:
+      jedis:
+        pool:
+          #最大连接数
+          max-active: 8
+          #最大阻塞等待时间(负数表示没限制)
+          max-wait: -1ms
+          #最大空闲xX
+          max-idle: 8
+          #最小空闲
+          min-idle: 0
+      #连接超时时间
+      timeout: 3000000ms
+    http:
+        servlet:
+            max-file-size: 100MB
+            max-request-size: 100MB
+            enabled: true
+# Mybatis配置
+mybatis:
+    mapperLocations: classpath:mapper/**/*.xml
+    configLocation: classpath:mybatis.xml
+
+# mob
+appkey: 2c9bff6aecbf4
+appSecret: e8bc2d0095271e4db48e9d47f408ad6f
+mobVerifyReqUrl: https://webapi.sms.mob.com/sms/verify
+
+

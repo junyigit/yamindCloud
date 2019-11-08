@@ -58,7 +58,14 @@ public class ShiroConfig {
         shiroFilter.setFilters(filters);
 
         Map<String, String> filterMap = new LinkedHashMap<>();
-        filterMap.put("/webjars/**", "anon");
+
+        // swagger ui
+        filterMap.put("/webjars/springfox-swagger-ui/**", "anon");
+        filterMap.put("/v2/api-docs", "anon");
+        filterMap.put("/swagger-resources/**", "anon");
+        filterMap.put("/swagger-ui.html", "anon");
+
+
         filterMap.put("/druid/**", "anon");
         filterMap.put("/api/**", "anon");
         filterMap.put("/sys/login", "anon");
@@ -69,13 +76,20 @@ public class ShiroConfig {
         filterMap.put("/images/**", "anon");
         filterMap.put("/fonts/**", "anon");
         filterMap.put("/plugins/**", "anon");
-        filterMap.put("/swagger/**", "anon");
         filterMap.put("/favicon.ico", "anon");
         filterMap.put("/", "anon");
         filterMap.put("/changeLanguage", "anon");
+        filterMap.put("/upload/imgs/**","anon");
+
+
+
+        filterMap.put("/app/login/**","anon");
+        //访问idea img不需要token
+        filterMap.put("/appResource/**","anon");
+
+
         filterMap.put("/**", "oauth2");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
-
         return shiroFilter;
     }
 

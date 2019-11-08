@@ -24,9 +24,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<Object> {
 
     private static Logger logger = LoggerFactory.getLogger(ServerHandler.class);
 
-    //private RedisTemplate redisTemplate;
 
-    //private SysDeviceService sysDeviceService = SpringContextUtils.getBean(SysDeviceServiceImpl.class);
 
     private QueueThreadExecutor queueThreadExecutor = SpringContextUtils.getBean(QueueThreadExecutor.class);
 
@@ -70,7 +68,8 @@ public class ServerHandler extends SimpleChannelInboundHandler<Object> {
         System.out.println(msgStr);
        //out.println("queueThreadExecutor: "+ queueThreadExecutor);
         //将消息加入到队列
-        queueThreadExecutor.addMsg(msgStr);
+        queueThreadExecutor.executeSaveMsg(msgStr);
+
         //返回接受数据给发送方
        // ctx.channel().writeAndFlush(PLUS_BUF);
     }

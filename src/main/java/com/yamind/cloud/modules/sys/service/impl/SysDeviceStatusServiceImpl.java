@@ -8,6 +8,8 @@ import com.yamind.cloud.modules.sys.service.SysDeviceStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service("sysDeviceStatusService")
 public class SysDeviceStatusServiceImpl implements SysDeviceStatusService {
@@ -17,12 +19,18 @@ public class SysDeviceStatusServiceImpl implements SysDeviceStatusService {
     SysDeviceStatusMapper sysDeviceStatusMapper;
 
     public R saveData(SysDeviceStatusEntity des){
-        int count = sysDeviceStatusMapper.save(des);
-        return CommonUtils.msg(count);
+        int result = sysDeviceStatusMapper.save(des);
+        return CommonUtils.msg(result);
     }
 
+    //根据设备序列号查询当前设备在线状态
     public SysDeviceStatusEntity getDeviceStatusBySerialId(String serialId){
-
         return sysDeviceStatusMapper.getDeviceStatusBySerialId(serialId);
+    }
+
+
+    //获取所有设备当前状态
+    public List<SysDeviceStatusEntity> listForOnlineDevice(){
+        return sysDeviceStatusMapper.listForOnlineDevice();
     }
 }

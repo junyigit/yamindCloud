@@ -1,6 +1,7 @@
 package com.yamind.cloud.modules.sys.dao;
 
 
+import com.yamind.cloud.modules.sys.entity.SysCureDataBoeEntity;
 import com.yamind.cloud.modules.sys.entity.SysCureDataEntity;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -41,6 +42,10 @@ public interface SysCureDataMapper extends BaseMapper<SysCureDataEntity>{
     // 根据时间获取 曲线图里面的数据
     List<SysCureDataEntity> findMapListWithDate(Map<String,Object> param);
 
+    //同步数据到京东方服务器
+    List<SysCureDataBoeEntity> listForBoeDataFlag(Map<String,Object> map);
+
+    int updateForFlag(List<Integer> idList);
 
     void delectOldTimeData();
 }

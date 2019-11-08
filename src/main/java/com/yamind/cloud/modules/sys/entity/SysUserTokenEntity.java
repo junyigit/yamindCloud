@@ -18,7 +18,7 @@ public class SysUserTokenEntity implements Serializable {
 	/**
 	 * 用户id
 	 */
-	private Long userId;
+	private String userId;
 	
 	/**
 	 * token
@@ -39,11 +39,11 @@ public class SysUserTokenEntity implements Serializable {
 		super();
 	}
 
-	public Long getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Long userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 

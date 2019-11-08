@@ -160,6 +160,6 @@ public class SysUserController extends AbstractController {
 	@ResponseBody
 	public R setLanguageFlag(@RequestParam(name = "language") Integer flag){
 		System.out.print(flag);
-		return R.ok("aaaa");
+		return R.ok("exchang language success!");
 	}
 }
