@@ -151,8 +151,9 @@ $(function () {
             showDelay:100,
             formatter: function (params) {
                 params = params[0];
+                console.log("params:",params);
                 var date = params.name;
-                return '<div><p>当前时间第：'+params.name+'秒</p></div>'+'<p>当前流量值值 : '+ params.value[1]+'</p>';
+                return '<div><p>当前时间第：'+params.name+'秒</p></div>'+'<p>当前流量值值 : '+ params.value+'</p>';
             },
             axisPointer: {
                 animation: false
@@ -240,31 +241,12 @@ $(function () {
                     }
 
 
-
-                    //时间转换  用于判断设备是否在线
-                    var localTime=Date.parse(new Date())/1000;
-
-
-                    console.log("lastTime :"+lastTime);
-
-                    console.log("dataArr[2] :"+dataArr[2]);
-
-
                     if (lastTime !=dataArr[2] && lastTime !=0){
-
-                        console.log("正在发送");
 
                         //压力数组
                         data.push(dataArr[9],dataArr[10],dataArr[11],dataArr[12],dataArr[13]);
                         //流量数组
                         data1.push(dataArr[3],dataArr[4],dataArr[5],dataArr[6],dataArr[7]);
-
-
-                        console.log("压力值:"+data);
-
-                        console.log("流量为:"+dataArr[3],dataArr[4],dataArr[5],dataArr[6],dataArr[7]);
-
-
                         myChart1.setOption({
                             series: [{
                                 data: data1
@@ -499,6 +481,7 @@ $(function () {
     echarts.connect('group1');
 
     window.onresize = function(){
+        console.log("onresize");
         myChart.resize();
         myChart1.resize();
     };

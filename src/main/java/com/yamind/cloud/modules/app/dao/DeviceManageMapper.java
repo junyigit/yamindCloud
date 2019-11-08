@@ -15,4 +15,5 @@ public interface DeviceManageMapper extends BaseMapper<DeviceDataEntity> {
     int deleteUserDeviceInfo(@Param("userId") String userId, @Param("serial") String serial);
 
     List<DeviceDataEntity> listForDevice(@Param("userId") String userId);
+
 }

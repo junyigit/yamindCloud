@@ -284,7 +284,7 @@ $(function () {
                 option2 = {
                     title: {
                         left: 'center',
-                        text: '气流量(L/min)',
+                        text: lauguageData.qll+'(L/min)',
                     },tooltip: {
                         trigger: 'axis',
                         showDelay:100,

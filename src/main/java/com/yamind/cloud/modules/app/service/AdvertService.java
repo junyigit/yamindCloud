@@ -9,6 +9,7 @@ public interface AdvertService {
 
 
 
+    //添加广告
     int addAdvert(AdvertEntity advertEntity);
 
     //获取广告列表

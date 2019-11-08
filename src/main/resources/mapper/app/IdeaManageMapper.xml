@@ -7,7 +7,7 @@
 
 	<!--保存治疗数据sql-->
 	<insert id="save" parameterType="com.yamind.cloud.modules.app.entity.IdeaDataEntity" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO user_question (
+		INSERT INTO app_question (
 			user_id,
 			user_name,
 			user_phone,
@@ -20,7 +20,7 @@
 			#{userName},
 			#{phone},
 			#{type},
-			#{time},
+			#{createTime},
 			#{content}
 			)
 	</insert>
@@ -35,7 +35,7 @@
 		c.create_time,
 		c.content
 		FROM
-		user_question c
+		app_question c
 		<where>
 			c.user_id=#{userId}
 		</where>

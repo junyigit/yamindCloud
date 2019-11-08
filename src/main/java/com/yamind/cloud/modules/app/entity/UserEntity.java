@@ -1,5 +1,6 @@
 package com.yamind.cloud.modules.app.entity;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -14,8 +15,6 @@ public class UserEntity implements Serializable {
     String nikeName;
 
     Long sex;
-
-
 
     BigDecimal weight;
 

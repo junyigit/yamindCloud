@@ -19,22 +19,24 @@ public class DeviceManageServiceImpl implements DeviceManageService {
     private DeviceManageMapper deviceManageMapper;
 
 
-    public R bindUserDeviceInfo(DeviceDataEntity deviceDataEntity){
+    public int bindUserDeviceInfo(DeviceDataEntity deviceDataEntity){
 
-        int result  =deviceManageMapper.bindUserDeviceInfo(deviceDataEntity);
-
-        return CommonUtils.msgCustom("bind seril:"+deviceDataEntity.getDeviceSerial() +" device success!",result);
+        return deviceManageMapper.bindUserDeviceInfo(deviceDataEntity);
     }
 
 
-    public R deleteUserDeviceInfo(String userId,String serial) {
+    public int deleteUserDeviceInfo(String userId,String serial) {
 
         int result = deviceManageMapper.deleteUserDeviceInfo(userId, serial);
-        return CommonUtils.msgCustom("delect seril:"+serial + " device success!",result);
+        return result;
 
     }
 
     public List<DeviceDataEntity> listForDevice(@RequestParam String userId){
         return deviceManageMapper.listForDevice(userId);
+    }
+
+    public int updateSoftVersion(DeviceDataEntity deviceDataEntity){
+        return deviceManageMapper.update(deviceDataEntity);
     }
 }

@@ -7,7 +7,7 @@
 
 	<!--保存治疗数据sql-->
 	<insert id="save" parameterType="com.yamind.cloud.modules.app.entity.IdeaImageEntity" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO user_question_img (
+		INSERT INTO app_question_img (
 			question_id,
 			img_name,
 			img_type,
@@ -29,7 +29,7 @@
 		img_type,
 		img_path
 		FROM
-		user_question_img c
+		app_question_img c
 		<where>
 			c.question_id=#{ideaId}
 		</where>

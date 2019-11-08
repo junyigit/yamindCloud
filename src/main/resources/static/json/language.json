@@ -23,6 +23,7 @@
         "hxpl": "呼吸频率",
         "xhb": "吸呼比",
         "cql": "潮气量",
+        "qll": "气流量",
         "fztql": "分钟通气量",
         "mbcql": "目标潮气量",
         "lql": "漏气量",
@@ -71,7 +72,6 @@
 
         "add":"添加",
         "edit":"编辑",
-
         "userId": "用户ID",
         "mobile": "手机号",
         "photo": "头像",
@@ -108,6 +108,7 @@
         "hxpl": "Respiratory Rate",
         "xhb": "I:E Ratio",
         "cql": "Tidal Volume",
+        "qll": "Air Flux",
         "fztql": "Minute Volume",
         "mbcql": "Target Tidal Volume",
         "lql": "Air Leakage",
@@ -168,7 +169,5 @@
         "gmtCreate":"gmtCreate",
         "remark":"remark",
         "status":"status"
-
-
     }
 }

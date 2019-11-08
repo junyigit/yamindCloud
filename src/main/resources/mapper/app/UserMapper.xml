@@ -10,6 +10,7 @@
 			photo,
 			nike_name,
 			sex,
+			weight,
 			height,
 			birthday,
 			create_time
@@ -19,6 +20,7 @@
 			#{photo},
 			#{nikeName},
 			#{sex},
+			#{weight},
 			#{height},
 			#{birthday},
 			#{createTime}
@@ -31,6 +33,7 @@
 			<if test="photo != null">photo = #{photo}, </if>
 			<if test="nikeName != null">nike_name = #{nikeName}, </if>
 			<if test="sex != null">sex = #{sex}, </if>
+			<if test="weight != null">weight = #{weight}, </if>
 			<if test="height != null">height = #{height}, </if>
 			<if test="birthday != null">birthday = #{birthday}, </if>
 			<if test="createTime != null">create_time = #{createTime} </if>
@@ -46,6 +49,7 @@
 			photo,
 			nike_name,
 			sex,
+			weight,
 			height,
 			birthday,
 			create_time,
@@ -67,6 +71,7 @@
 		u.photo,
 		u.nike_name,
 		u.sex,
+		u.weight,
 		u.height,
 		u.birthday,
 		u.create_time,

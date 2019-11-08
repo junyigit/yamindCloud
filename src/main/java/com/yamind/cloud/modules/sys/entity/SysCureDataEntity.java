@@ -107,6 +107,9 @@ public class SysCureDataEntity implements Serializable {
     //吸气压力
     private Float inhaleStress;
 
+    //呼气压力
+    private Float exhaleStress;
+
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -304,8 +307,7 @@ public class SysCureDataEntity implements Serializable {
         this.exhaleStress = exhaleStress;
     }
 
-    //呼气压力
-    private Float exhaleStress;
+
 
 
 

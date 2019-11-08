@@ -63,6 +63,7 @@ public class SysDeviceServiceImpl implements SysDeviceService {
     public int saveRecvHistoryData(String data) {
 
         String[] recvArr = data.split(",");
+
         switch (recvArr[0]){
             case "P":
                 if (recvArr.length == 24) {
@@ -142,6 +143,8 @@ public class SysDeviceServiceImpl implements SysDeviceService {
 
 
                     sysParamaterSetService.savePara(sysParamaterSetEntity);
+
+//                    System.out.println("设置信息为"+"P"+data);
                     //存入redis
                     redisTemplate.opsForValue().set("P"+recvArr[1],data);
 

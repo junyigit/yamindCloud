@@ -36,8 +36,10 @@ public class QueueThreadExecutor {
      * @param msg
      */
     public void executeSaveMsg(final String msg) {
+
+
         workerThreadPool.execute(() -> {
-            sysDeviceService.saveRecvHistoryData(msg);
+         sysDeviceService.saveRecvHistoryData(msg);
         });
     }
 
@@ -48,3 +50,4 @@ public class QueueThreadExecutor {
         workerThreadPool.shutdown(); // 关闭线程池
     }
 }
+

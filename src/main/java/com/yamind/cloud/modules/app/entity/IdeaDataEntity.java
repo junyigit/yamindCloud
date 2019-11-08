@@ -17,18 +17,12 @@ public class IdeaDataEntity implements Serializable {
 
     private Integer type;
 
-    private Integer time;
+
+
+    private String createTime;
 
     private String content;
 
-//    private List<String> imgList;
-//    public List<String> getImgList() {
-//        return imgList;
-//    }
-//
-//    public void setImgList(List<String> imgList) {
-//        this.imgList = imgList;
-//    }
 
 
 
@@ -80,13 +74,12 @@ public class IdeaDataEntity implements Serializable {
         this.content = content;
     }
 
-    public Integer getTime() {
-        return time;
+    public String getCreateTime() {
+        return createTime;
     }
 
-    public void setTime(Integer time) {
-        this.time = time;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
-
 
 }

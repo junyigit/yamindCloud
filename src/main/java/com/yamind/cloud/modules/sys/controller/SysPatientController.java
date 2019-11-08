@@ -205,6 +205,7 @@ public class SysPatientController extends AbstractController {
     @RequestMapping(value = "/getHistoryStatInfo", method = RequestMethod.POST)
     public R getHistoryStatInfo(@RequestParam("serialId") String serialId, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) {
         R r = new R();
+
         Map<String, Object> map = new HashMap<>();
         List<String> colData = new ArrayList<>();
         //获取前台传递的参数
@@ -244,8 +245,6 @@ public class SysPatientController extends AbstractController {
             median = (size / 2) + 1;
         }
 
-        long startTime = System.currentTimeMillis();    //获取开始时间
-
 
         List<SysCureDataEntity> colsData = new ArrayList<>();
         map.put("colName", "inhale_stress,cure_stress,exhale_stress,tidal_volume,minu_throughput,respiratory_rate");
@@ -259,34 +258,6 @@ public class SysPatientController extends AbstractController {
         r.put("minuThroughput", colsData.get(median).getMinusTroughput());
         r.put("respiratoryRate", colsData.get(median).getRespiratoryRate());
 
-
-        //按字段排序查询[统计信息]数据
-        /*
-        map.put("colName","cure_stress");
-        colData=sysCureDataService.listForColData(map);  //压力的中位值
-        r.put("cureStress",Double.parseDouble(colData.get(median)));
-        System.out.println(colsData.get(median).getCureStress1());
-
-        map.put("colName","inhale_stress");
-        colData=sysCureDataService.listForColData(map);  //吸气压力中位值
-        r.put("inhaleStress",Double.parseDouble(colData.get(median)));
-
-        map.put("colName","exhale_stress");
-        colData=sysCureDataService.listForColData(map);  //呼气压力中位值
-        r.put("exhaleStress",Double.parseDouble(colData.get(median)));
-
-        map.put("colName","tidal_volume");
-        colData=sysCureDataService.listForColData(map);  //潮气量中位值
-        r.put("tidalVolume",Double.parseDouble(colData.get(median)));
-
-        map.put("colName","minu_throughput");
-        colData=sysCureDataService.listForColData(map);  //分钟通气量中位值
-        r.put("minuThroughput",Double.parseDouble(colData.get(median)));
-
-        map.put("colName","respiratory_rate");
-        colData=sysCureDataService.listForColData(map);  //呼吸频率中位值
-        r.put("respiratoryRate",Double.parseDouble(colData.get(median)));
-        */
 
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -356,19 +327,13 @@ public class SysPatientController extends AbstractController {
                 if (sData.size() != 0) {
                     sigleNice6 += Double.parseDouble(sData.get((int) Math.ceil(sData.size() * (0.95)) - 1));
                 }
-
                 sDte = addDays(sDte, 1);//时间再加一天
-
             }
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-
-        long endTime = System.currentTimeMillis();    //获取结束时间
-
-        System.out.println("程序运行时间：" + (endTime - startTime) + "ms");    //输出程序运行时间
 
 
         //存储压力95的list cure_stress
@@ -519,6 +484,14 @@ public class SysPatientController extends AbstractController {
                     detailJson.put("startTime", StringUtils.substringBefore(sys.getCureTime(),"."));
                     detailJson.put("pressure", sys.getCureStress());
                     detailJson.put("flow", "");
+
+                    detailJson.put("tidalVolume", sys.getTidalVolume());
+                    detailJson.put("respiratoryRate", sys.getRespiratoryRate());
+
+                    detailJson.put("inhaleStress", sys.getInhaleStress());
+                    detailJson.put("exhaleStress", sys.getExhaleStress());
+                    detailJson.put("minuThroughput", sys.getMinuThroughput());
+
                     detailJson.put("ai", sys.getAiCount());
                     detailJson.put("hi", sys.getHiCount());
                     detailJson.put("fi", "");
@@ -535,6 +508,7 @@ public class SysPatientController extends AbstractController {
 
                 String result = HttpClientUtils.httpPost("http://copdtest.appsbu.com:8000/api/device/daya-resperitor-receiver", boeCpod.toString());
                 //logger.info("[POST内容为:"+boeCpod.toString()+"]");
+                //System.out.println(boeCpod.toString());
                 JSONObject json_test = JSONObject.parseObject(result);
                 String resultPost = json_test.getString("status");
                 System.out.println("[POST-序列号为："+sysDeviceStatusEntity.getSerialId()+"的状态:"+json_test+"]");

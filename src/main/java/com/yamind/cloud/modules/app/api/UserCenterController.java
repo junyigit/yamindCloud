@@ -3,6 +3,7 @@ package com.yamind.cloud.modules.app.api;
 
 import com.yamind.cloud.common.entity.R;
 import com.yamind.cloud.common.utils.CommonUtils;
+import com.yamind.cloud.modules.app.entity.SleepDataEntity;
 import com.yamind.cloud.modules.app.entity.UserEntity;
 import com.yamind.cloud.modules.app.service.UserManageService;
 import com.yamind.cloud.modules.sys.controller.AbstractController;
@@ -10,6 +11,7 @@ import jdk.nashorn.internal.codegen.CompileUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.yamind.cloud.common.entity.Page;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +30,7 @@ public class UserCenterController extends AbstractController {
 
     @Autowired
     UserManageService userManageService;
+
 
 
     @Value("${upload-path}")
@@ -72,7 +75,7 @@ public class UserCenterController extends AbstractController {
                 try {
                     //将上传的文件写到服务器上指定的文件。
                     file.transferTo(targetFile);
-                    userEntity.setPhoto(returnUrl+"appResource/imgs" + "/"+"user" +"/"+ fileName);
+                    userEntity.setPhoto(returnUrl+"appResource/img" + "/"+"user" +"/"+ fileName);
                     logger.info(userEntity.getPhoto());
 
                 } catch (Exception e) {
@@ -85,17 +88,20 @@ public class UserCenterController extends AbstractController {
         int count  = userManageService.updateUserInfo(userEntity);
         if (count > 0) {
             result.put("code",200);
+            result.put("data",userEntity);
             result.put("msg","update success!");
-        }else{
-            result.put("code",500);
-            result.put("msg","update faild!");
+            return result;
         }
-
-        return result;
+        return R.error("update faild!");
 
     }
+
+
+
+
+
     /**
-     * 获取APP列表
+     * 后台展示- 获取APP列表
      * @return
      */
     @RequestMapping("/list")

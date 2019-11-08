@@ -23,6 +23,21 @@ public class DeviceDataEntity  implements Serializable {
     private String mac;
 
 
+    //版本号
+    private String version;
+
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+
+
+
     public Long getId() {
         return id;
     }

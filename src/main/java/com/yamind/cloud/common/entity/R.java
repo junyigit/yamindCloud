@@ -1,6 +1,7 @@
 package com.yamind.cloud.common.entity;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,7 +15,9 @@ import java.util.Map;
 public class R extends HashMap<String, Object> {
 	
 	private static final long serialVersionUID = 1L;
-	
+
+	public static final int CUSTOM_OK_CODE = 200;
+
 	public R() {
 		put("code", 0);
 	}
@@ -31,6 +34,29 @@ public class R extends HashMap<String, Object> {
 		R r = new R();
 		r.put("code", code);
 		r.put("msg", msg);
+		return r;
+	}
+
+	/**
+	 *
+	 * @param data
+	 * @return
+	 */
+	public static R customOk(Object data) {
+		return customOk(CUSTOM_OK_CODE,data); // code: default 200
+	}
+
+	public static R customOk(String msg) {
+		R r = new R();
+		r.put("code", CUSTOM_OK_CODE);
+		r.put("msg", msg);
+		return r;
+	}
+
+	public static R customOk(int code, Object data) {
+		R r = new R();
+		r.put("code", code);
+		r.put("data", data);
 		return r;
 	}
 

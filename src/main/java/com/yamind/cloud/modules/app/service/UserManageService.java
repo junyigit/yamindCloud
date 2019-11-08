@@ -1,6 +1,7 @@
 package com.yamind.cloud.modules.app.service;
 
 
+import com.yamind.cloud.modules.app.entity.SleepDataEntity;
 import com.yamind.cloud.modules.app.entity.UserEntity;
 import com.yamind.cloud.common.entity.Page;
 
@@ -20,4 +21,7 @@ public interface UserManageService{
 
     //获取用户列表
     Page<UserEntity>  listForUserInfo(Map<String, Object> params);
+
+
+
 }

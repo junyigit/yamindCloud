@@ -53,6 +53,57 @@ public class SysCureDataBoeEntity implements Serializable {
 
 
 
+
+    /**
+     * 潮气量
+     */
+    private int tidalVolume;
+
+
+    /**
+     * 呼吸频率
+     */
+    private float respiratoryRate;
+
+    //吸气压力
+    private Float inhaleStress;
+
+    //呼气压力
+    private Float exhaleStress;
+
+    //分钟通气量
+    private Float minuThroughput;
+
+
+    public Float getMinuThroughput() {
+        return minuThroughput;
+    }
+
+    public void setMinuThroughput(Float minuThroughput) {
+        this.minuThroughput = minuThroughput;
+    }
+
+
+
+    public Float getInhaleStress() {
+        return inhaleStress;
+    }
+
+    public void setInhaleStress(Float inhaleStress) {
+        this.inhaleStress = inhaleStress;
+    }
+
+    public Float getExhaleStress() {
+        return exhaleStress;
+    }
+
+    public void setExhaleStress(Float exhaleStress) {
+        this.exhaleStress = exhaleStress;
+    }
+
+
+
+
     public Integer getId() {
         return id;
     }
@@ -106,4 +157,21 @@ public class SysCureDataBoeEntity implements Serializable {
     public void setLeakage(float leakage) {
         this.leakage = leakage;
     }
+
+    public int getTidalVolume() {
+        return tidalVolume;
+    }
+
+    public void setTidalVolume(int tidalVolume) {
+        this.tidalVolume = tidalVolume;
+    }
+
+    public float getRespiratoryRate() {
+        return respiratoryRate;
+    }
+
+    public void setRespiratoryRate(float respiratoryRate) {
+        this.respiratoryRate = respiratoryRate;
+    }
+
 }

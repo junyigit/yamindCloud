@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -57,9 +58,9 @@ public class IdeaController extends AbstractController {
         //获取当前用户所有提交的问题
         List<IdeaDataEntity> ideaList = ideaManageService.listFroUserIdea(userId);
         if(null == ideaList || ideaList.size() ==0 ){
-            r.put("code",200);
-            r.put("msg","当前用户没有提交过问题反馈");
-            return r;
+            /*r.put("code",200);
+            r.put("msg","当前用户没有提交过问题反馈");*/
+            return R.customOk("当前用户没有提交过问题反馈");
         }
         //将每一个工单里面包含的图片获取
         for (IdeaDataEntity ideaDataEntity :ideaList){
@@ -71,7 +72,7 @@ public class IdeaController extends AbstractController {
             ideaContent.put("userName",ideaDataEntity.getUserName());
             ideaContent.put("phone",ideaDataEntity.getPhone());
             ideaContent.put("type",ideaDataEntity.getType());
-            ideaContent.put("time",ideaDataEntity.getTime());
+            ideaContent.put("time",ideaDataEntity.getCreateTime());
             ideaContent.put("content",ideaDataEntity.getContent());
 
             //获取当前工单的ID  ideaDataEntity.getId()
@@ -81,7 +82,7 @@ public class IdeaController extends AbstractController {
                     JSONObject img = new JSONObject();
                     img.put("imgId", ideaImageEntity.getId());
                     img.put("ideaId", ideaImageEntity.getQuestionId());
-                    img.put("imgPath", returnUrl+"/appResource/imgs/"+ideaImageEntity.getImgPath() + "/" + ideaImageEntity.getImgName());
+                    img.put("imgPath", returnUrl+"/appResource/imgs/idea"+"/"+ideaImageEntity.getImgPath() + "/" + ideaImageEntity.getImgName());
                     imgArr.add(img);
                 }
                 //将图片添加至JSON对象中
@@ -111,16 +112,19 @@ public class IdeaController extends AbstractController {
         R result = new R();
         Map<String, Object> map = new HashMap<String, Object>();
         File targetFile = null;
-
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         if(ideaDataEntity !=null) {
+            //转换时间
+            String uploadTime = formatter.format(currentTime);
+            ideaDataEntity.setCreateTime(uploadTime);
             result = ideaManageService.saveIdea(ideaDataEntity);
         }
 
         for (MultipartFile file : fileList) {
-
-            String fileName = file.getOriginalFilename();//获取文件名加后缀
-            System.out.println("文件名为:"+fileName);
+            //获取文件名加后缀
+            String fileName = file.getOriginalFilename();
 
             if (fileName != null && fileName != "") {
 
@@ -130,13 +134,13 @@ public class IdeaController extends AbstractController {
                 fileName = new Date().getTime() + "_" + new Random().nextInt(1000) + fileType;//新的文件名
 
                 //创建一个当前日期的文件夹
-                //SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-                //String fileAdd = sdf.format(new Date());
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                String fileAdd = sdf.format(new Date());
 
 
 
                 //获取文件夹路径
-                File file1 = new File(uploadPath  );
+                File file1 = new File(uploadPath +File.separator +fileAdd );
                 //如果文件夹不存在则创建
                 if (!file1.exists() && !file1.isDirectory()) {
                     file1.mkdir();
@@ -149,11 +153,11 @@ public class IdeaController extends AbstractController {
                     ideaImageEntity.setQuestionId(ideaDataEntity.getId().intValue());
                     ideaImageEntity.setImgName(fileName);
                     ideaImageEntity.setImgType(fileType);
-                    ideaImageEntity.setImgPath("idea");
+                    ideaImageEntity.setImgPath(fileAdd);
                     ideaImageService.saveIdeaImage(ideaImageEntity);
 
                     result.put("code", 200);
-                    result.put("msg", "commit idea success");
+                    result.put("msg", "img idea success");
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -165,5 +169,21 @@ public class IdeaController extends AbstractController {
         return result;
     }
 
+    /***
+     * 时间戳转换
+     * @param seconds
+     * @param format
+     * @return
+     */
+    public static String timeStamp2Date(String seconds,String format) {
+        if(seconds == null || seconds.isEmpty() || seconds.equals("null")){
+            return "";
+        }
+        if(format == null || format.isEmpty()){
+            format = "yyyy-MM-dd HH:mm:ss";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(new Date(Long.valueOf(seconds+"000")));
+    }
 
 }

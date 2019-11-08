@@ -11,6 +11,17 @@
 </div>
 
 
+<!--<div class="col-md-8">-->
+    <!--<div class="btn-toolbar pull-right">-->
+        <!--<div class="btn-group">-->
+            <!--<a v-if="hasPermission('sys:device:list')" class="btn btn-default" onclick="reload();"><i class="fa fa-refresh"></i>&nbsp;[[#{refresh}]]</a>-->
+            <!--&lt;!&ndash;<a v-if="hasPermission('sys:patient:save')" class="btn btn-default" @click="save"><i class="fa fa-plus"></i>&nbsp;[[#{add}]]</a>&ndash;&gt;-->
+            <!--&lt;!&ndash;<a v-if="hasPermission('sys:patient:edit')" class="btn btn-default" @click="edit"><i class="fa fa-pencil-square-o"></i>&nbsp;[[#{edit}]]</a>&ndash;&gt;-->
+            <!--&lt;!&ndash;<a v-if="hasPermission('sys:patient:remove')" class="btn btn-default" @click="remove"><i class="fa fa-trash-o"></i>&nbsp;[[#{delete}]]</a>&ndash;&gt;-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+
 <ul id="myTab" class="nav nav-tabs">
     <li class="active">
         <a href="#szxx" data-toggle="tab">
@@ -20,6 +31,9 @@
     <li><a href="#tjxx" data-toggle="tab">[[#{statisInfo}]]</a></li>
     <li>
         <a href="#qxt" @click="mapImg" data-toggle="tab">[[#{graph}]]</a>
+    </li>
+    <li>
+        <a style="margin-right: 0" class="btn btn-default" onclick="reload();">&nbsp;刷新</a>
     </li>
     <li style="right: 0">
         <a style="margin-right: 0" class="btn btn-default" onclick="javascript:history.go(-1)">&nbsp;[[#{return}]]</a>

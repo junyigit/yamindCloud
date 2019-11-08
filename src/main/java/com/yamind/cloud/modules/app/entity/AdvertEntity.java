@@ -9,8 +9,22 @@ public class AdvertEntity implements Serializable {
 
     String advertName;
 
-
     String advertImgPath;
+
+    String createTime;
+
+    Integer sort;
+
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+
     public Long getId() {
         return id;
     }
@@ -33,6 +47,14 @@ public class AdvertEntity implements Serializable {
 
     public void setAdvertImgPath(String advertImgPath) {
         this.advertImgPath = advertImgPath;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 
 }
