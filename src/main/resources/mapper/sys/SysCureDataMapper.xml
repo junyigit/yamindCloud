@@ -13,7 +13,7 @@
 		c.leakage,
 		c.cure_stress,
 		c.respiratory_rate,
-		c.tidal_volume
+		c.tidal_volume,
 		c.minu_throughput,
 		c.ai,
 		c.hi
@@ -268,7 +268,12 @@
 			c.bootSerial,
 			c.cure_time,
 			c.leakage,
+			c.tidal_volume,
 			c.cure_stress,
+			c.respiratory_rate,
+			c.inhale_stress,
+			c.exhale_stress,
+			minu_throughput,
 			c.ai,
 			c.hi
 		FROM

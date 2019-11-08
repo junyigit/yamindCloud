@@ -7,11 +7,15 @@
 	<insert id="save" parameterType="com.yamind.cloud.modules.app.entity.AdvertEntity" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO app_advert (
 			advert_name,
-			advert_img_path
+			advert_img_path,
+			create_time,
+			sort
 		)
 		VALUES (
   			#{advertName},
-			#{advertImgPath}
+			#{advertImgPath},
+			#{createTime},
+			#{sort}
 			)
 	</insert>
 
@@ -19,7 +23,9 @@
 		SELECT
 			id,
 			advert_name,
-			advert_img_path
+			advert_img_path,
+			create_time,
+			sort
 		FROM
 		app_advert
 	</select>

@@ -10,11 +10,14 @@ public interface DeviceManageService {
 
 
     //绑定设备
-    R bindUserDeviceInfo(DeviceDataEntity appDeviceDataEntity);
+    int bindUserDeviceInfo(DeviceDataEntity appDeviceDataEntity);
 
     //解除绑定
-    R deleteUserDeviceInfo(String userId,String serial);
+    int deleteUserDeviceInfo(String userId,String serial);
 
     //获取用户设备列表
     List<DeviceDataEntity> listForDevice(@RequestParam String userId);
+
+    //获取用户设备列表
+    int updateSoftVersion(DeviceDataEntity deviceDataEntity);
 }

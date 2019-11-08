@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yamind.cloud.modules.app.dao.SleepDataMapper">
+
+
+	<insert id="save" parameterType="com.yamind.cloud.modules.app.entity.SleepDataEntity" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO app_sleep_data (
+			user_id,
+			serial,
+			sleep_data_time,
+			upload_time,
+			path
+		)
+		VALUES (
+			#{userId},
+			#{serial},
+			#{sleepDataTime},
+			#{uploadTime},
+			#{path}
+			)
+	</insert>
+
+	<select id="listForUserSleepData" resultType="com.yamind.cloud.modules.app.entity.SleepDataEntity">
+		SELECT
+		c.id,
+		c.user_id,
+		c.serial,
+		c.sleep_data_time,
+		c.upload_time,
+		c.path
+		FROM app_sleep_data c
+		<where>
+			c.user_id =#{userId} AND c.serial=#{serial}
+		</where>
+	</select>
+
+</mapper>

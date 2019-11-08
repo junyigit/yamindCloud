@@ -16,6 +16,8 @@ public class ProductStoreEntity implements Serializable {
 
     String imgPath;
 
+    String createTime;
+
     public String getImgPath() {
         return imgPath;
     }
@@ -65,6 +67,13 @@ public class ProductStoreEntity implements Serializable {
         this.link = link;
     }
 
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
 
 
 }

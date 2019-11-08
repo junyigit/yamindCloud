@@ -19,7 +19,7 @@ public class ServerChannelInitializer extends ChannelInitializer<SocketChannel> 
 
 
         ByteBuf delimiter=Unpooled.copiedBuffer("$".getBytes());//指定消息分割符处理数据
-        socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(1024 , delimiter));//如果取消了分割符解码，就会出现TCP粘包之类的问题了
+        socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(3072 , delimiter));//如果取消了分割符解码，就会出现TCP粘包之类的问题了
        // socketChannel.pipeline().addLast(new BufByteToMessageDecoder()); //
         socketChannel.pipeline().addLast(new StringDecoder());
         socketChannel.pipeline().addLast(new ServerHandler());

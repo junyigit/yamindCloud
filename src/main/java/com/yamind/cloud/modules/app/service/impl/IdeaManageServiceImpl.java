@@ -18,12 +18,23 @@ public class IdeaManageServiceImpl implements IdeaManageService {
     @Autowired
     IdeaManageMapper ideaManageMapper;
 
-    public R saveIdea(IdeaDataEntity ideaDataEntity){
 
+    /**
+     * 保存投诉意见反馈
+     * @param ideaDataEntity
+     * @return
+     */
+    public R saveIdea(IdeaDataEntity ideaDataEntity){
         int result = ideaManageMapper.save(ideaDataEntity);
         return CommonUtils.msgCustom("idea submit success!",result);
     }
 
+
+    /**
+     * 获取用户意见反馈列表
+     * @param userId
+     * @return
+     */
     public List<IdeaDataEntity > listFroUserIdea(Long userId){
         List<IdeaDataEntity> ideaDataEntity = ideaManageMapper.listFroUserIdea(userId);
         return ideaDataEntity;

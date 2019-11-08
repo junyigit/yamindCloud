@@ -5,34 +5,33 @@
 
 
 	<insert id="save" parameterType="com.yamind.cloud.modules.app.entity.ProductStoreEntity" useGeneratedKeys="true" keyProperty="userId">
-		INSERT INTO app_user (
-			mobile,
-			photo,
-			nike_name,
-			sex,
-			height,
-			birthday,
+		INSERT INTO app_store (
+			product_name,
+			title,
+			price,
+			link,
+			img_path,
 			create_time
 		)
 		VALUES (
-			#{mobile},
-			#{photo},
-			#{nikeName},
-			#{sex},
-			#{height},
-			#{birthday},
+			#{productName},
+			#{title},
+			#{price},
+			#{link},
+			#{imgPath},
 			#{createTime}
 			)
 	</insert>
 
 	<update id="update">
-		UPDATE app_user
+		UPDATE app_store
 		<set>
-			<if test="photo != null">photo = #{photo}, </if>
-			<if test="nikeName != null">nike_name = #{nikeName}, </if>
-			<if test="sex != null">sex = #{sex}, </if>
-			<if test="height != null">height = #{height}, </if>
-			<if test="birthday != null">birthday = #{birthday}, </if>
+			<if test="id != null">id = #{id}, </if>
+			<if test="productName != null">product_name = #{productName}, </if>
+			<if test="title != null">title = #{title}, </if>
+			<if test="price != null">price = #{price}, </if>
+			<if test="link != null">link = #{link}, </if>
+			<if test="imgPath != null">img_path = #{imgPath}, </if>
 			<if test="createTime != null">create_time = #{createTime} </if>
 		</set>
 		WHERE
@@ -48,7 +47,8 @@
 			title,
 			price,
 			link,
-			img_path
+			img_path,
+			create_time
 		FROM
 		app_store
 	</select>
