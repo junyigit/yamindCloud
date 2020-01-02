@@ -47,5 +47,5 @@ public interface SysCureDataMapper extends BaseMapper<SysCureDataEntity>{
 
     int updateForFlag(List<Integer> idList);
 
-    void delectOldTimeData();
+    int delectOldTimeData();
 }

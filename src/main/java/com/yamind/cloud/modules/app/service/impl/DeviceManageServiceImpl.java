@@ -36,7 +36,7 @@ public class DeviceManageServiceImpl implements DeviceManageService {
         return deviceManageMapper.listForDevice(userId);
     }
 
-    public int updateSoftVersion(DeviceDataEntity deviceDataEntity){
+    public int compareVersion(DeviceDataEntity deviceDataEntity){
         return deviceManageMapper.update(deviceDataEntity);
     }
 }

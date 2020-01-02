@@ -19,6 +19,7 @@ public class AdvertServiceImpl implements AdvertService {
     AdvertMapper advertMapper;
 
 
+
     /**
      * 添加广告
      * @param advertEntity
@@ -27,6 +28,8 @@ public class AdvertServiceImpl implements AdvertService {
     public int addAdvert(AdvertEntity advertEntity){
         return advertMapper.save(advertEntity);
     }
+
+
 
     public List<AdvertEntity> listForAdvertList(){
         return advertMapper.listForAdvertList();

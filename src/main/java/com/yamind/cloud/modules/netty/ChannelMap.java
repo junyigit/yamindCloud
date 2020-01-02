@@ -23,7 +23,7 @@ public class ChannelMap {
         return channelHashMap.get(name);
     }
     public static void addChannel(String name,Channel channel){
-        if(channelHashMap==null){
+            if(channelHashMap==null){
             channelHashMap=new HashMap<>(100);
         }
         channelHashMap.put(name,channel);

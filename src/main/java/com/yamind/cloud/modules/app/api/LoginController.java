@@ -58,10 +58,10 @@ public class LoginController extends AbstractController {
         mobJson.put("phone",phone);
         mobJson.put("code",code);
 
-        //String resultJson = HttpClientUtils.httpPost(mobVerifyReqUrl,mobJson);
-        //JSONObject verifyResult = JSONObject.parseObject(resultJson);
+        String resultJson = HttpClientUtils.httpPost(mobVerifyReqUrl,mobJson);
+        JSONObject verifyResult = JSONObject.parseObject(resultJson);
         // 临时测试屏蔽
-        JSONObject verifyResult = JSONObject.parseObject("{status:200}");
+       // JSONObject verifyResult = JSONObject.parseObject("{status:200}");
         if ("200".equals(verifyResult.getString("status"))){
             // 保存用户 和 Token 信息
             UserEntity userEntity = new UserEntity();
@@ -76,9 +76,8 @@ public class LoginController extends AbstractController {
             //判断用户信息是否保存成功
             if (result>0 && StringUtils.isNotEmpty(r.get("token").toString())){
                 //返回创建成功的token信息
-                /*r.put("code",200);
-                r.put("userInfo",userEntity);*/
-                return R.customOk(userEntity);
+                r.put("code",200);
+                r.put("userInfo",userEntity);
             }
         } else {
             return R.error("验证码错误");

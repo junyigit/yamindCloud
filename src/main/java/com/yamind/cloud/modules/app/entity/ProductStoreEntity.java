@@ -75,5 +75,4 @@ public class ProductStoreEntity implements Serializable {
         this.createTime = createTime;
     }
 
-
 }

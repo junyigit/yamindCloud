@@ -86,12 +86,7 @@ public class AppAdvertController extends AbstractController {
                 result.put("code",500);
                 result.put("msg","advert add faild!");
             }
-
         }
         return result;
     }
-
-
-
-
 }

@@ -17,6 +17,7 @@ public class SysPatientManagerImpl implements SysPatientManager {
 
     @Autowired
     private SysPadientMapper sysPadientMapper;
+
     @Autowired
     private SysDeviceMapper sysDeviceMapper;
 

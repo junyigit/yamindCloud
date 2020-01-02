@@ -38,7 +38,7 @@ public class QueueThreadExecutor {
     public void executeSaveMsg(final String msg) {
 
 
-        workerThreadPool.execute(() -> {
+       workerThreadPool.execute(() -> {
          sysDeviceService.saveRecvHistoryData(msg);
         });
     }

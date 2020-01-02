@@ -144,7 +144,6 @@ public class SysDeviceServiceImpl implements SysDeviceService {
 
                     sysParamaterSetService.savePara(sysParamaterSetEntity);
 
-//                    System.out.println("设置信息为"+"P"+data);
                     //存入redis
                     redisTemplate.opsForValue().set("P"+recvArr[1],data);
 
@@ -219,7 +218,7 @@ public class SysDeviceServiceImpl implements SysDeviceService {
                 boeCpodS.put("type","begin");
                 boeCpodS.put("createAt",Calendar.getInstance().getTimeInMillis());
                 System.out.println(boeCpodS);
-                String startHttp = HttpClientUtils.httpPost("http://copdtest.appsbu.com:8000/api/device/daya-resperitor-receiver",boeCpodS.toString());
+                String startHttp = HttpClientUtils.httpPost("http://device-copd.boe.com.cn/api/device/daya-resperitor-receiver",boeCpodS.toString());
                 com.alibaba.fastjson.JSONObject startJson = com.alibaba.fastjson.JSONObject.parseObject(startHttp);
                 String startResult = startJson.getString("status");
                 if("ok".equals(startResult)){
@@ -307,7 +306,7 @@ public class SysDeviceServiceImpl implements SysDeviceService {
                 boeCpod.put("type","end");
                 boeCpod.put("createAt",Calendar.getInstance().getTimeInMillis());
 
-                String endHttp = HttpClientUtils.httpPost("http://copdtest.appsbu.com:8000/api/device/daya-resperitor-receiver",boeCpod.toString());
+                String endHttp = HttpClientUtils.httpPost("http://device-copd.boe.com.cn/api/device/daya-resperitor-receiver",boeCpod.toString());
                 com.alibaba.fastjson.JSONObject endJson = com.alibaba.fastjson.JSONObject.parseObject(endHttp);
                 String endResult = endJson.getString("status");
                 if("ok".equals(endResult)){
