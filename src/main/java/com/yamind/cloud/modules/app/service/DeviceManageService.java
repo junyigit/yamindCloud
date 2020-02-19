@@ -19,5 +19,5 @@ public interface DeviceManageService {
     List<DeviceDataEntity> listForDevice(@RequestParam String userId);
 
     //获取用户设备列表
-    int updateSoftVersion(DeviceDataEntity deviceDataEntity);
+    int compareVersion(DeviceDataEntity deviceDataEntity);
 }

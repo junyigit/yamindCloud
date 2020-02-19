@@ -17,9 +17,7 @@ public abstract class AbstractController {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 	
 	protected SysUserEntity getUser() {
-
 		return ShiroUtils.getUserEntity();
-
 	}
 
 	protected Long getUserId() {

@@ -121,7 +121,7 @@ public class ResourceController {
        //获取接收文件的对象
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 
-        //获取上传的文件（存放在内存中） zhege m
+        //获取上传的文件（存放在内存中)
         MultipartFile uploadPdf = multipartRequest.getFile("uploadFile");
 
         String fileName = file.getOriginalFilename();//获取文件名加后缀

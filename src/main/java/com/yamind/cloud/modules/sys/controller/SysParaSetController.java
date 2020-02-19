@@ -74,6 +74,8 @@ public class SysParaSetController {
             //获取IP地址用于指定IP地址的信息发送
             Channel channel=ChannelMap.getChannelByName(params.get("ipAddr"));
 
+            String paramaterSet = "S";
+
             JSONObject jsonObject = new JSONObject();
             JSONObject pataArr = new JSONObject();
             JSONArray paraSet = new JSONArray();
@@ -97,7 +99,51 @@ public class SysParaSetController {
                     pataArr.put("ycsj",params.get("delayTime"));
                     jsonObject.put("paraData",pataArr);
                     break;
+                case "S":
+                    jsonObject.put("serialId",params.get("serial"));
+                    jsonObject.put("mode",params.get("mode"));
+                    pataArr.put("ksyl",params.get("starStress"));
+                    pataArr.put("zdyl",params.get("maxStress"));
+                    pataArr.put("zxyl",params.get("minStress"));
+                    pataArr.put("hqsf",params.get("breatheRel"));
+                    pataArr.put("ycsj",params.get("delayTime"));
+                    jsonObject.put("paraData",pataArr);
+                    break;
+                case "T":
+                    jsonObject.put("serialId",params.get("serial"));
+                    jsonObject.put("mode",params.get("mode"));
+                    pataArr.put("ksyl",params.get("starStress"));
+                    pataArr.put("zdyl",params.get("maxStress"));
+                    pataArr.put("zxyl",params.get("minStress"));
+                    pataArr.put("hqsf",params.get("breatheRel"));
+                    pataArr.put("ycsj",params.get("delayTime"));
+                    jsonObject.put("paraData",pataArr);
+                    break;
+                case "S/T":
+                    jsonObject.put("serialId",params.get("serial"));
+                    jsonObject.put("mode",params.get("mode"));
+                    pataArr.put("ksyl",params.get("starStress"));
+                    pataArr.put("zdyl",params.get("maxStress"));
+                    pataArr.put("zxyl",params.get("minStress"));
+                    pataArr.put("hqsf",params.get("breatheRel"));
+                    pataArr.put("ycsj",params.get("delayTime"));
+                    jsonObject.put("paraData",pataArr);
+                    break;
+                case "S-Auto":
+                    jsonObject.put("serialId",params.get("serial"));
+                    jsonObject.put("mode",params.get("mode"));
+                    pataArr.put("ksyl",params.get("starStress"));
+                    pataArr.put("zdyl",params.get("maxStress"));
+                    pataArr.put("zxyl",params.get("minStress"));
+                    pataArr.put("hqsf",params.get("breatheRel"));
+                    pataArr.put("ycsj",params.get("delayTime"));
+                    jsonObject.put("paraData",pataArr);
+                    break;
             }
+
+
+
+
             //写入到缓冲通道
             channel.writeAndFlush(jsonObject.toString());
             return R.ok("ok");

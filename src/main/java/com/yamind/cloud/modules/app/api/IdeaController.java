@@ -70,8 +70,8 @@ public class IdeaController extends AbstractController {
             ideaContent.put("ideaId",ideaDataEntity.getId());
             ideaContent.put("userId",ideaDataEntity.getUserId());
             ideaContent.put("userName",ideaDataEntity.getUserName());
-            ideaContent.put("phone",ideaDataEntity.getPhone());
-            ideaContent.put("type",ideaDataEntity.getType());
+            ideaContent.put("phone",ideaDataEntity.getUserPhone());
+            ideaContent.put("type",ideaDataEntity.getIdeaType());
             ideaContent.put("time",ideaDataEntity.getCreateTime());
             ideaContent.put("content",ideaDataEntity.getContent());
 
@@ -136,8 +136,6 @@ public class IdeaController extends AbstractController {
                 //创建一个当前日期的文件夹
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
                 String fileAdd = sdf.format(new Date());
-
-
 
                 //获取文件夹路径
                 File file1 = new File(uploadPath +File.separator +fileAdd );

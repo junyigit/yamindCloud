@@ -4,7 +4,9 @@ package com.yamind.cloud.modules.app.api;
 import com.yamind.cloud.common.entity.R;
 import com.yamind.cloud.common.utils.CommonUtils;
 import com.yamind.cloud.modules.app.entity.DeviceDataEntity;
+import com.yamind.cloud.modules.app.entity.DeviceOtaEntity;
 import com.yamind.cloud.modules.app.service.DeviceManageService;
+import com.yamind.cloud.modules.app.service.DeviceOtaService;
 import com.yamind.cloud.modules.sys.controller.AbstractController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,12 +30,16 @@ public class DeviceManageController extends AbstractController {
     @Autowired
     private DeviceManageService deviceManageService;
 
+    @Autowired
+    private DeviceOtaService deviceOtaService;
+
 
     /**
      * 获取设备列表
      * @param userId
      * @return
      */
+
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public R listForDevice(@RequestParam String userId) {
         List<DeviceDataEntity> list = deviceManageService.listForDevice(userId);
@@ -62,17 +68,29 @@ public class DeviceManageController extends AbstractController {
 
 
     /**
-     * 更新设备软件版本号(判断是否为最新软件版本)
-     * @param deviceDataEntity
+     * 更新设备
+     * 软件版本号(判断是否为最新软件版本)
+     * @param type
+     * @param version
      * @return
      */
-    @RequestMapping(value = "/updateSoftVersion", method = RequestMethod.POST)
-    public R updateSoftVersion(DeviceDataEntity deviceDataEntity) {
-        int result = deviceManageService.updateSoftVersion(deviceDataEntity);
-        if (result>0){
-            return R.customOk("bind device success");
+    @RequestMapping(value = "/compareVersion", method = RequestMethod.POST)
+    public R compareVersion(String type,String version) {
+        R r = new R();
+        DeviceOtaEntity d  = deviceOtaService.compareVersion(type);
+        if (!("").equals(d) && d!= null && version !=""){
+            if (d.getVersion().equals(version)){
+                return R.customOk(200,"当前已升至最新版本！");
+            }else {
+                r.put("code",201);
+                r.put("msg","当前不是最新版本，请升级至最新版本固件！");
+                r.put("version",d.getVersion());
+                r.put("url","http://cloud.yamind.cn:9999/appResource/zips/ota/dfufile.zip");
+                return r;
+            }
         }
-        return R.error("updateSoftVersion faild");
+
+        return R.error(500,"compareVersion faild");
     }
 
     /**
@@ -89,5 +107,7 @@ public class DeviceManageController extends AbstractController {
         }
         return R.error("updateSoftVersion faild");
     }
+
+
 
 }

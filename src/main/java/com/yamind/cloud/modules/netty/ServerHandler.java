@@ -32,7 +32,6 @@ public class ServerHandler extends SimpleChannelInboundHandler<Object> {
 
     private static String clientAddr="";
 
-
     public static final ByteBuf PLUS_BUF = Unpooled.unreleasableBuffer(Unpooled.copiedBuffer("%", CharsetUtil.UTF_8));
 
     /**
@@ -41,6 +40,8 @@ public class ServerHandler extends SimpleChannelInboundHandler<Object> {
     public ServerHandler() {
         System.out.println("调用了ServerHandler构造");
     }
+
+
 
   /* @PostConstruct
     public void init() {
@@ -58,8 +59,10 @@ public class ServerHandler extends SimpleChannelInboundHandler<Object> {
 
         //获取IP地址
         //String clientIP = insocket.getAddress().getHostAddress();
+
         //控制台输出接受到的数据
         //System.out.println("connetIP is : " + clientIP +"server receive message :"+ msg);
+
         //赋值给clientAddr
         //clientAddr =clientIP;
 

@@ -111,11 +111,16 @@ public class SysPatientController extends AbstractController {
         }
         //传递模式
         r.put("mode", sysParamaterSetEntity.getMode());
+
+        map.put("seleceTime", time + " 12:00:00");
+
+        map.put("endTime", format.format(sDte)+ " 12:00:00");
         // 统计数据
         List<SysCureDataEntity> list = sysCureDataService.findMapWithSerial(map);
         LocalDateTime end = LocalDateTime.now();
 
         Duration duration = Duration.between(start, end);
+
         logger.info("查询序列号为"+serialId+"曲线图耗时：" + duration.getSeconds() + "s");
 
         return r.put("map", list);
@@ -181,11 +186,9 @@ public class SysPatientController extends AbstractController {
 
     /**
      * 获取历史数据-设置信息
-     *
      * @param params
      * @return
      */
-
     @RequestMapping(value = "/getHistorySetData", method = RequestMethod.POST)
     public Page<SysParamaterSetEntity> getHistorySetData(@RequestBody Map<String, Object> params) {
         Page<SysParamaterSetEntity> setEntityPage = sysParamaterSetService.listForParamaterInfo(params);
@@ -195,7 +198,6 @@ public class SysPatientController extends AbstractController {
 
     /**
      * 获取历史数据-统计信息
-     *
      * @param serialId
      * @param startDate
      * @param endDate
@@ -323,6 +325,7 @@ public class SysPatientController extends AbstractController {
 
                 //获取呼吸频率平均95值
                 map.put("niceCol", "respiratory_rate");
+
                 sData = sysCureDataService.listForDateStatInfo(map);
                 if (sData.size() != 0) {
                     sigleNice6 += Double.parseDouble(sData.get((int) Math.ceil(sData.size() * (0.95)) - 1));
@@ -359,8 +362,7 @@ public class SysPatientController extends AbstractController {
 
 
     /**
-     * 患者实时数据信息
-     *
+     * 患者实时数据
      * @param serialId
      * @return
      */
@@ -379,7 +381,7 @@ public class SysPatientController extends AbstractController {
         //  paraMsg = paraMsg.substring(1,paraMsg.length()-1);
 
         //判断数据信息是否为空
-        if (!StringUtils.isBlank(dataMsg)) {
+        if (!StringUtils.isBlank(dataMsg)){
             r.put("dataMsg", dataMsg);
         }
 
@@ -413,7 +415,8 @@ public class SysPatientController extends AbstractController {
     @Scheduled(cron = "0 0 0 * * *")
     public void delTimeOutHistory() {
         logger.info("删除过期的历史数据");
-        sysCureDataService.delectData();
+        int count =sysCureDataService.delectData();
+        logger.info("删除过期的历史数据"+count+"条");
     }
 
 
@@ -452,6 +455,7 @@ public class SysPatientController extends AbstractController {
                 JSONObject measureJson = new JSONObject();
 
                 JSONArray detailArr = new JSONArray();
+
                 List<Integer> idList = new ArrayList<Integer>();
 
                 //序列号
@@ -506,7 +510,7 @@ public class SysPatientController extends AbstractController {
                 boeCpod.put("type", "realtime");
                 boeCpod.put("createAt", Calendar.getInstance().getTimeInMillis());
 
-                String result = HttpClientUtils.httpPost("http://copdtest.appsbu.com:8000/api/device/daya-resperitor-receiver", boeCpod.toString());
+                String result = HttpClientUtils.httpPost("http://device-copd.boe.com.cn/api/device/daya-resperitor-receiver", boeCpod.toString());
                 //logger.info("[POST内容为:"+boeCpod.toString()+"]");
                 //System.out.println(boeCpod.toString());
                 JSONObject json_test = JSONObject.parseObject(result);

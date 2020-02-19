@@ -21,6 +21,8 @@ public class SysCureDataServiceImpl implements SysCureDataService {
 
 
 
+
+
     @Autowired
     SysCureDataManager sysCureDataManager;
     @Autowired
@@ -80,19 +82,15 @@ public class SysCureDataServiceImpl implements SysCureDataService {
     }
 
 
-
-
-
-    public R delectData(){
-        sysCureDataMapper.delectOldTimeData();
-        return R.ok("success");
+    public int delectData(){
+        int count =sysCureDataMapper.delectOldTimeData();
+        return count;
     }
 
-    public R updateForFlag(List<Integer> idList){
 
+    public R updateForFlag(List<Integer> idList){
         int count = sysCureDataMapper.updateForFlag(idList);;
         return CommonUtils.msg(count);
     }
-
 
 }

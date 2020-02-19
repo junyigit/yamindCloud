@@ -32,64 +32,63 @@ public class UserCenterController extends AbstractController {
     UserManageService userManageService;
 
 
-
     @Value("${upload-path}")
     private String uploadPath;
 
 
-
     /**
      * 添加或者更新用户信息
+     *
      * @param userEntity
      * @return
      */
     @RequestMapping("/updateUserInfo")
     @ResponseBody
-    public R addAndUpdateUserInfo(UserEntity userEntity, @RequestParam(value = "uploadFile", required = false) MultipartFile file, HttpServletRequest request)  throws IOException {
+    public R addAndUpdateUserInfo(UserEntity userEntity, @RequestParam(value = "uploadFile", required = false) MultipartFile file, HttpServletRequest request) throws IOException {
 
         R result = new R();
 
         //获取请求地址
-        String returnUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath()+"//";
+        String returnUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "//";
         File targetFile = null;
 
         if (null != userEntity.getUserId()) {
 
-            if (null !=file){
-            String fileName = file.getOriginalFilename();//获取文件名加后缀
-            System.out.println("文件名为:" + fileName);
+            if (null != file) {
+                String fileName = file.getOriginalFilename();//获取文件名加后缀
+                System.out.println("文件名为:" + fileName);
 
-            if (fileName != null && fileName != "") {
+                if (fileName != null && fileName != "") {
 
-                String fileType = fileName.substring(fileName.lastIndexOf("."), fileName.length());//文件后缀
-                fileName = new Date().getTime() + "_" + new Random().nextInt(1000) + fileType;//新的文件名
+                    String fileType = fileName.substring(fileName.lastIndexOf("."), fileName.length());//文件后缀
+                    fileName = new Date().getTime() + "_" + new Random().nextInt(1000) + fileType;//新的文件名
 
-                //获取文件夹路径
-                File file1 = new File(uploadPath + File.separator+ "user");
-                //如果文件夹不存在则创建
-                if (!file1.exists() && !file1.isDirectory()) {
-                    file1.mkdir();
+                    //获取文件夹路径
+                    File file1 = new File(uploadPath + File.separator + "user");
+                    //如果文件夹不存在则创建
+                    if (!file1.exists() && !file1.isDirectory()) {
+                        file1.mkdir();
+                    }
+                    //将图片存入文件夹
+                    targetFile = new File(file1, fileName);
+                    try {
+                        //将上传的文件写到服务器上指定的文件。
+                        file.transferTo(targetFile);
+                        userEntity.setPhoto(returnUrl + "appResource/img" + "/" + "user" + "/" + fileName);
+                        logger.info(userEntity.getPhoto());
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-                //将图片存入文件夹
-                targetFile = new File(file1, fileName);
-                try {
-                    //将上传的文件写到服务器上指定的文件。
-                    file.transferTo(targetFile);
-                    userEntity.setPhoto(returnUrl+"appResource/img" + "/"+"user" +"/"+ fileName);
-                    logger.info(userEntity.getPhoto());
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
             }
         }
 
-        int count  = userManageService.updateUserInfo(userEntity);
+        int count = userManageService.updateUserInfo(userEntity);
         if (count > 0) {
-            result.put("code",200);
-            result.put("data",userEntity);
-            result.put("msg","update success!");
+            result.put("code", 200);
+            result.put("data", userEntity);
+            result.put("msg", "update success!");
             return result;
         }
         return R.error("update faild!");
@@ -97,15 +96,13 @@ public class UserCenterController extends AbstractController {
     }
 
 
-
-
-
     /**
      * 后台展示- 获取APP列表
+     *
      * @return
      */
     @RequestMapping("/list")
-    public Page userList(@RequestBody Map<String, Object> params){
+    public Page userList(@RequestBody Map<String, Object> params) {
         Page<UserEntity> list = userManageService.listForUserInfo(params);
         return list;
     }

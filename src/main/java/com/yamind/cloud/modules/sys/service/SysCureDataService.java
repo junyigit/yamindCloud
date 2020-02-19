@@ -48,7 +48,7 @@ public interface SysCureDataService {
 
 
     //删除过期的数据
-    R delectData();
+    int delectData();
 
 
     //更新sys_device_status表中已同步的数据

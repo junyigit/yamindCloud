@@ -20,8 +20,6 @@ public class SysCureDataBoeEntity implements Serializable {
 
 
 
-
-
     /**
      * '治疗日期'
      */
@@ -52,8 +50,6 @@ public class SysCureDataBoeEntity implements Serializable {
     private float hiCount;
 
 
-
-
     /**
      * 潮气量
      */
@@ -82,8 +78,6 @@ public class SysCureDataBoeEntity implements Serializable {
     public void setMinuThroughput(Float minuThroughput) {
         this.minuThroughput = minuThroughput;
     }
-
-
 
     public Float getInhaleStress() {
         return inhaleStress;
