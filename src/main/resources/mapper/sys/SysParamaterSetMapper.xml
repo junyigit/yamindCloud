@@ -74,9 +74,8 @@
 				AND s.serialId LIKE concat('%',#{serialId},'%')
 			</if>
 		</where>
-
--- 		ORDER BY
--- 			s.useDate DESC
+ 		ORDER BY
+			s.useDate DESC
 	</select>
 
 

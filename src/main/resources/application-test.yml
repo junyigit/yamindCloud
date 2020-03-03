@@ -39,7 +39,7 @@ spring:
 
 # netty配置
 n:
-  url: 192.168.123.1
+  url: 127.0.0.1
   port: 2222
 #日志路径
 logging:

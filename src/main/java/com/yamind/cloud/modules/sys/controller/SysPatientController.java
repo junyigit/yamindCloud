@@ -510,7 +510,7 @@ public class SysPatientController extends AbstractController {
                 boeCpod.put("type", "realtime");
                 boeCpod.put("createAt", Calendar.getInstance().getTimeInMillis());
 
-                String result = HttpClientUtils.httpPost("http://device-copd.boe.com.cn/api/device/daya-resperitor-receiver", boeCpod.toString());
+                String result =HttpClientUtils.httpPost("http://device-copd.boe.com.cn/api/device/daya-resperitor-receiver", boeCpod.toString());
                 //logger.info("[POST内容为:"+boeCpod.toString()+"]");
                 //System.out.println(boeCpod.toString());
                 JSONObject json_test = JSONObject.parseObject(result);

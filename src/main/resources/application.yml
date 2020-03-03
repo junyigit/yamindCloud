@@ -36,7 +36,7 @@ spring:
         static-locations:  classpath:/static/,classpath:/templates/
     redis:
       #数据库索引
-      host: localhost
+      host: 120.79.198.31
       port: 6379
       password:
       jedis:
