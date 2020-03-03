@@ -49,6 +49,7 @@ public class AppAdvertController extends AbstractController {
 
 
                 String fileType = fileName.substring(fileName.lastIndexOf("."), fileName.length());//文件后缀
+
                 fileName = new Date().getTime() + "_" + new Random().nextInt(1000) + fileType;//新的文件名
 
 
@@ -75,6 +76,7 @@ public class AppAdvertController extends AbstractController {
             }
             //创建时间戳
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
             String createTime = formatter.format(new Date());
             advertEntity.setCreateTime(createTime);
 

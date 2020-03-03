@@ -85,7 +85,15 @@ public class DeviceManageController extends AbstractController {
                 r.put("code",201);
                 r.put("msg","当前不是最新版本，请升级至最新版本固件！");
                 r.put("version",d.getVersion());
-                r.put("url","http://cloud.yamind.cn:9999/appResource/zips/ota/dfufile.zip");
+                switch (type){
+                    case "1":
+                        r.put("url","http://cloud.yamind.cn:9999/appResource/zips/ota/dfufile-I101-20200115.zip");
+                        break;
+                    case "2":
+                        r.put("url","http://cloud.yamind.cn:9999/appResource/zips/ota/dfufile-I201-20200115.zip");
+                        break;
+                }
+
                 return r;
             }
         }

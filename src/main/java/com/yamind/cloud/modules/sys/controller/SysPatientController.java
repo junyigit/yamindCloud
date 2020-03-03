@@ -260,12 +260,9 @@ public class SysPatientController extends AbstractController {
         r.put("minuThroughput", colsData.get(median).getMinusTroughput());
         r.put("respiratoryRate", colsData.get(median).getRespiratoryRate());
 
-
-
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date sDte = null; //开始日期
         Date eDte = null; //结束日期
-
 
         List<String> sData = new ArrayList<String>();
 
@@ -451,6 +448,7 @@ public class SysPatientController extends AbstractController {
             if (postData !=null && postData.size() >0){
 
                 JSONObject boeCpod = new JSONObject();
+
                 //测量数据JSON数组
                 JSONObject measureJson = new JSONObject();
 

@@ -31,7 +31,6 @@ public class AdvertController extends AbstractController {
     @Autowired
     AdvertService advertService;
 
-
     /**
      * 获取首页广告
      * @return

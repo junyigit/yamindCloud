@@ -131,6 +131,7 @@ public class ResourceController {
             String suffix ="F:/"+fileName;
             //需要保存的文件对象
             File targetFile = new File( suffix );
+
             //判断该文件对象在磁盘上是否存在
             if (!targetFile.exists()  && !targetFile.isDirectory()) {
                 //磁盘上不存在，则进行文件的创建
@@ -159,7 +160,9 @@ public class ResourceController {
         Map<String, Object> map = new HashMap<String, Object>();
         File targetFile = null;
         String url = "";//返回存储路径
+
         int code = 1;
+
         System.out.println(file);
         String fileName = file.getOriginalFilename();//获取文件名加后缀
         if (fileName != null && fileName != "") {

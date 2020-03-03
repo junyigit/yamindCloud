@@ -65,9 +65,12 @@ public class LoginController extends AbstractController {
         if ("200".equals(verifyResult.getString("status"))){
             // 保存用户 和 Token 信息
             UserEntity userEntity = new UserEntity();
+
             userEntity.setMobile(phone);
+
             //保存用户信息至APP用户表
             int result = userManageService.saveUser(userEntity);
+
             if (result==2){
                 userEntity = userManageService.getUserMobile(phone);
             }

@@ -81,6 +81,8 @@ public class SysParaSetController {
             JSONArray paraSet = new JSONArray();
             switch (params.get("mode")){
                 case "CPAP":
+
+
                     jsonObject.put("serialId",params.get("serial"));
                     jsonObject.put("mode",params.get("mode"));
                     pataArr.put("ksyl",params.get("starStress"));

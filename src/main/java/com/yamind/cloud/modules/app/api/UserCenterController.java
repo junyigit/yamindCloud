@@ -31,7 +31,6 @@ public class UserCenterController extends AbstractController {
     @Autowired
     UserManageService userManageService;
 
-
     @Value("${upload-path}")
     private String uploadPath;
 
