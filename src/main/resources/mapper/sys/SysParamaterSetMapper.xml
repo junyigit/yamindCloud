@@ -26,8 +26,10 @@
 			inhale_sensitivity,
 			exhale_sensitivity,
 			stress_up,
-			stress_down,
 			avaps,
+            max_inhaleTime,
+			min_inhaleTime,
+			aiStart,
 			soft_version
 		FROM
 		sys_device_set s
@@ -64,8 +66,10 @@
 			inhale_sensitivity,
 			exhale_sensitivity,
 			stress_up,
-			stress_down,
 			avaps,
+			max_inhaleTime,
+			min_inhaleTime,
+			aiStart,
 			soft_version
 		FROM
 		sys_device_set s
@@ -74,9 +78,8 @@
 				AND s.serialId LIKE concat('%',#{serialId},'%')
 			</if>
 		</where>
-
--- 		ORDER BY
--- 			s.useDate DESC
+ 		ORDER BY
+ 			s.useDate DESC
 	</select>
 
 
@@ -107,8 +110,11 @@
 			inhale_sensitivity,
 			exhale_sensitivity,
 			stress_up,
-			stress_down,
+-- 			stress_down,
 			avaps,
+			max_inhaleTime,
+			min_inhaleTime,
+			aiStart,
 			soft_version
 		)
 		VALUES (
@@ -132,8 +138,10 @@
 				#{inhaleSensitivity},
 				#{exhaleSensitivity},
 				#{stressUp},
-				#{stressDown},
 				#{avaps},
+				#{maxInhaleTime},
+				#{minInhaleTime},
+				#{aiStart},
 				#{softVersion}
 		) ON DUPLICATE KEY UPDATE bootType =#{bootType},
 			mode=#{mode},
@@ -153,9 +161,15 @@
 			inhale_sensitivity=#{inhaleSensitivity},
 			exhale_sensitivity=#{exhaleSensitivity},
 			stress_up=#{stressUp},
-			stress_down=#{stressDown},
 			avaps=#{avaps},
+			max_inhaleTime=#{maxInhaleTime},
+			min_inhaleTime=#{minInhaleTime},
+			aiStart=#{aiStart},
 			soft_version=#{softVersion}
 	</insert>
 
+
+	<delete id="delOldDate">
+		DELETE FROM sys_device_set WHERE DATEDIFF(now(),use_Date)>7
+	</delete>
 </mapper>

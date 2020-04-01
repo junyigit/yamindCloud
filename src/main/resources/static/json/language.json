@@ -81,7 +81,10 @@
         "birthday":"出生日期",
         "gmtCreate":"创建时间",
         "remark":"备注",
-        "status":"状态"
+        "status":"状态",
+        "maxInhaleTime":"最大吸气时间",
+        "minInhaleTime":"最小吸气时间",
+        "aiStart":"智能启动"
     },
     "en": {
 
@@ -168,6 +171,10 @@
         "birthday":"birthday",
         "gmtCreate":"gmtCreate",
         "remark":"remark",
-        "status":"status"
+        "status":"status",
+
+        "maxInhaleTime":"maxInhaleTime",
+        "minInhaleTime":"minInhaleTime",
+        "aiStart":"aiStart"
     }
 }

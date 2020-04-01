@@ -4,7 +4,7 @@
 
 $(function() {
     initialPage();
- //   getGrid();
+ // getGrid();
 
 });
 
@@ -32,7 +32,7 @@ window.operateEvents = {
             },//数据，这里使用的是Json格式进行传输
             success: function (result) {//返回数据根据结果进行相应的处理
                 if (result.code < 0) {
-                    console.log("errorrrr");
+                    console.log("error");
                     dialogMsg(result.msg);
                 } else {
                     console.log("success");

@@ -82,6 +82,8 @@ public class SysCureDataServiceImpl implements SysCureDataService {
     }
 
 
+
+    //删除过期用户治疗数据
     public int delectData(){
         int count =sysCureDataMapper.delectOldTimeData();
         return count;

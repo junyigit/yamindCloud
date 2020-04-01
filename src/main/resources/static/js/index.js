@@ -70,7 +70,6 @@
 
             if (cookie_end == -1) {
                 cookie_end = allcookies.length;
-
             }
             //得到想要的cookie的值
             var value = unescape(allcookies.substring(cookie_pos, cookie_end));

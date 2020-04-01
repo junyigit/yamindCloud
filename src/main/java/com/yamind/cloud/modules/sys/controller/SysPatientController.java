@@ -24,6 +24,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.xml.crypto.Data;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -196,6 +197,10 @@ public class SysPatientController extends AbstractController {
     }
 
 
+
+
+
+
     /**
      * 获取历史数据-统计信息
      * @param serialId
@@ -212,47 +217,39 @@ public class SysPatientController extends AbstractController {
         List<String> colData = new ArrayList<>();
         //获取前台传递的参数
         map.put("serialId", serialId);
+
+        //日期从12点开始计算
+        startDate += " 12:00:00";
+        endDate += " 12:00:00";
         map.put("startDate", startDate);
         map.put("endDate", endDate);
 
-
-        //查询当前日期所有的数据List
-        int size = sysCureDataService.getStatCount(map);
-
+        List<SysCureDataEntity> colsData = new ArrayList<>();
+        // 查询当前日期所有的数据List
+        map.put("colName", "DATE_FORMAT(cure_time, \"%Y-%m-%d\" ) as cure_time,inhale_stress,cure_stress,exhale_stress,tidal_volume,minu_throughput,respiratory_rate,ai,hi");
+        colsData = sysCureDataService.listForColData2(map);
+        int size = colsData.size();
         if (size <= 0) {
             return R.error("当前时间段没有监测到治疗数据!");
         }
-
         //查询最大值最小值
         r.put("maxAvg", sysCureDataService.getStatDataMaxAndAvg(map)); //参数:最大值最小值的
 
 
-        int useDay = sysCureDataService.getUseDayCount(map);
-
-        //单位转换为小时
-        double useHours = new BigDecimal((float) size / 3600).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-
-        //使用信息
-        r.put("dayCount", size); //使用天数
-        r.put("useDay", useDay); ////获取所选时间内的 使用天数
-        r.put("useTime", useHours + " h"); //使用时间  单位小时
-        r.put("avgUseTime", useHours / useDay + " h"); //平均使用时间
+        //获取查询的数据 AI 数据大于0的值
+        long aicount = colsData.stream().filter(e  -> e.getAi() > 0).count();
+        //获取查询的数据 HI 数据大于0的值
+        long hicount = colsData.stream().filter(e  -> e.getHi() > 0).count();
 
 
-        //计算中位值 奇数 N+1/2   偶数 （长度/2的值 + 长度/2+1位)/2
+        //中位值-  统计信息
+        // 奇数 N+1/2   偶数 （长度/2的值 + 长度/2+1位)/2
         int median = 0;
         if (size % 2 == 0) {
             median = size / 2;
         } else {
             median = (size / 2) + 1;
         }
-
-
-        List<SysCureDataEntity> colsData = new ArrayList<>();
-        map.put("colName", "inhale_stress,cure_stress,exhale_stress,tidal_volume,minu_throughput,respiratory_rate");
-        colsData = sysCureDataService.listForColData2(map);
-
-
         r.put("cureStress", colsData.get(median).getCureStress());
         r.put("inhaleStress", colsData.get(median).getInhaleStress());
         r.put("exhaleStress", colsData.get(median).getExhaleStress());
@@ -260,11 +257,40 @@ public class SysPatientController extends AbstractController {
         r.put("minuThroughput", colsData.get(median).getMinusTroughput());
         r.put("respiratoryRate", colsData.get(median).getRespiratoryRate());
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+
+
+
+        // 根据 cure_time 对数据进行分组
+        Map<String, List<SysCureDataEntity>> cureTimeMap = colsData.stream().collect(Collectors.groupingBy(SysCureDataEntity::getCureTime));
+        // 获取使用天数
+        int useDay = cureTimeMap.size();
+        //单位转换为小时
+        double useHours = new BigDecimal((float) size / 3600).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+
+
+        r.put("avgAi",aicount/ (useHours>1.00 ? useHours:1));
+        r.put("avgHi",hicount/ (useHours>1.00 ? useHours:1));
+
+        r.put("avgAHI",(aicount+hicount )/ (useHours>1.00 ? useHours:1));
+
+
+        //使用信息
+        r.put("dayCount", size); //使用天数
+        r.put("useDay", useDay); ////获取所选时间内的 使用天数
+        r.put("useTime", useHours + " h"); //使用时间  单位小时
+
+        r.put("avgUseTime", useHours / useDay + " h"); //平均使用时间
+
+        // 获取 values
+        Collection<List<SysCureDataEntity>> cureTimeList = cureTimeMap.values();
+       /* SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date sDte = null; //开始日期
         Date eDte = null; //结束日期
 
-        List<String> sData = new ArrayList<String>();
+        List<String> sData = new ArrayList<String>();*/
+
 
         //存放单个95值
         Double sigleNice1 = 0.00;
@@ -275,67 +301,34 @@ public class SysPatientController extends AbstractController {
         Double sigleNice6 = 0.00;
 
 
-        try {
-            sDte = format.parse(startDate);  // 开始时间转换date类型
-            eDte = format.parse(endDate); //结束时间转换date类型
-
-            while (sDte.getTime() < eDte.getTime()) {
-                map.put("niceStart", sDte);
-                map.put("niceEnd", addDays(sDte, 1));
+        // 每一组的每一个字段进行排序并获取 95 值
+        for (List<SysCureDataEntity> e : cureTimeList) {
 
 
-                //获取压力平均95值
-                map.put("niceCol", "cure_stress");
-                sData = sysCureDataService.listForDateStatInfo(map);
-                if (sData.size() != 0) {
-                    Double test = Math.ceil(sData.size() * (0.95)) - 1;
-                    sigleNice1 += Double.parseDouble(sData.get((int) Math.ceil(sData.size() * (0.95)) - 1));
-                }
 
-                //获取吸气压力平均95值
-                map.put("niceCol", "inhale_stress");
-                sData = sysCureDataService.listForDateStatInfo(map);
-                if (sData.size() != 0) {
-                    sigleNice2 += Double.parseDouble(sData.get((int) Math.ceil(sData.size() * (0.95)) - 1));
-                }
+            System.out.println(e.get(0).getCureTime());
+            //取出数据总长度，计算95%位置
+            int len = (int) Math.ceil(e.size() * (0.95)) - 1;
+            sigleNice1 += e.stream().map(SysCureDataEntity::getCureStress).sorted()
+                    .collect(Collectors.toList()).get(len);
+            sigleNice2 += e.stream().map(SysCureDataEntity::getInhaleStress).sorted()
+                    .collect(Collectors.toList()).get(len);
+            sigleNice3 += e.stream().map(SysCureDataEntity::getExhaleStress).sorted()
+                    .collect(Collectors.toList()).get(len);
+            sigleNice4 += e.stream().map(SysCureDataEntity::getTidalVolume).sorted()
+                    .collect(Collectors.toList()).get(len);
+            sigleNice5 += e.stream().map(SysCureDataEntity::getMinusTroughput).sorted()
+                    .collect(Collectors.toList()).get(len);
+            sigleNice6 += e.stream().map(SysCureDataEntity::getRespiratoryRate).sorted()
+                    .collect(Collectors.toList()).get(len);
 
-                //获取呼气压力平均95值
-                map.put("niceCol", "exhale_stress");
-                sData = sysCureDataService.listForDateStatInfo(map);
-                if (sData.size() != 0) {
-                    sigleNice3 += Double.parseDouble(sData.get((int) Math.ceil(sData.size() * (0.95)) - 1));
-                }
 
-                //获取潮气量平均95值
-                map.put("niceCol", "tidal_volume");
-                sData = sysCureDataService.listForDateStatInfo(map);
-                if (sData.size() != 0) {
-                    sigleNice4 += Double.parseDouble(sData.get((int) Math.ceil(sData.size() * (0.95)) - 1));
-                }
 
-                //获取分钟通气量平均95值
-                map.put("niceCol", "minu_throughput");
-                sData = sysCureDataService.listForDateStatInfo(map);
-                if (sData.size() != 0) {
-                    sigleNice5 += Double.parseDouble(sData.get((int) Math.ceil(sData.size() * (0.95)) - 1));
-                }
-
-                //获取呼吸频率平均95值
-                map.put("niceCol", "respiratory_rate");
-
-                sData = sysCureDataService.listForDateStatInfo(map);
-                if (sData.size() != 0) {
-                    sigleNice6 += Double.parseDouble(sData.get((int) Math.ceil(sData.size() * (0.95)) - 1));
-                }
-                sDte = addDays(sDte, 1);//时间再加一天
-            }
-
-        } catch (ParseException e) {
-            e.printStackTrace();
         }
 
 
 
+        System.out.println("ai的出现次数:"+aicount +"hi出现的次数"+hicount);
         //存储压力95的list cure_stress
         r.put("stressNice", sigleNice1 / useDay);
 
@@ -411,9 +404,11 @@ public class SysPatientController extends AbstractController {
      */
     @Scheduled(cron = "0 0 0 * * *")
     public void delTimeOutHistory() {
-        logger.info("删除过期的历史数据");
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
         int count =sysCureDataService.delectData();
-        logger.info("删除过期的历史数据"+count+"条");
+        int setInfoCount = sysParamaterSetService.delOldDate();
+        logger.info("定时任务 - "+ df.format(new Date()) +"-"+"删除过期的历史数据"+count+"条"+"删除过期的设置信息:"+setInfoCount);
     }
 
 
@@ -494,8 +489,8 @@ public class SysPatientController extends AbstractController {
                     detailJson.put("exhaleStress", sys.getExhaleStress());
                     detailJson.put("minuThroughput", sys.getMinuThroughput());
 
-                    detailJson.put("ai", sys.getAiCount());
-                    detailJson.put("hi", sys.getHiCount());
+                    detailJson.put("ai", sys.getAi());
+                    detailJson.put("hi", sys.getHi());
                     detailJson.put("fi", "");
                     detailJson.put("leak", sys.getLeakage());
                     detailArr.add(detailJson);
@@ -508,7 +503,12 @@ public class SysPatientController extends AbstractController {
                 boeCpod.put("type", "realtime");
                 boeCpod.put("createAt", Calendar.getInstance().getTimeInMillis());
 
+
                 String result = HttpClientUtils.httpPost("http://device-copd.boe.com.cn/api/device/daya-resperitor-receiver", boeCpod.toString());
+                if ("DM21011927088".equals(sysDeviceStatusEntity.getSerialId())){
+                    result = HttpClientUtils.httpPost("http://218.104.69.87:9000/api/device/daya-resperitor-receiver", boeCpod.toString());
+                }
+
                 //logger.info("[POST内容为:"+boeCpod.toString()+"]");
                 //System.out.println(boeCpod.toString());
                 JSONObject json_test = JSONObject.parseObject(result);

@@ -147,4 +147,6 @@
 			ur.user_id = #{value}
 	</select>
 
+
+
 </mapper>

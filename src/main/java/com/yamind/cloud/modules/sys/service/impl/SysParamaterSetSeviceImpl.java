@@ -31,17 +31,26 @@ public class SysParamaterSetSeviceImpl implements SysParamaterSetService {
         sysParaManager.listUserSetInfo(page,query);
         return page;
     }
+
+
     //保存治疗数据
     public R savePara(SysParamaterSetEntity para){
         int count = sysParamaterSetMapper.save(para);
         return CommonUtils.msg(count);
     }
 
-    //查询
+    //查询当前序列号的参数信息
     public SysParamaterSetEntity getParamaterBySerial(Map<String, Object> params){
         return sysParamaterSetMapper.getParamaterBySerial(params);
     }
 
+
+
+    //删除大于7天过期的设置信息
+    public int delOldDate(){
+        int count =sysParamaterSetMapper.delOldDate();
+        return count;
+    }
 
 
 }

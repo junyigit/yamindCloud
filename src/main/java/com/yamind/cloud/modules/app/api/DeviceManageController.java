@@ -8,14 +8,13 @@ import com.yamind.cloud.modules.app.entity.DeviceOtaEntity;
 import com.yamind.cloud.modules.app.service.DeviceManageService;
 import com.yamind.cloud.modules.app.service.DeviceOtaService;
 import com.yamind.cloud.modules.sys.controller.AbstractController;
+import com.yamind.cloud.modules.sys.entity.SysParamaterSetEntity;
+import com.yamind.cloud.modules.sys.service.SysParamaterSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 用户设备管理
@@ -29,6 +28,9 @@ public class DeviceManageController extends AbstractController {
 
     @Autowired
     private DeviceManageService deviceManageService;
+
+    @Autowired
+    private SysParamaterSetService sysParamaterSetService;
 
     @Autowired
     private DeviceOtaService deviceOtaService;
@@ -59,9 +61,17 @@ public class DeviceManageController extends AbstractController {
     public R bindDeviceToUser(DeviceDataEntity deviceDataEntity) {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
         deviceDataEntity.setBindTime(df.format(new Date()));
+        Map<String, Object> map = new HashMap<>();
+        SysParamaterSetEntity sysParamaterSetEntity =new SysParamaterSetEntity();
+
         int result = deviceManageService.bindUserDeviceInfo(deviceDataEntity);
+
+        if (deviceDataEntity.getDeviceType()==3){
+            map.put("serialId",deviceDataEntity.getDeviceSerial());
+            sysParamaterSetEntity= sysParamaterSetService.getParamaterBySerial(map);
+        }
         if (result>0) {
-            return R.customOk("bind device success");
+            return R.customOk(sysParamaterSetEntity);
         }
         return R.error("bind device faild");
     }

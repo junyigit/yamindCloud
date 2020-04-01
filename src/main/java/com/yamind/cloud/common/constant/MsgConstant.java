@@ -29,6 +29,8 @@ public class MsgConstant {
 	 * 加载表单数据错误提示
 	 */
 	public static final String MSG_INIT_FORM = "初始化表单数据失败，请重试！";
+
+
 	
 	/**
 	 * 删除数据项不是全部所选

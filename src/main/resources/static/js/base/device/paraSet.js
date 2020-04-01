@@ -107,6 +107,18 @@
                          '<td>' + languageData.ycsj + '</td>' +
                          '<td><input id="delayTime" value=' + paraArr[7] + '></td>' +
                          '</tr>' +
+
+                         '<tr> ' +
+                         '<td>' + "面罩类型" + '</td>' +
+                         '<td><input id="starStress" value=' + paraArr[6] + '></td>' +
+                         '<td>' + "智能启动" + '</td>' +
+                         '<td><input id="delayTime" value=' + paraArr[7] + '></td>' +
+                         '</tr>' +
+
+                         '<tr> ' +
+                         '<td>' + "漏气提示" + '</td>' +
+                         '<td><input id="starStress" value=' + paraArr[6] + '></td>'+
+                         '</tr>'+
                          '</table>'
                      );
                      break;
@@ -114,7 +126,6 @@
                      table.append(
                          '<table class="table" id="setParaTable" cellspacing="30" >' +
                          '<h4><b>'+languageData.devicePara+'</b></h4>' +
-
 
 
                          '<tr> ' +
@@ -836,7 +847,7 @@
                  '<td>' + languageData.mode + '</td>' +
                  '<td><select id="modeSel" onchange="changeMode()">\n' +
                  '<option value="APAP" >APAP</option>' +
-                 '<option value ="CPAP">CPA     P</option>' +
+                 '<option value ="CPAP">CPAP</option>' +
                  '  <option value="S">S</option>\n' +
                  '  <option value="S-Auto">S-Auto</option>\n' +
                  '  <option value="T" selected="selected" >T</option>\n' +

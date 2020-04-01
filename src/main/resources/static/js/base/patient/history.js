@@ -12,7 +12,7 @@ $(function () {
 
     var myChart1 = echarts.init(document.getElementById('charts1'));
     var myChart2 = echarts.init(document.getElementById('charts2'));
-    var myChart3 = echarts.init(document.getElementById('charts3'));
+//    var myChart3 = echarts.init(document.getElementById('charts3'));
 
 
     laydate.render({
@@ -99,6 +99,7 @@ $(function () {
                 var mapData = result.map;
                 //保存时间的数组
                 var curetime = [];
+                var curetimeOther = [];
                 var cureArr = [];//治疗数组
                 var flowArr = [];//流量数组
                 var ahiArr  = [];//低通气数组
@@ -111,6 +112,16 @@ $(function () {
 
                 for (var i = 0, length = mapData.length; i < length; i++) {
                     curetime.push(mapData[i].cureTime);
+                    // curetime.push(mapData[i].cureTime);
+                    // curetime.push(mapData[i].cureTime);
+                    // curetime.push(mapData[i].cureTime);
+                    // curetime.push(mapData[i].cureTime);
+                    // curetimeOther.push(mapData[i].cureTime)
+                    // curetimeOther.push(mapData[i].cureTime)
+                    // curetimeOther.push(mapData[i].cureTime)
+                    // curetimeOther.push(mapData[i].cureTime)
+                    // curetimeOther.push(mapData[i].cureTime)
+
                     cureArr.push(mapData[i].cureStress);
                     cureArr.push(mapData[i].cureStress2);
                     cureArr.push(mapData[i].cureStress3);
@@ -136,13 +147,21 @@ $(function () {
                                 left: 'center',
                                 text: lauguageData.treatmentPres+'(hPa)',
                             },tooltip: {
+
+                                show: true,
                                 trigger: 'axis',
-                                showDelay:100,
+                                axisPointer: {
+                                    type: 'line'
+                                },
+                                lineStyle: {
+                                    color: '#000',
+                                },
                                 formatter: function (params) {
                                     params = params[0];
                                     var date = params.name;
                                     return '<div><p>当前时间第：'+params.name+'秒</p></div>'+'<p>当前压力值 : '+ params.value+'</p>';
-                                }},
+                                }
+                            },
                             xAxis: {
                                 type: 'category',
                                 boundaryGap: false,
@@ -166,11 +185,12 @@ $(function () {
                                     smooth: 0.3,
                                     symbol:'none',
                                     color:["#CE0000"],
+                                    sampling:"average",
                                     data: cureArr
                                 }
                             ]
                         };
-                        myChart1.setOption(option);
+
                         break;
 
                     case "APAP":
@@ -179,15 +199,18 @@ $(function () {
                                 left: 'center',
                                 text: '治疗压力(hPa)',
                             },tooltip: {
+                                show: true,
                                 trigger: 'axis',
-                                showDelay:100,
+                                axisPointer: {
+                                    type: 'line'
+                                },
+                                lineStyle: {
+                                    color: '#000',
+                                },
                                 formatter: function (params) {
                                     params = params[0];
                                     var date = params.name;
                                     return '<div><p>当前时间第：'+params.name+'秒</p></div>'+'<p>当前压力值 : '+ params.value+'</p>';
-                                },
-                                axisPointer: {
-                                    animation: false
                                 }
                             },
                             xAxis: {
@@ -214,6 +237,7 @@ $(function () {
                                     smooth: 0.3,
                                     symbol:'none',
                                     color:["#CE0000"],
+                                    sampling:"average",
                                     data: cureArr
                                 }
                                 ,
@@ -223,11 +247,12 @@ $(function () {
                                     smooth: 0.3,
                                     symbol:'none',
                                     color:["#00BB00"],
+                                    sampling:"average",
                                     data: cureArr
                                 }
                             ]
                         };
-                        myChart1.setOption(option);
+
                         break;
                     default:
                         option = {
@@ -235,13 +260,23 @@ $(function () {
                                 left: 'center',
                                 text: lauguageData.treatmentPres+'(hPa)',
                             },tooltip: {
+
+                                show: true,
                                 trigger: 'axis',
+                                axisPointer: {
+                                    type: 'line'
+                                },
+                                lineStyle: {
+                                    color: '#000',
+                                },
                                 showDelay:100,
                                 formatter: function (params) {
                                     params = params[0];
                                     var date = params.name;
                                     return '<div><p>当前时间第：'+params.name+'秒</p></div>'+'<p>当前压力值 : '+ params.value+'</p>';
-                                }},
+                                }
+                            },
+
                             xAxis: {
                                 type: 'category',
                                 boundaryGap: false,
@@ -264,6 +299,7 @@ $(function () {
                                     smooth: 0.3,
                                     symbol:'none',
                                     color:["#CE0000"],
+                                    sampling:"average",
                                     data: inhale
                                 },
                                 {
@@ -272,11 +308,12 @@ $(function () {
                                     smooth: 0.3,
                                     symbol:'none',
                                     color:["#00BB00"],
+                                    sampling:"average",
                                     data: outhale
                                 }
                             ]
                         };
-                        myChart1.setOption(option);
+
                         break;
                 }
 
@@ -317,12 +354,24 @@ $(function () {
                             smooth: 0.3,
                             symbol:'none',
                             color:["#CE0000"],
+                            sampling:"average",
                             data: flowArr
                         }
                     ]
+                    /*,
+                    sampling:"average",
+                    showAllSymbol: false,
+                    animation: false*/
                 };
                 myChart2.setOption(option2);
+                myChart1.setOption(option);
 
+
+
+                // 分别设置每个实例的 group id
+                myChart1.group = 'group1';
+                myChart2.group = 'group1';
+                echarts.connect('group1');
 
                 /**
                  * 呼吸事件图形
@@ -437,8 +486,20 @@ $(function () {
 
                 },
                 {
-                    field: "stressDown",
-                    title: lauguageData.ylxjpd,
+                    field: "maxInhaleTime",
+                    title: lauguageData.maxInhaleTime,
+                    width: "80px"
+
+                },
+                {
+                    field: "minInhaleTime",
+                    title: lauguageData.minInhaleTime,
+                    width: "80px"
+
+                },
+                {
+                    field: "aiStart",
+                    title: lauguageData.aiStart,
                     width: "80px"
 
                 },
@@ -499,15 +560,13 @@ $(function () {
             '<h3><tr><b>'+lauguageData.hxztdtqzs+'</b></tr></h3>' +
             '<tr> ' +
             '<td>' + lauguageData.pjahi+ '</td>' +
-            '<td>' + p.maxAvg.pjahi + '</td>' +
-            '<td>' + lauguageData.zdahi + '</td>' +
-            '<td>' + p.maxAvg.zdahi+ '</td>' +
+            '<td>' + p.avgAHI + '</td>' +
             '</tr>' +
             '<tr> ' +
             '<td>' + lauguageData.pjai + '</td>' +
-            '<td>' + p.maxAvg.aipjz+ '</td>' +
+            '<td>' + p.avgAi+ '</td>' +
             '<td>' + lauguageData.pjhi + '</td>' +
-            '<td>' + p.maxAvg.hipjz + '</td>' +
+            '<td>' + p.avgHi + '</td>' +
             '</tr>' +
             '</table>';
     }
@@ -570,15 +629,13 @@ $(function () {
             '<h3><tr><b>'+lauguageData.hxztdtqzs+'</b></tr></h3>' +
             '<tr> ' +
             '<td>' + lauguageData.pjahi+ '</td>' +
-            '<td>' + p.maxAvg.pjahi + '</td>' +
-            '<td>' + lauguageData.zdahi + '</td>' +
-            '<td>' + p.maxAvg.zdahi+ '</td>' +
+            '<td>' + p.avgAHI + '</td>' +
             '</tr>' +
             '<tr> ' +
             '<td>' + lauguageData.pjai + '</td>' +
-            '<td>' + p.maxAvg.aipjz+ '</td>' +
+            '<td>' + p.avgAi+ '</td>' +
             '<td>' + lauguageData.pjhi + '</td>' +
-            '<td>' + p.maxAvg.hipjz + '</td>' +
+            '<td>' + p.avgHi + '</td>' +
             '</tr>' +
             '</table>'+
 
@@ -656,33 +713,6 @@ $(function () {
     }
 
 
-    /**
-     * 获取cookie值
-     * @param cookie_name
-     * @returns {string}
-     */
-    function getCookie(cookie_name) {
-        var allcookies = document.cookie;
-        //索引长度，开始索引的位置
-        var cookie_pos = allcookies.indexOf(cookie_name);
-
-        // 如果找到了索引，就代表cookie存在,否则不存在
-        if (cookie_pos != -1) {
-            // 把cookie_pos放在值的开始，只要给值加1即可
-            //计算取cookie值得开始索引，加的1为“=”
-            cookie_pos = cookie_pos + cookie_name.length + 1;
-            //计算取cookie值得结束索引
-            var cookie_end = allcookies.indexOf(";", cookie_pos);
-
-            if (cookie_end == -1) {
-                cookie_end = allcookies.length;
-
-            }
-            //得到想要的cookie的值
-            var value = unescape(allcookies.substring(cookie_pos, cookie_end));
-        }
-        return value;
-    }
 
 });
 

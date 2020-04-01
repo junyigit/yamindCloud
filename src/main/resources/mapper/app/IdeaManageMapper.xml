@@ -18,8 +18,8 @@
 		VALUES (
   			#{userId},
 			#{userName},
-			#{phone},
-			#{type},
+			#{userPhone},
+			#{ideaType},
 			#{createTime},
 			#{content}
 			)

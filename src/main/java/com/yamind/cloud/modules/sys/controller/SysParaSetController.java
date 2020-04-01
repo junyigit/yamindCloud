@@ -37,6 +37,7 @@ public class SysParaSetController {
         public Page<SysParamaterSetEntity> list(@RequestBody Map<String, Object> params) {
 
             Page<SysParamaterSetEntity> list = sysDeviceService.listForDevice(params);
+
             return list;
         }
 
@@ -81,8 +82,6 @@ public class SysParaSetController {
             JSONArray paraSet = new JSONArray();
             switch (params.get("mode")){
                 case "CPAP":
-
-
                     jsonObject.put("serialId",params.get("serial"));
                     jsonObject.put("mode",params.get("mode"));
                     pataArr.put("ksyl",params.get("starStress"));

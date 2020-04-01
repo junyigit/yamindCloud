@@ -230,7 +230,6 @@ $(function () {
                     var date1=new Date();
                     var second = date1.getSeconds();//秒
                     //console.log("秒为"+second);
-
                     //填充数据
                     if (data.length >colNum){
                         data.length=0;
@@ -239,6 +238,8 @@ $(function () {
                     if (data1.length >colNum){
                         data1.length=0;
                     }
+
+
 
 
                     if (lastTime !=dataArr[2] && lastTime !=0){
@@ -261,8 +262,6 @@ $(function () {
                     }else{
                         console.log("设备断线");
                     }
-
-
 
 
                     //把当前时间戳保存 用于下次对比
@@ -341,7 +340,7 @@ $(function () {
 
                                 '<tr> ' +
                                 '<td>' + lauguageData.xhb + '</td>' +
-                                '<td>' + +'1:'+dataArr[19] + '</td>' +
+                                '<td>' +"1: "+dataArr[19] + '</td>' +
                                 '<td>' + lauguageData.hxpl + '</td>' +
                                 '<td>' + dataArr[16] + '</td>' +
                                 '</tr>'+
@@ -377,15 +376,15 @@ $(function () {
                                 '<tr> ' +
                                 '<td>' + lauguageData.ylsspd + '</td>' +
                                 '<td>' + paraArr[20]  + '</td>' +
-                                '<td>' + lauguageData.ylxjpd + '</td>' +
-                                '<td>' + paraArr[21]  + '</td>' +
+                                '<td>' + "AVAPS" + '</td>' +
+                                '<td>' + paraArr[21] + '</td>' +
                                 '</tr>' +
 
                                 '<tr> ' +
-                                '<td>' + "AVAPS" + '</td>' +
-                                '<td>' + paraArr[22] + '</td>' +
-                                '<td>' + lauguageData.mbcql + '</td>' +
-                                '<td>' + paraArr[14] + '</td>' +
+                                '<td>' + lauguageData.maxInhaleTime + '</td>' +
+                                '<td>' + paraArr[22]  + '</td>' +
+                                '<td>' + lauguageData.minInhaleTime + '</td>' +
+                                '<td>' + paraArr[23]  + '</td>' +
                                 '</tr>'+
 
                                 '<tr> ' +
@@ -393,6 +392,13 @@ $(function () {
                                 '<td>' + paraArr[10]  + '</td>' +
                                 '<td>' + lauguageData.zxxqyl + '</td>' +
                                 '<td>' + paraArr[11]  + '</td>' +
+                                '</tr>' +
+
+                                '<tr> ' +
+                                '<td>' + lauguageData.aiStart + '</td>' +
+                                '<td>' + paraArr[24]  + '</td>' +
+                                '<td>' + lauguageData.mbcql + '</td>' +
+                                '<td>' + paraArr[14] + '</td>' +
                                 '</tr>' +
                                 '</table>'
                             )
@@ -411,7 +417,7 @@ $(function () {
 
                                 '<tr> ' +
                                 '<td>' + lauguageData.xhb + '</td>' +
-                                '<td>' + +'1:'+dataArr[19] + '</td>' +
+                                '<td>' + "1: "+dataArr[19] + '</td>' +
                                 '<td>' + lauguageData.hxpl + '</td>' +
                                 '<td>' + dataArr[16] + '</td>' +
                                 '</tr>'+
@@ -448,10 +454,17 @@ $(function () {
                                 '</tr>' +
 
                                 '<tr> ' +
+                                '<td>' + lauguageData.maxInhaleTime + '</td>' +
+                                '<td>' + paraArr[21]  + '</td>' +
+                                '<td>' + lauguageData.minInhaleTime + '</td>' +
+                                '<td>' + paraArr[22]  + '</td>' +
+                                '</tr>'+
+
+                                '<tr> ' +
                                 '<td>' + lauguageData.ylsspd + '</td>' +
                                 '<td>' + paraArr[20]  + '</td>' +
-                                '<td>' + lauguageData.ylxjpd + '</td>' +
-                                '<td>' + paraArr[21]  + '</td>' +
+                                '<td>' + lauguageData.aiStart + '</td>' +
+                                '<td>' + paraArr[23]  + '</td>' +
                                 '</tr>' +
                                 '</table>'
                             )
@@ -478,7 +491,6 @@ $(function () {
 
     myChart.group = 'group1';
     myChart1.group = 'group1';
-    echarts.connect('group1');
 
     window.onresize = function(){
         console.log("onresize");
@@ -527,7 +539,7 @@ function returnSoft(paraArr) {
 
         '<tr> ' +
         '<td>' + lauguageData.softVersion + '</td>' +
-        '<td>' + paraArr[23]+ '</td>' +
+        '<td>' + paraArr[25]+ '</td>' +
         // '<td>' + lauguageData.time + '</td>' +
         // '<td>' + paraArr[2] + '</td>' +
         '</tr>'+
@@ -554,7 +566,7 @@ function returnStData(paraArr,dataArr) {
 
         '<tr> ' +
         '<td>' + lauguageData.xhb + '</td>' +
-        '<td>' +'1:'+ dataArr[19] + '</td>' +
+        '<td>' +"1: "+ dataArr[19] + '</td>' +
         '<td>' + lauguageData.hxpl + '</td>' +
         '<td>' + dataArr[16] + '</td>' +
         '</tr>' +
@@ -610,8 +622,8 @@ function returnStData(paraArr,dataArr) {
         '<tr> ' +
         '<td>' + lauguageData.ylsspd + '</td>' +
         '<td>' + paraArr[20]  + '</td>' +
-        '<td>' + lauguageData.ylxjpd + '</td>' +
-        '<td>' + paraArr[21]  + '</td>' +
+        '<td>' + lauguageData.aiStart + '</td>' +
+        '<td>' + paraArr[23]  + '</td>' +
         '</tr>' +
 
         '<tr> ' +
@@ -621,12 +633,12 @@ function returnStData(paraArr,dataArr) {
         '<td>' + paraArr[14] + '</td>' +
         '</tr>' +
 
-        // '<tr> ' +
-        // '<td>' + "最大吸气压力" + '</td>' +
-        // '<td>' + d.cureData.zdxqyl + '</td>' +
-        // '<td>' + "最小吸气压力" + '</td>' +
-        // '<td>' + d.cureData.zxxqyl + '</td>' +
-        // '</tr>' +
+        '<tr> ' +
+        '<td>' + lauguageData.maxInhaleTime + '</td>' +
+        '<td>' + paraArr[22]  + '</td>' +
+        '<td>' + lauguageData.minInhaleTime + '</td>' +
+        '<td>' + paraArr[23]  + '</td>' +
+        '</tr>'+
         '</table>';
 
 }

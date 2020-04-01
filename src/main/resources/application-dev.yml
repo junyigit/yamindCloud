@@ -42,7 +42,7 @@ n:
   port: 2222
 #日志路径
 logging:
-  file: log/cloud.log
+  file: log/cloud.d
 
 
 #存放  -图片路径

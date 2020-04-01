@@ -99,23 +99,24 @@
 	<!--获取历史数据中 统计信息的列表-->
 	<select id="getStatDataMaxAndAvg" resultType="hashmap">
 		SELECT
-		AVG(c.cure_stress) as ylpjz,
-		MAX(c.cure_stress) as ylzdz,
-		AVG(c.inhale_stress) as xqylpjz,
-		MAX(c.inhale_stress) as xqylzdz,
-		AVG(c.exhale_stress) as hqylpjz,
-		MAX(c.exhale_stress) as hqylzdz,
-		AVG(c.ai) as aipjz,
-		AVG(c.hi) as hipjz,
-		MAX(c.ai+c.hi) as zdahi,
-		AVG(c.ai+c.hi) as pjahi,
-		AVG(c.minu_throughput) as fztqlpjz,
-		MAX(c.minu_throughput) as fztqzdz,
-		AVG(c.tidal_volume) as cqlpjz,
-		MAX(c.tidal_volume) as cqlzdz,
-		AVG(c.respiratory_rate) as hxplpjz,
-		MAX(c.respiratory_rate) as hxplzdz,
-		AVG(c.leakage) as lqlpjz
+
+			ROUND(AVG(c.cure_stress),2) as ylpjz,
+		ROUND(MAX(c.cure_stress),2) as ylzdz,
+		ROUND(AVG(c.inhale_stress),2) as xqylpjz,
+		ROUND(MAX(c.inhale_stress),2) as xqylzdz,
+		ROUND(AVG(c.exhale_stress),2) as hqylpjz,
+		ROUND(MAX(c.exhale_stress),2) as hqylzdz,
+-- 		ROUND(AVG(c.ai),2) as aipjz,
+-- 		ROUND(AVG(c.hi),2) as hipjz,
+-- 		ROUND(MAX(c.ai+c.hi),2) as zdahi,
+-- 		ROUND(AVG(c.ai+c.hi),2) as pjahi,
+		ROUND(AVG(c.minu_throughput),2) as fztqlpjz,
+		ROUND(MAX(c.minu_throughput),2) as fztqzdz,
+		ROUND(AVG(c.tidal_volume),2) as cqlpjz,
+		ROUND(MAX(c.tidal_volume),2) as cqlzdz,
+		ROUND(AVG(c.respiratory_rate),2) as hxplpjz,
+		ROUND(MAX(c.respiratory_rate),2) as hxplzdz,
+		ROUND(AVG(c.leakage),2) as lqlpjz
 		FROM
 		sys_curedata c
 	WHERE
@@ -169,8 +170,8 @@
 			#{respiratoryRate},
 			#{tidalVolume},
 			#{minusTroughput},
-			#{aiCount},
-			#{hiCount},
+			#{ai},
+			#{hi},
 			#{xhb},
 			#{inhaleStress},
 			#{exhaleStress},
@@ -256,7 +257,7 @@
 		sys_curedata c
 		<where>
 				c.cure_time BETWEEN #{seleceTime} and #{endTime}
-			AND c.bootSerial =#{serialId} ORDER BY c.cure_time ASC limit 10000
+			AND c.bootSerial =#{serialId} ORDER BY c.cure_time ASC
 		</where>
 	</select>
 

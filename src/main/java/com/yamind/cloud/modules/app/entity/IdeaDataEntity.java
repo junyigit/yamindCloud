@@ -17,13 +17,9 @@ public class IdeaDataEntity implements Serializable {
 
     private Integer ideaType;
 
-
     private String createTime;
 
     private String content;
-
-
-
 
     public Long getId() {
         return id;
@@ -49,24 +45,6 @@ public class IdeaDataEntity implements Serializable {
         this.userName = userName;
     }
 
-
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
-
     public String getUserPhone() {
         return userPhone;
     }
@@ -82,4 +60,23 @@ public class IdeaDataEntity implements Serializable {
     public void setIdeaType(Integer ideaType) {
         this.ideaType = ideaType;
     }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+
+
 }

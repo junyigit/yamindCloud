@@ -194,9 +194,13 @@
     function changeStatus(value) {
 
         if (value ==1){
-            return "在线";
+            console.log("1111");
+            return [[#{device.status.on}]];
+
         }else{
-            return "离线";
+            console.log("22");
+            return [[#{device.status.off}]];
+
         }
 
     }

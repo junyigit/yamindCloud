@@ -66,7 +66,104 @@ public class SysDeviceServiceImpl implements SysDeviceService {
 
         switch (recvArr[0]){
             case "P":
-                if (recvArr.length == 24) {
+                if (recvArr.length == 26) {
+                    logger.info("新版本的协议");
+                    SysParamaterSetEntity sysParamaterSetEntity = new SysParamaterSetEntity();
+
+                    //序列号
+                    sysParamaterSetEntity.setSerialId(recvArr[1]);
+
+                    //转换时间
+                    String currentTime = timeStamp2Date(recvArr[2], "yyyy-MM-dd HH:mm:ss");
+
+                    //设置时间
+                    sysParamaterSetEntity.setUseDate(currentTime);
+
+                    //机器型号
+                    sysParamaterSetEntity.setBootType(recvArr[3]);
+
+                    //模式
+                    sysParamaterSetEntity.setMode(recvArr[4]);
+                    //治疗压力
+                    sysParamaterSetEntity.setCureStress(Float.parseFloat(recvArr[5]));
+
+                    //开始压力
+                    sysParamaterSetEntity.setStartStress(Float.parseFloat(recvArr[6]));
+
+                    //延迟时间
+                    sysParamaterSetEntity.setDelayTime(Integer.parseInt(recvArr[7]));
+
+                    //最大压力
+                    sysParamaterSetEntity.setMaxStress(Float.parseFloat(recvArr[8]));
+
+                    //最小压力
+                    sysParamaterSetEntity.setMinStress(Float.parseFloat(recvArr[9]));
+
+                    //最大吸气压力
+                    sysParamaterSetEntity.setMaxInhaleStress(Float.parseFloat(recvArr[10]));
+
+                    //最小吸气压力
+                    sysParamaterSetEntity.setMinInhaleStress(Float.parseFloat(recvArr[11]));
+
+                    //吸气压力
+                    sysParamaterSetEntity.setInhaleStress(Float.parseFloat(recvArr[12]));
+
+                    //呼气压力
+                    sysParamaterSetEntity.setExhaleStress(Float.parseFloat(recvArr[13]));
+
+                    //目标潮气量
+                    sysParamaterSetEntity.setTidalVolume(Integer.parseInt(recvArr[14]));
+
+                    //呼吸频率
+                    sysParamaterSetEntity.setRespiratoryRate(Float.parseFloat(recvArr[15]));
+
+                    //吸气时间
+                    sysParamaterSetEntity.setInhaleTime(Float.parseFloat(recvArr[16]));
+
+                    //呼吸释放
+                    sysParamaterSetEntity.setExhaleRelease(Integer.parseInt(recvArr[17]));
+
+                    //吸气灵敏度
+                    sysParamaterSetEntity.setInhaleSensitivity(Integer.parseInt(recvArr[18]));
+
+                    //呼气灵敏度
+                    sysParamaterSetEntity.setExhaleSensitivity(Integer.parseInt(recvArr[19]));
+
+                    //压力上升坡度
+                    sysParamaterSetEntity.setStressUp(Integer.parseInt(recvArr[20]));
+
+
+                    //avaps
+                    sysParamaterSetEntity.setAvaps(Integer.parseInt(recvArr[21]));
+
+
+
+                    //最大吸气时间
+                    sysParamaterSetEntity.setMaxInhaleTime(Float.parseFloat(recvArr[22]));
+
+                    //最小吸气时间
+                    sysParamaterSetEntity.setMinInhaleTime(Float.parseFloat(recvArr[23]));
+
+                    //智能启动
+                    sysParamaterSetEntity.setAiStart(Integer.parseInt(recvArr[24]));
+
+                    //软件版本号
+                    sysParamaterSetEntity.setSoftVersion(recvArr[25]);
+
+
+                    sysParamaterSetService.savePara(sysParamaterSetEntity);
+
+                    //存入redis
+                    redisTemplate.opsForValue().set("P"+recvArr[1],data);
+
+                } else {
+                    System.err.println(data);
+                }
+
+                if (recvArr.length == 24){
+
+                    logger.info("旧版本的协议");
+
 
                     SysParamaterSetEntity sysParamaterSetEntity = new SysParamaterSetEntity();
 
@@ -132,8 +229,6 @@ public class SysDeviceServiceImpl implements SysDeviceService {
                     //压力上升坡度
                     sysParamaterSetEntity.setStressUp(Integer.parseInt(recvArr[20]));
 
-                    //压力下降坡度
-                    sysParamaterSetEntity.setStressDown(Integer.parseInt(recvArr[21]));
 
                     //avaps
                     sysParamaterSetEntity.setAvaps(Integer.parseInt(recvArr[22]));
@@ -146,8 +241,7 @@ public class SysDeviceServiceImpl implements SysDeviceService {
 
                     //存入redis
                     redisTemplate.opsForValue().set("P"+recvArr[1],data);
-
-                } else {
+                }else {
                     System.err.println(data);
                 }
                 break;
@@ -175,8 +269,8 @@ public class SysDeviceServiceImpl implements SysDeviceService {
                     sysCureDataEntity.setTidalVolume(Integer.parseInt(recvArr[14]));//潮气量
                     sysCureDataEntity.setMinusTroughput( Float.parseFloat(recvArr[15]));//分钟通气量
                     sysCureDataEntity.setRespiratoryRate(Float.parseFloat(recvArr[16])); //呼吸频率
-                    sysCureDataEntity.setAiCount(Float.parseFloat(recvArr[17])); //AI  低通气指数
-                    sysCureDataEntity.setHiCount(Float.parseFloat(recvArr[18])); //HI 呼吸暂停出现 1 出现 0没有
+                    sysCureDataEntity.setAi(Float.parseFloat(recvArr[17])); //AI  低通气指数
+                    sysCureDataEntity.setHi(Float.parseFloat(recvArr[18])); //HI 呼吸暂停出现 1 出现 0没有
 
                     sysCureDataEntity.setXhb(Float.parseFloat(recvArr[19])); //吸呼比
                     sysCureDataEntity.setInhaleStress(Float.parseFloat(recvArr[20])); //吸气压力
@@ -219,6 +313,10 @@ public class SysDeviceServiceImpl implements SysDeviceService {
                 boeCpodS.put("createAt",Calendar.getInstance().getTimeInMillis());
                 System.out.println(boeCpodS);
                 String startHttp = HttpClientUtils.httpPost("http://device-copd.boe.com.cn/api/device/daya-resperitor-receiver",boeCpodS.toString());
+                //新增京东方临时测试
+                if ("DM21011927088".equals(sysDeviceStatusEntity.getSerialId())){
+                    startHttp = HttpClientUtils.httpPost("http://218.104.69.87:9000/api/device/daya-resperitor-receiver", boeCpodS.toString());
+                }
                 com.alibaba.fastjson.JSONObject startJson = com.alibaba.fastjson.JSONObject.parseObject(startHttp);
                 String startResult = startJson.getString("status");
                 if("ok".equals(startResult)){
@@ -306,7 +404,14 @@ public class SysDeviceServiceImpl implements SysDeviceService {
                 boeCpod.put("type","end");
                 boeCpod.put("createAt",Calendar.getInstance().getTimeInMillis());
 
-                String endHttp = HttpClientUtils.httpPost("http://device-copd.boe.com.cn/api/device/daya-resperitor-receiver",boeCpod.toString());
+                String url ="http://device-copd.boe.com.cn/api/device/daya-resperitor-receiver";
+                //新增京东方临时测试
+                if ("DM21011927088".equals(recvArr[1])){
+                    url ="http://218.104.69.87:9000/api/device/daya-resperitor-receiver";
+                }
+
+                String endHttp = HttpClientUtils.httpPost(url, boeCpod.toString());;
+
                 com.alibaba.fastjson.JSONObject endJson = com.alibaba.fastjson.JSONObject.parseObject(endHttp);
                 String endResult = endJson.getString("status");
                 if("ok".equals(endResult)){

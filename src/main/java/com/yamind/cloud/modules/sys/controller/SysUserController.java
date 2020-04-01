@@ -35,17 +35,34 @@ public class SysUserController extends AbstractController {
 	 * @param params
 	 * @return
 	 */
-	@RequestMapping("/list")
-	public Page<SysUserEntity> list(@RequestBody Map<String, Object> params) {
+	@RequestMapping("/listUser")
+	public Page<SysUserEntity> listUser(@RequestBody Map<String, Object> params) {
 		if(getUserId() != SystemConstant.SUPER_ADMIN) {
 			params.put("userIdCreate", getUserId());
 		}
+		//return sysUserService.listUser(params);
 		return sysUserService.listUser(params);
 	}
-	
+
+
+	/**
+	 * N - 用户列表
+	 * @param params
+	 * @return
+	 */
+	@RequestMapping("/list")
+	public R list(@RequestBody Map<String, Object> params) {
+		if(getUserId() != SystemConstant.SUPER_ADMIN) {
+			params.put("userIdCreate", getUserId());
+		}
+		return R.customOk(sysUserService.listUser(params));
+	}
+
+
 	/**
 	 * 获取登录的用户信息
 	 */
+
 	@RequestMapping("/info")
 	public R info(){
 		return R.ok().put("user", getUser());

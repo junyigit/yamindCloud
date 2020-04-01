@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yamind.cloud.modules.app.dao.DeviceOtaMapper">
+
+
+
+	<!--历史数据-设备信息列表-->
+	<select id="compareVersion" parameterType="java.lang.String" resultType="com.yamind.cloud.modules.app.entity.DeviceOtaEntity">
+		SELECT
+		c.id,
+		c.product_type,
+		c.version
+		FROM
+		app_device_ota c
+		<where>
+				AND c.product_type =#{productType}
+		</where>
+	</select>
+
+
+</mapper>

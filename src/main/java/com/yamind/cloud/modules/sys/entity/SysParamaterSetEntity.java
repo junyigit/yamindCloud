@@ -63,8 +63,22 @@ public class SysParamaterSetEntity implements Serializable {
     //压力上升坡度
     private Integer stressUp;
 
-    //压力下降坡度
-    private Integer stressDown;
+    //压力下降坡度  删除掉
+   // private Integer stressDown;
+
+    //软件版本号
+    private String softVersion;
+
+    private Integer avaps;
+
+    //最大吸气时间
+    private Float maxInhaleTime;
+
+    //最小吸气时间
+    private Float minInhaleTime;
+
+    //智能启动
+    private Integer aiStart;
 
     //呼吸频率
     private Float respiratoryRate;
@@ -72,11 +86,6 @@ public class SysParamaterSetEntity implements Serializable {
     //吸气时间
     private Float inhaleTime;
 
-    //软件版本号
-    private String softVersion;
-
-
-    private Integer avaps;
 
     public long getId() {
         return id;
@@ -124,6 +133,22 @@ public class SysParamaterSetEntity implements Serializable {
 
     public void setCureStress(Float cureStress) {
         this.cureStress = cureStress;
+    }
+
+    public Float getStartStress() {
+        return startStress;
+    }
+
+    public void setStartStress(Float startStress) {
+        this.startStress = startStress;
+    }
+
+    public Integer getDelayTime() {
+        return delayTime;
+    }
+
+    public void setDelayTime(Integer delayTime) {
+        this.delayTime = delayTime;
     }
 
     public Integer getExhaleRelease() {
@@ -214,12 +239,36 @@ public class SysParamaterSetEntity implements Serializable {
         this.stressUp = stressUp;
     }
 
-    public Integer getStressDown() {
-        return stressDown;
+    public Integer getAvaps() {
+        return avaps;
     }
 
-    public void setStressDown(Integer stressDown) {
-        this.stressDown = stressDown;
+    public void setAvaps(Integer avaps) {
+        this.avaps = avaps;
+    }
+
+    public Float getMaxInhaleTime() {
+        return maxInhaleTime;
+    }
+
+    public void setMaxInhaleTime(Float maxInhaleTime) {
+        this.maxInhaleTime = maxInhaleTime;
+    }
+
+    public Float getMinInhaleTime() {
+        return minInhaleTime;
+    }
+
+    public void setMinInhaleTime(Float minInhaleTime) {
+        this.minInhaleTime = minInhaleTime;
+    }
+
+    public Integer getAiStart() {
+        return aiStart;
+    }
+
+    public void setAiStart(Integer aiStart) {
+        this.aiStart = aiStart;
     }
 
     public Float getRespiratoryRate() {
@@ -238,14 +287,6 @@ public class SysParamaterSetEntity implements Serializable {
         this.inhaleTime = inhaleTime;
     }
 
-    public Integer getAvaps() {
-        return avaps;
-    }
-
-    public void setAvaps(Integer avaps) {
-        this.avaps = avaps;
-    }
-
     public String getSoftVersion() {
         return softVersion;
     }
@@ -255,21 +296,6 @@ public class SysParamaterSetEntity implements Serializable {
     }
 
 
-    public Float getStartStress() {
-        return startStress;
-    }
-
-    public void setStartStress(Float startStress) {
-        this.startStress = startStress;
-    }
-
-    public Integer getDelayTime() {
-        return delayTime;
-    }
-
-    public void setDelayTime(Integer delayTime) {
-        this.delayTime = delayTime;
-    }
 
 
 }

@@ -20,9 +20,9 @@
 				<i class="fa fa-exclamation-triangle"></i> {{errorMsg}}
 			</h4>
 		</div>
-		<input placeholder="用户名" v-model="username" type="text">
+		<input th:placeholder="#{login.usrName}" v-model="username" type="text">
 		<hr class="hr15">
-		<input placeholder="密码" v-model="password" type="password">
+		<input th:placeholder="#{login.psw}"v-model="password" type="password">
 		<hr class="hr15">
 
 

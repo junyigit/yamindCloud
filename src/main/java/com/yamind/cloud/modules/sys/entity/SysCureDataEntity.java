@@ -76,17 +76,19 @@ public class SysCureDataEntity implements Serializable {
     private float minusTroughput;
 
 
+
+
     /**
      * 呼吸暂停次数
      */
 
-    private float aiCount;
+    private float ai;
 
     /**
      * 低通气指数
      */
 
-    private float hiCount;
+    private float hi;
 
 
     /**
@@ -259,21 +261,7 @@ public class SysCureDataEntity implements Serializable {
         this.minusTroughput = minusTroughput;
     }
 
-    public float getAiCount() {
-        return aiCount;
-    }
 
-    public void setAiCount(float aiCount) {
-        this.aiCount = aiCount;
-    }
-
-    public float getHiCount() {
-        return hiCount;
-    }
-
-    public void setHiCount(float hiCount) {
-        this.hiCount = hiCount;
-    }
 
     public String getSoftVersion() {
         return softVersion;
@@ -307,7 +295,21 @@ public class SysCureDataEntity implements Serializable {
         this.exhaleStress = exhaleStress;
     }
 
+    public float getAi() {
+        return ai;
+    }
 
+    public void setAi(float ai) {
+        this.ai = ai;
+    }
+
+    public float getHi() {
+        return hi;
+    }
+
+    public void setHi(float hi) {
+        this.hi = hi;
+    }
 
 
 

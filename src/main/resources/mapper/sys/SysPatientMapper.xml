@@ -20,7 +20,7 @@
         u.doctor,
         u.card,
         u.homeAddres,
-        u.status
+        (select status from sys_device_status where serialId= u.serialNum ) as status
         FROM
         sys_padient u
         <where>

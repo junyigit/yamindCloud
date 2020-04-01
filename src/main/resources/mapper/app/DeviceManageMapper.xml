@@ -13,7 +13,8 @@
 		c.device_serial,
 		c.device_type,
 		c.bind_time,
-		c.mac
+		c.mac,
+		c.version
 		FROM
 		app_device c
 		<where>

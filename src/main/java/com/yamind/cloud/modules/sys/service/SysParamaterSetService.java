@@ -24,4 +24,9 @@ public interface SysParamaterSetService {
     //查询设置信息 --序列号
     SysParamaterSetEntity getParamaterBySerial(Map<String, Object> params);
 
+
+    //删除过期设置信息
+
+    int delOldDate();
+
 }

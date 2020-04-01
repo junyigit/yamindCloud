@@ -16,8 +16,10 @@
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper" id="dyLTE" v-cloak>
 		<header class="main-header">
-			<a href="javascript:void(0);" class="logo"> <span
-				class="logo-mini" th:text="#{logo}"><b>大雅</b></span> <span class="logo-lg" th:text="#{logo}"></span>
+			<a href="javascript:void(0);" class="logo">
+				<span class="logo-mini" th:text="#{logo}"><b></b></span> <span class="logo-lg" th:text="#{logo}">asdasd</span>
+				<!--<span class="logo-mini" th:text="#{logo}"><img src="/static/images/nav_logo.png"> </span>-->
+				<!--<img th:src="/static/images/nav_logo.png" class="img-rounded">-->
 			</a>
 			<nav class="navbar navbar-static-top" role="navigation">
 				<a href="#" class="sidebar-toggle" data-toggle="offcanvas"
@@ -30,12 +32,7 @@
 					<ul class="nav navbar-nav">
 						<li><a href="index.html"><i
 								class="fa fa-home"></i> &nbsp;[[#{index.home}]]</a></li>
-						<!--<li><a href="index_tab.html" target="_blank"><i-->
-								<!--class="fa fa-bookmark"></i> &nbsp;TABS</a></li>-->
-						<!--<li><a href="http://dp-dev.mydoc.io/" target="_blank"><i-->
-								<!--class="fa fa-paper-plane"></i> &nbsp;项目文档</a></li>-->
-						<!--<li><a href="http://www.chenlintech.com/" target="_blank"><i-->
-								<!--class="fa fa-info-circle"></i> &nbsp;关于作者</a></li>-->
+
 						<li><a href="javascript:;" @click="updatePassword"><i
 								class="fa fa-lock"></i> &nbsp;[[#{index.resetPsw}]]</a></li>
 						<li><a href="javascript:;" @click="logout"><i

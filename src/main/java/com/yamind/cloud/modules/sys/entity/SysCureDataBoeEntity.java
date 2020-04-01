@@ -38,16 +38,17 @@ public class SysCureDataBoeEntity implements Serializable {
      */
     private float cureStress;
 
+
     /**
      * 呼吸暂停次数
      */
-    private float aiCount;
+    private float ai;
 
 
     /**
      * 低通气指数
      */
-    private float hiCount;
+    private float hi;
 
 
     /**
@@ -122,21 +123,24 @@ public class SysCureDataBoeEntity implements Serializable {
         this.cureStress = cureStress;
     }
 
-    public float getAiCount() {
-        return aiCount;
+    public float getAi() {
+        return ai;
     }
 
-    public void setAiCount(float aiCount) {
-        this.aiCount = aiCount;
+    public void setAi(float ai) {
+        this.ai = ai;
     }
 
-    public float getHiCount() {
-        return hiCount;
+    public float getHi() {
+        return hi;
     }
 
-    public void setHiCount(float hiCount) {
-        this.hiCount = hiCount;
+    public void setHi(float hi) {
+        this.hi = hi;
     }
+
+
+
     public String getBootSerial() {
         return bootSerial;
     }
