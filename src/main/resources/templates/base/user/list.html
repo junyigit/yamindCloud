@@ -45,7 +45,7 @@
     }
     function getGrid() {
         $('#dataGrid').bootstrapTableEx({
-            url : '../../sys/user/list?_' + $.now(),
+            url : '../../sys/user/listUser?_' + $.now(),
             height : $(window).height() - 56,
             queryParams : function(params) {
                 params.username = vm.keyword;

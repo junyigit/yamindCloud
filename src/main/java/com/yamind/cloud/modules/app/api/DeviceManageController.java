@@ -97,10 +97,10 @@ public class DeviceManageController extends AbstractController {
                 r.put("version",d.getVersion());
                 switch (type){
                     case "1":
-                        r.put("url","http://cloud.yamind.cn:9999/appResource/zips/ota/dfufile-I101-20200115.zip");
+                        r.put("url","http://cloud.yamind.cn:9999/appResource/zips/ota/dfufile-I101.zip");
                         break;
                     case "2":
-                        r.put("url","http://cloud.yamind.cn:9999/appResource/zips/ota/dfufile-I201-20200115.zip");
+                        r.put("url","http://cloud.yamind.cn:9999/appResource/zips/ota/dfufile-I201.zip");
                         break;
                 }
 
@@ -125,6 +125,17 @@ public class DeviceManageController extends AbstractController {
         }
         return R.error("updateSoftVersion faild");
     }
+
+
+    /**
+     * 获取呼吸机使用日期显示
+     */
+
+    @RequestMapping(value = "/getHistorySetData", method = RequestMethod.POST)
+    public R getHistorySetData(@RequestBody Map<String, Object> params) {
+        return R.customOk(sysParamaterSetService.listForParamaterInfo(params));
+    }
+
 
 
 

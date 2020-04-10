@@ -1,5 +1,6 @@
 package com.yamind.cloud.modules.sys.oauth2;
 
+import com.alibaba.fastjson.JSONObject;
 import com.yamind.cloud.common.entity.R;
 import com.yamind.cloud.common.utils.JSONUtils;
 import org.apache.commons.lang.StringUtils;
@@ -35,8 +36,14 @@ public class OAuth2Filter extends AuthenticatingFilter {
         return new OAuth2Token(token);
     }
 
+
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
+        if (request instanceof HttpServletRequest) {
+            if (((HttpServletRequest) request).getMethod().toUpperCase().equals("OPTIONS")) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -45,6 +52,17 @@ public class OAuth2Filter extends AuthenticatingFilter {
      */
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
+
+        HttpServletResponse response0 = (HttpServletResponse) response;
+        HttpServletRequest request0 = (HttpServletRequest) request;
+        // 跨域配置
+
+        response0.setHeader("Content-Type","application/json;charset=UTF-8");
+        response0.setHeader("Access-control-Allow-Origin", request0.getHeader("Origin"));
+        response0.setHeader("Access-Control-Allow-Methods", request0.getMethod());
+        response0.setHeader("Access-Control-Allow-Credentials", "true");
+        response0.setHeader("Access-Control-Allow-Headers", request0.getHeader("Access-Control-Request-Headers"));
+
         //获取请求token，如果token不存在，直接返回401
         String token = getRequestToken((HttpServletRequest) request);
         if(StringUtils.isBlank(token)){
@@ -71,7 +89,7 @@ public class OAuth2Filter extends AuthenticatingFilter {
             String json = JSONUtils.beanToJson(r);
             httpResponse.getWriter().print(json);
         } catch (Exception ee) {
-        	
+
         }
 
         return false;

@@ -37,10 +37,12 @@ public class SysUserController extends AbstractController {
 	 */
 	@RequestMapping("/listUser")
 	public Page<SysUserEntity> listUser(@RequestBody Map<String, Object> params) {
-		if(getUserId() != SystemConstant.SUPER_ADMIN) {
+		Long userId = getUserId();
+		/*
+		if(userId != SystemConstant.SUPER_ADMIN) {
 			params.put("userIdCreate", getUserId());
 		}
-		//return sysUserService.listUser(params);
+		*/
 		return sysUserService.listUser(params);
 	}
 
@@ -52,7 +54,9 @@ public class SysUserController extends AbstractController {
 	 */
 	@RequestMapping("/list")
 	public R list(@RequestBody Map<String, Object> params) {
-		if(getUserId() != SystemConstant.SUPER_ADMIN) {
+
+		Long userId = getUserId();
+		if(userId != SystemConstant.SUPER_ADMIN) {
 			params.put("userIdCreate", getUserId());
 		}
 		return R.customOk(sysUserService.listUser(params));
@@ -86,9 +90,10 @@ public class SysUserController extends AbstractController {
 	@RequestMapping("/save")
 	public R save(@RequestBody SysUserEntity user) {
 		user.setUserIdCreate(getUserId());
+		System.out.println(user.toString());
 		return sysUserService.saveUser(user);
 	}
-	
+
 	/**
 	 * 根据id查询详情
 	 * @param userId

@@ -40,7 +40,36 @@ public class SysRoleController extends AbstractController {
 		}
 		return sysRoleService.listRole(params);
 	}
-	
+
+	/**
+	 * N - 角色列表
+	 * @param params
+	 * @return
+	 */
+	@RequestMapping("/listForRole")
+	public R listForRole(@RequestBody Map<String, Object> params) {
+		if(getUserId() != SystemConstant.SUPER_ADMIN) {
+			params.put("userIdCreate", getUserId());
+		}
+		return R.customOk(sysRoleService.listRole(params));
+	}
+
+
+	/**
+	 * N - 用户添加 - 角色列表
+	 * @param params
+	 * @return
+	 */
+	@RequestMapping("/listForUserRole")
+	public R listForUserRole(@RequestBody Map<String, Object> params) {
+		if(getUserId() != SystemConstant.SUPER_ADMIN) {
+			params.put("userIdCreate", getUserId());
+		}
+		return R.customOk(sysRoleService.listRole(params));
+	}
+
+
+
 	/**
 	 * 用户角色
 	 * @return

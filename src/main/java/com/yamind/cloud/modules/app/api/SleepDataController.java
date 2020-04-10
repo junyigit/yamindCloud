@@ -186,7 +186,7 @@ public class SleepDataController extends AbstractController {
         r.put("useDay", useDay); ////获取所选时间内的 使用天数
         r.put("useTime", useHours + " h"); //使用时间  单位小时
 
-        r.put("avgUseTime", useHours / useDay + " h"); //平均使用时间
+        r.put("avgUseTime", String.format("%.2f",useHours / useDay) + " h"); //平均使用时间
 
         // 获取 values
         Collection<List<SysCureDataEntity>> cureTimeList = cureTimeMap.values();
@@ -234,23 +234,26 @@ public class SleepDataController extends AbstractController {
 
 
         System.out.println("ai的出现次数:"+aicount +"hi出现的次数"+hicount);
+
+
+
         //存储压力95的list cure_stress
-        r.put("stressNice", sigleNice1 / useDay);
+        r.put("stressNice", String.format("%.2f", sigleNice1 / useDay));
 
         //存储吸气压力95的list inhale_stress
-        r.put("inhaleStressNice", sigleNice2 / useDay);
+        r.put("inhaleStressNice", String.format("%.2f", sigleNice2 / useDay));
 
         //存储呼气压力95的list exhale_stress
-        r.put("exhaleStressNice", sigleNice3 / useDay);
+        r.put("exhaleStressNice", String.format("%.2f", sigleNice3 / useDay));
 
         //存储潮气量95的list  tidal_volume
-        r.put("tidalVolumeNice", sigleNice4 / useDay);
+        r.put("tidalVolumeNice", String.format("%.2f", sigleNice4 / useDay));
 
         //存储分钟通气量95的list  minu_throughput
-        r.put("minuThroughputNice", sigleNice5 / useDay);
+        r.put("minuThroughputNice", String.format("%.2f", sigleNice5 / useDay));
 
         //存储呼吸频率95的list  respiratory_rate
-        r.put("respiratoryRateNice", sigleNice6 / useDay);
+        r.put("respiratoryRateNice", String.format("%.2f", sigleNice6 / useDay));
 
         return r;
     }

@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 @RestController
@@ -29,6 +30,18 @@ public class AppAdvertController extends AbstractController {
 
     @Autowired
     AdvertService advertService;
+
+
+    /**
+     * 获取APP广告列表
+     * @return
+     */
+    @RequestMapping("/list")
+    public R list(){
+
+        List<AdvertEntity> advertEntityList =  advertService.listForAdvertList();
+        return R.customOk(advertEntityList);
+    }
 
     @RequestMapping("add")
     @ResponseBody

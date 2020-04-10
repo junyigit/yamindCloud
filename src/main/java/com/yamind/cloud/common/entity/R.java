@@ -1,5 +1,7 @@
 package com.yamind.cloud.common.entity;
 
+import com.yamind.cloud.common.constant.SystemConstant;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +9,10 @@ import java.util.Map;
 /**
  * 页面响应entity
  *
+ * @author ZhouChenglin
+ * @email yczclcn@163.com
+ * @url www.chenlintech.com
+ * @date 2017年8月8日 上午11:40:42
  */
 public class R extends HashMap<String, Object> {
 
@@ -89,6 +95,18 @@ public class R extends HashMap<String, Object> {
 		return r;
 	}
 
+	public static R customRcover(R r) {
+		int code = (int) r.get("code");
+		if(code == 0) { // 转换为 200
+			r.put("code",200);
+			if(r.containsKey(SystemConstant.DATA_ROWS)) { // 包含 rows 数据
+				Object obj = r.get(SystemConstant.DATA_ROWS);
+				r.put("data",obj);
+				r.remove(SystemConstant.DATA_ROWS);
+			}
+		}
+		return r;
+	}
 
 	/** 原来的后端接口 */
 	public static R ok(String msg) {

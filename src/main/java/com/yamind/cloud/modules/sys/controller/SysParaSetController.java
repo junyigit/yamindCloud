@@ -42,14 +42,27 @@ public class SysParaSetController {
         }
 
 
-        /**
+    /**
+     * N - 参数设置-用户列表
+     * @param params
+     * @return
+     */
+    @RequestMapping("/listForPara")
+    public R listForPara(@RequestBody Map<String, Object> params) {
+
+        return R.customOk(sysDeviceService.listForDevice(params));
+    }
+
+
+
+    /**
          * 获取参数详情
          * @param params
          * @return
          */
 
         @RequestMapping(value ="/getParaDetails",method = RequestMethod.POST)
-        public R getParaDetails(@RequestParam Map<String, String> params) {
+        public R getParaDetails(@RequestBody Map<String, String> params) {
             R r = new R();
             String serialId = "P"+params.get("serialId");
             String redisParaSet = (String)redisTemplate.opsForValue().get(serialId);
@@ -141,9 +154,6 @@ public class SysParaSetController {
                     jsonObject.put("paraData",pataArr);
                     break;
             }
-
-
-
 
             //写入到缓冲通道
             channel.writeAndFlush(jsonObject.toString());

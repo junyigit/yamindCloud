@@ -1,6 +1,7 @@
 package com.yamind.cloud.modules.app.api;
 
 
+import com.yamind.cloud.common.constant.SystemConstant;
 import com.yamind.cloud.common.entity.R;
 import com.yamind.cloud.common.utils.CommonUtils;
 import com.yamind.cloud.modules.app.entity.SleepDataEntity;
@@ -104,5 +105,16 @@ public class UserCenterController extends AbstractController {
     public Page userList(@RequestBody Map<String, Object> params) {
         Page<UserEntity> list = userManageService.listForUserInfo(params);
         return list;
+    }
+
+
+    /**
+     * N - 后台展示- 获取APP用户列表
+     * @param params
+     * @return
+     */
+    @RequestMapping("/listForAppUser")
+    public R list(@RequestBody Map<String, Object> params) {
+        return R.customOk(userManageService.listForUserInfo(params));
     }
 }

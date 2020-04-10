@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -40,7 +41,7 @@ public class SysLoginController extends AbstractController {
 	@SysLog("登录")
 	@ApiOperation(value = "查询用户信息", notes = "查询用户信息...")
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public R login(String username, String password)throws IOException {
+	public R login(@RequestParam String username,@RequestParam String password)throws IOException {
 		SysUserEntity user = sysUserService.getByUserName(username);
 		password = MD5Utils.encrypt(username, password);
 		

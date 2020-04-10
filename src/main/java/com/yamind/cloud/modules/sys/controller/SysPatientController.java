@@ -69,6 +69,17 @@ public class SysPatientController extends AbstractController {
 
 
     /**
+     * N - 用户列表
+     *
+     * @param params
+     * @return
+     */
+    @RequestMapping("/listForPatient")
+    public R listForPatient(@RequestBody Map<String, Object> params) {
+        return R.customOk(sysPatientService.listForPatient(params));
+    }
+
+    /**
      * 获取历史数据-曲线图
      *
      * @param serialId
@@ -173,8 +184,10 @@ public class SysPatientController extends AbstractController {
     /**
      * 判断是否有实时数据传输
      */
+
     @RequestMapping(value = "/isRealData", method = RequestMethod.POST)
-    public R isRealData(@RequestParam String serialId) {
+    public R isRealData(@RequestBody  String serialId) {
+        /*
         String tempData = redisTemplate.opsForList().range(serialId, 0, 0).toString();
         tempData  = tempData.substring(1, tempData.length() - 1);
         if (StringUtils.isBlank(tempData)) {
@@ -182,6 +195,8 @@ public class SysPatientController extends AbstractController {
         } else {
             return R.ok("有实时数据");
         }
+        */
+        return R.ok("有实时数据");
     }
 
 
@@ -203,31 +218,25 @@ public class SysPatientController extends AbstractController {
 
     /**
      * 获取历史数据-统计信息
-     * @param serialId
-     * @param startDate
-     * @param endDate
-     * @return
      */
 
     @RequestMapping(value = "/getHistoryStatInfo", method = RequestMethod.POST)
-    public R getHistoryStatInfo(@RequestParam("serialId") String serialId, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) {
+    public R getHistoryStatInfo(@RequestBody Map<String, Object> params) {
         R r = new R();
 
         Map<String, Object> map = new HashMap<>();
         List<String> colData = new ArrayList<>();
-        //获取前台传递的参数
-        map.put("serialId", serialId);
+
 
         //日期从12点开始计算
-        startDate += " 12:00:00";
-        endDate += " 12:00:00";
-        map.put("startDate", startDate);
-        map.put("endDate", endDate);
+        params.put("startDate",params.get("startDate")+" 12:00:00")  ;
+        params.put("endDate",params.get("endDate")+" 12:00:00")  ;
+
 
         List<SysCureDataEntity> colsData = new ArrayList<>();
         // 查询当前日期所有的数据List
-        map.put("colName", "DATE_FORMAT(cure_time, \"%Y-%m-%d\" ) as cure_time,inhale_stress,cure_stress,exhale_stress,tidal_volume,minu_throughput,respiratory_rate,ai,hi");
-        colsData = sysCureDataService.listForColData2(map);
+        params.put("colName", "DATE_FORMAT(cure_time, \"%Y-%m-%d\" ) as cure_time,inhale_stress,cure_stress,exhale_stress,tidal_volume,minu_throughput,respiratory_rate,ai,hi");
+        colsData = sysCureDataService.listForColData2(params);
         int size = colsData.size();
         if (size <= 0) {
             return R.error("当前时间段没有监测到治疗数据!");
@@ -270,11 +279,10 @@ public class SysPatientController extends AbstractController {
 
 
 
+
         r.put("avgAi",aicount/ (useHours>1.00 ? useHours:1));
         r.put("avgHi",hicount/ (useHours>1.00 ? useHours:1));
-
         r.put("avgAHI",(aicount+hicount )/ (useHours>1.00 ? useHours:1));
-
 
         //使用信息
         r.put("dayCount", size); //使用天数
@@ -304,8 +312,6 @@ public class SysPatientController extends AbstractController {
         // 每一组的每一个字段进行排序并获取 95 值
         for (List<SysCureDataEntity> e : cureTimeList) {
 
-
-
             System.out.println(e.get(0).getCureTime());
             //取出数据总长度，计算95%位置
             int len = (int) Math.ceil(e.size() * (0.95)) - 1;
@@ -322,30 +328,28 @@ public class SysPatientController extends AbstractController {
             sigleNice6 += e.stream().map(SysCureDataEntity::getRespiratoryRate).sorted()
                     .collect(Collectors.toList()).get(len);
 
-
-
         }
 
-
-
         System.out.println("ai的出现次数:"+aicount +"hi出现的次数"+hicount);
+
+
         //存储压力95的list cure_stress
-        r.put("stressNice", sigleNice1 / useDay);
+        r.put("stressNice", String.format("%.2f", sigleNice1 / useDay));
 
         //存储吸气压力95的list inhale_stress
-        r.put("inhaleStressNice", sigleNice2 / useDay);
+        r.put("inhaleStressNice", String.format("%.2f", sigleNice2 / useDay));
 
         //存储呼气压力95的list exhale_stress
-        r.put("exhaleStressNice", sigleNice3 / useDay);
+        r.put("exhaleStressNice", String.format("%.2f", sigleNice3 / useDay));
 
         //存储潮气量95的list  tidal_volume
-        r.put("tidalVolumeNice", sigleNice4 / useDay);
+        r.put("tidalVolumeNice", String.format("%.2f", sigleNice4 / useDay));
 
         //存储分钟通气量95的list  minu_throughput
-        r.put("minuThroughputNice", sigleNice5 / useDay);
+        r.put("minuThroughputNice", String.format("%.2f", sigleNice5 / useDay));
 
         //存储呼吸频率95的list  respiratory_rate
-        r.put("respiratoryRateNice", sigleNice6 / useDay);
+        r.put("respiratoryRateNice", String.format("%.2f", sigleNice6 / useDay));
 
         return r;
     }
@@ -357,8 +361,9 @@ public class SysPatientController extends AbstractController {
      * @return
      */
 
+    @ResponseBody
     @RequestMapping(value = "/getRealData", method = RequestMethod.POST)
-    public R getRealData(@RequestParam String serialId) {
+    public R getRealData(@RequestParam  String serialId) {
         List<String> test = new ArrayList<>();
         R r = new R();
 

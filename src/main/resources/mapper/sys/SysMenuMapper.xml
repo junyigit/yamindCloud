@@ -147,6 +147,8 @@
 			ur.user_id = #{value}
 	</select>
 
-
+	<select id="countMenuChildren" parameterType="long" resultType="int">
+		SELECT count(*) FROM sys_menu WHERE  parent_id = #{parentId};
+	</select>
 
 </mapper>

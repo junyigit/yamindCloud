@@ -33,11 +33,20 @@ $(function () {
                 field : "mobile",
                 title : lauguageData.mobile,
                 width : "200px"
-            }, {
-                field : "photo",
-                title : lauguageData.photo,
-                width : "200px"
-            }, {
+            },
+
+        {
+            field: 'photo',//域值
+            title: lauguageData.photo,//标题
+            visible: true,//false表示不显示
+            sortable: true,//启用排序
+            width : '15%',
+            formatter : function (value, row, index) {
+                return "<img style='width: 50px;height: 50px;' src='"+"http://cloud.yamind.cn:9999//appResource/img/user/1575338824508_360.jpg"+"' alt=''>"
+            }
+
+
+        }, {
                 field : "nikeName",
                 title : lauguageData.nikeName,
                 width : "300px"

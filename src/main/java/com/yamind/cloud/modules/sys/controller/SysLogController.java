@@ -59,5 +59,9 @@ public class SysLogController extends AbstractController {
 	public R batchRemoveAll() {
 		return sysLogService.batchRemoveAll();
 	}
-	
+
 }
+
+
+
+

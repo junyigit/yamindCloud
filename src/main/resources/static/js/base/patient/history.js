@@ -30,6 +30,12 @@ $(function () {
     //获取地址传参
     var serialId = getUrlParam(window.location.href,'serialId');
 
+
+    var para = { "serialId": serialId,
+        "startDate":startDate,
+        "endDate":endTime}
+
+
     // 统计信息---点击查询
     $("#dateHistory").click(function(){
         $("#cisLoading").show();
@@ -37,12 +43,9 @@ $(function () {
             $.ajax({
                 type: "POST",
                 url: "/sys/patient/getHistoryStatInfo",
-                dataType: "json",
-                data: {
-                    "serialId": serialId,
-                    "startDate":startDate,
-                    "endDate":endTime
-                },beforeSend:function (xhr) {
+                contentType:'application/json;charset=utf-8',
+                data:JSON.stringify(para)
+                ,beforeSend:function (xhr) {
                     $("#cisLoading").show();
                 },success : function(result) {//返回数据根据结果进行相应的处理
                     if (result.code ==500){
