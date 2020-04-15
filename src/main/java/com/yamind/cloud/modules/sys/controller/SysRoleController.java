@@ -111,8 +111,8 @@ public class SysRoleController extends AbstractController {
 	public R updateRole(@RequestBody SysRoleEntity role) {
 		return sysRoleService.updateRole(role);
 	}
-	
-	/**
+
+	 /**
 	 * 批量删除
 	 * @param id
 	 * @return

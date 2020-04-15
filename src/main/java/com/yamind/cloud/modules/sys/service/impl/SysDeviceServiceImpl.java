@@ -132,11 +132,8 @@ public class SysDeviceServiceImpl implements SysDeviceService {
                     //压力上升坡度
                     sysParamaterSetEntity.setStressUp(Integer.parseInt(recvArr[20]));
 
-
                     //avaps
                     sysParamaterSetEntity.setAvaps(Integer.parseInt(recvArr[21]));
-
-
 
                     //最大吸气时间
                     sysParamaterSetEntity.setMaxInhaleTime(Float.parseFloat(recvArr[22]));

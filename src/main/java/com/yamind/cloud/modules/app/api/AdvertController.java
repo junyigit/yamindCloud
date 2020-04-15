@@ -7,10 +7,7 @@ import com.yamind.cloud.modules.app.service.AdvertService;
 import com.yamind.cloud.modules.sys.controller.AbstractController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 @RestController
@@ -37,11 +35,12 @@ public class AdvertController extends AbstractController {
      */
     @RequestMapping("homeAdvert")
     @ResponseBody
-    public R listForHomeAdvert(){
-        List<AdvertEntity> list = advertService.listForAdvertList();
-        if (list !=null && list.size()> 0){
-            return R.customOk(list);
-        }
-        return R.error("没有广告");
+    public R listForHomeAdvert(@RequestBody Map<String, Object> params){
+             return R.customOk(advertService.listForAdvertList(params));
     }
+
+
+
+
+
 }

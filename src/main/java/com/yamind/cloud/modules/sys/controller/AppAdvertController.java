@@ -6,10 +6,7 @@ import com.yamind.cloud.modules.app.entity.AdvertEntity;
 import com.yamind.cloud.modules.app.service.AdvertService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +16,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 @RestController
@@ -37,9 +35,8 @@ public class AppAdvertController extends AbstractController {
      * @return
      */
     @RequestMapping("/list")
-    public R list(){
-
-        List<AdvertEntity> advertEntityList =  advertService.listForAdvertList();
+    public R list(@RequestBody Map<String, Object> params){
+        List<AdvertEntity> advertEntityList =  advertService.listForAdvertList(params);
         return R.customOk(advertEntityList);
     }
 

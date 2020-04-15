@@ -19,7 +19,7 @@
 			)
 	</insert>
 
-    <select id="listForAdvertList" resultType="com.yamind.cloud.modules.app.entity.AdvertEntity">
+    <select id="listForPage" resultType="com.yamind.cloud.modules.app.entity.AdvertEntity">
 		SELECT
 			id,
 			advert_name,

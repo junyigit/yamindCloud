@@ -138,9 +138,10 @@ public class SysMenuController extends AbstractController {
 		return sysMenuService.getMenuById(id);
 	}
 
+
 	/**
 	 * N - 查询详情
-	 * @param id
+	 * @param params
 	 * @return
 	 */
 	@RequestMapping("/ninfo")
@@ -188,9 +189,10 @@ public class SysMenuController extends AbstractController {
 		return sysMenuService.batchRemove(id);
 	}
 
+
 	/**
 	 * N - 删除菜单
-	 * @param id
+	 * @param object
 	 * @return
 	 */
 	@SysLog("N - 删除菜单")
