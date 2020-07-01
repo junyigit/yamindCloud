@@ -35,7 +35,7 @@
 		<commons-configuration-version>1.10</commons-configuration-version>
 		<aspect-version>1.9.1</aspect-version>
 		<shiro-version>1.4.0</shiro-version>
-		<quartz-version>2.3.0</quartz-version>
+		<quartz-version>2.3.2</quartz-version>
 		<httpclient-version>4.5.6</httpclient-version>
 		<nekohtml-version>1.9.22</nekohtml-version>
 		<velocity-version>1.7</velocity-version>
